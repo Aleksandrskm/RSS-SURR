@@ -8,6 +8,11 @@ def index():
     return render_template('base.html')
 
 
+@views.route('/call__simulator')
+def function_call():
+    return render_template('call__simulator.html')
+
+
 @views.route('/azimuth_and_elevation_angle')
 def function_az():
     return render_template('azimuth_and_elevation_angle.html')

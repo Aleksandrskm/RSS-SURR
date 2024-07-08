@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h2>Имитатор Вызовов</h2>
+
+    <div class="input_parameters_com">
+        <div class="row_com">
+            <div class="column1_com">
+        <span>Частота вызовов в /10 сек</span>
+        <input id="frequency_of_calls" type="text" value="">
+        <span>Продолжительность вызовов от</span>
+        <input id="Duration_of_calls_from" type="text" value="">
+        <span>Продолжительность вызовов до</span>
+        <input id="The_duration_of_calls_is_up_to" type="text" value="">
+        <span>Имитация от текущего времени</span>
+        <input id="start_datetime" type="text" value="">
+            </div>
+            <div class="column2_com">
+        <span>Расположение абонента:</span>
+                <br>
+        <span>Широта , градусы</span>
+        <input id="lat" type="text" value="">
+        <span>Долгота, градусы</span>
+        <input id="lon" type="text" value="">
+        <span>Высота над у.м ,м</span>
+        <input id="name" type="text">
+            </div>
+        </div>
+        <div class="btn2">
+            <button id="task-btn" onclick="">Старт</button>
+        </div>
+
+        <span>ОТВЕТ:</span>
+        <br>
+        <span id="response"></span>
+
+    </div>
+{% endblock %}
