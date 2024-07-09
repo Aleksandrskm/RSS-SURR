@@ -74,7 +74,16 @@ img {
     font-weight: bold;
     font-family: Arial, sans-serif;
 }
-
+.input_parameters_imitator input {
+    margin: 7px;
+    padding: 7px;
+    width: 100px;
+    border-radius: 6px;
+    border-width: 1px;
+    font-size: calc(0.9rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
 .input_parameters_az span {
     margin: 3px 0;
     font-size: calc(1.0rem);
