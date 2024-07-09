@@ -8,12 +8,18 @@
 </head>
 <body>
     <header>
-        <h1>Имитатор центра обработки вызовов</h1>
+        <div class="ref">
+            <a class="home-ref" href="/" title="Главная страница">
+                <img class="home" src="{{ url_for('static', filename='img/home.svg') }}" alt="Стартовая страница">
+            </a>
+        </div>
+        <h1>Имитатор центра обработки вызова</h1>
     </header>
 
     {% block content %}
 
     <main class="butt">
+        <a href="/call__simulator"><button class="btn">Имитатор вызовов</button></a>
         <a href="/azimuth_and_elevation_angle"><button class="btn">Определение азимута и угла места</button></a>
         <a href="/get_coordinates"><button class="btn">Нахождение координат через API</button></a>
         <a href="/communication_availability"><button class="btn">Вычисление доступности связи</button></a>
