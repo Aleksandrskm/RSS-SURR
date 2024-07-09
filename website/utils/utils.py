@@ -76,7 +76,7 @@ def get_coordinates(first_TLE_line: str, second_TLE_line: str, name: str):
     current_datetime = datetime.utcnow().isoformat()
 
     data = {
-        'satellite': {
+        'satellite_model': {
             'first_tle_line': lat1,
             'name': name,
             'second_tle_line': lon1
