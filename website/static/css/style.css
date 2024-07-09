@@ -9,7 +9,11 @@
     padding: 20px;
     box-sizing: border-box;
 }
-
+img {
+    margin-right: 90%;
+    height: 40px;
+    width: 44px;
+}
 .input_parameters input {
     margin: 7px;
     padding: 7px;
@@ -124,7 +128,18 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 1300px; /* Ограничение ширины контейнера */
+    max-width: 1100px; /* Ограничение ширины контейнера */
+    margin: 100px auto; /* Центрирование контейнера */
+    background-color: #f1f1f1;
+    border-radius: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.input_parameters_imitator{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 900px; /* Ограничение ширины контейнера */
     margin: 100px auto; /* Центрирование контейнера */
     background-color: #f1f1f1;
     border-radius: 20px;
@@ -236,25 +251,29 @@
 
 
 header {
-  background-color: #999999;
-  height: 75px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center; /* Центрируем заголовок по горизонтали */
-  overflow: hidden;
-
-
+    background-color: #999999;
+    height: 75px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 33rem 1fr;
 }
 
 h1 {
-  color: #000000;
-  line-height: 1;
-  font-size: calc(0.7rem + 1vw);
-  font-weight: bold;
-  font-family: Arial, sans-serif;
-  text-align: center; /* Центрируем текст заголовка */
-  margin: 0; /* Убираем внешние отступы */
+    color: #000000;
+    line-height: 1;
+    font-size: calc(1.1rem + 1vw);
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    text-align: center; /* Центрируем текст заголовка */
+    margin: auto ; /* Убираем внешние отступы */
+}
+.home-ref {
+    margin-right: auto;
+    margin-right: 90%;
+}
+
+.ref{
+    margin: 15px;
 }
 
 h2 {
