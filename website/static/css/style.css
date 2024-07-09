@@ -171,6 +171,17 @@ img {
     font-family: Arial, sans-serif;
 }
 
+.input_parameters_imitator input {
+    margin: 7px;
+    padding: 7px;
+    width: 200px;
+    border-radius: 6px;
+    border-width: 1px;
+    font-size: calc(0.9rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+
 .row_com {
     display: flex;
     margin: 10px 10px;
