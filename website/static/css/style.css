@@ -324,12 +324,13 @@ img {
 
 
 header {
+    grid-template-columns: 1fr 43rem 1fr;
     white-space: nowrap;
     background-color: #999999;
     height: 75px;
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 33rem 1fr;
+    
 }
 
 h1 {
