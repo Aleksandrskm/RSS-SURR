@@ -216,6 +216,7 @@ function createResponse(result,data){
   createInformationRequest.append(spanSiple);
   createInformationRequest.append(checkboxDuplex);
   createInformationRequest.append(spanDuplex);
+  createInformationRequest.innerHTML+=`<br>`;
   createInformationRequest.append(btnSend);
   parent.append(createInformationRequest);
   

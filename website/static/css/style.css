@@ -144,6 +144,40 @@ img {
     padding: 20px;
     box-sizing: border-box;
 }
+.information_request{
+    text-align: center;
+}
+.information_request div {
+    text-align: left;
+    margin: 3px 0;
+    font-size: calc(1.0rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+.btn-send{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 6px;
+    text-align: center;
+    width: 130px;
+    border-radius: 6px;
+    border-width: 2px;
+    font-size: calc(1rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+#task-btn_sim{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 6px;
+    text-align: center;
+    width: 130px;
+    border-radius: 6px;
+    border-width: 2px;
+    font-size: calc(1rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif; 
+}
 .input_parameters_imitator{
     display: flex;
     flex-direction: column;
