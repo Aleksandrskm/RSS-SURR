@@ -84,7 +84,23 @@ function communication_availability() {
         console.error('Error:', error);
       });
    }
-
+async function calculateFirstAvailableInterval(data){
+  try {
+    const response = await fetch("http://185.192.247.60:7130/CommunicationAvailability/CalculateFirstAvailableInterval", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data)
+    });
+    const result = await response.json();
+    console.log("Success:", result);
+    createResponse(result,data);
+    return result;
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
 async function postJSON(data) {
     try {
       const response = await fetch("http://185.192.247.60:7128/Database/TableInfo", {
@@ -143,3 +159,97 @@ let response =  fetch(url)
   });
   // console.log(json);
 });
+
+ const simDate=document.getElementById('simulator_this_time');
+ simDate.value=new Date().toISOString();
+ console.log(new Date().toISOString());
+function createResponse(result,data){
+  document.getElementById('response3').innerHTML='';
+  for (const [key, value] of Object.entries(result)) {
+    if (typeof(value)!='object') {
+      document.getElementById('response3').innerHTML+=`<div>${key}: ${value}</div><br>`;
+    }
+   else{
+    for (const [key, values] of Object.entries(value)){
+      document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div><br>`;
+    }
+   
+   }
+    console.log();
+  }
+  const createInformationRequest=document.createElement('div');
+  const parent=document.querySelector('.row_com');
+  createInformationRequest.classList.add('information_request');
+  for (const [key, value] of Object.entries(data)) {
+    if (typeof(value)!='object') {
+      
+      createInformationRequest.innerHTML+=`<div>${key}: ${value}</div><br>`;
+    }
+   else{
+    for (const [key, values] of Object.entries(value)){
+      createInformationRequest.innerHTML+=`<div>${key}: ${values}</div><br>`;
+    }
+   
+   }
+    console.log();
+  }
+  const checkboxSimple=document.createElement('input'); 
+  const checkboxDuplex=document.createElement('input');
+  const spanSiple=document.createElement('span');
+  const spanDuplex=document.createElement('span');
+  const btnSend=document.createElement('button');
+  spanSiple.textContent='Simplex';
+  spanDuplex.textContent='Duplex';
+  btnSend.classList.add('btn-send');
+  btnSend.textContent='Отправить';
+  checkboxSimple.type='radio';
+  checkboxSimple.checked=true;
+  checkboxDuplex.type='radio';
+  checkboxSimple.value='Simplex';
+  checkboxDuplex.value='Duplex';
+  checkboxSimple.name='radio';
+  checkboxDuplex.name='radio';
+  checkboxSimple.classList.add('simple-checkbox');
+  checkboxDuplex.classList.add('duplex-checkbox');
+  createInformationRequest.append(spanSiple);
+  createInformationRequest.append(checkboxSimple);
+  createInformationRequest.append(spanSiple);
+  createInformationRequest.append(checkboxDuplex);
+  createInformationRequest.append(spanDuplex);
+  createInformationRequest.innerHTML+=`<br>`;
+  createInformationRequest.append(btnSend);
+  parent.append(createInformationRequest);
+  
+}
+const btnStartSim=document.getElementById('task-btn_sim');
+btnStartSim.addEventListener('click',()=>{
+  const data = {
+    'point':{
+          "name":name,
+          "lat": document.getElementById('lat3').value,
+          "lon": document.getElementById('lon3').value,
+          "radius": 2500
+        },
+        "start_datetime_iso": document.getElementById('simulator_this_time').value
+  }
+  calculateFirstAvailableInterval(data)
+  .then(result=>{
+   
+   
+    
+    // for (const [key, value] of Object.entries(result)) {
+    //   if (typeof(value)!='object') {
+    //     document.getElementById('response3').innerHTML+=`${key}: ${value}<br>`;
+    //   }
+    //  else{
+    //   for (const [key, values] of Object.entries(value)){
+    //     document.getElementById('response3').innerHTML+=`${key}: ${values}<br>`;
+    //   }
+     
+    //  }
+    //   console.log();
+    // }
+    
+  });
+})
+
