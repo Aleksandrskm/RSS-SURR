@@ -95,6 +95,7 @@ async function calculateFirstAvailableInterval(data){
     });
     const result = await response.json();
     console.log("Success:", result);
+    
     createResponse(result,data);
     return result;
   } catch (error) {
@@ -117,6 +118,7 @@ async function postJSON(data) {
       console.error("Error:", error);
     }
   }
+
 let url = 'http://185.192.247.60:7128/Database/DBTables';
 let response =  fetch(url)
 .then(response =>response.json())
@@ -164,6 +166,9 @@ let response =  fetch(url)
  simDate.value=new Date().toISOString();
  console.log(new Date().toISOString());
 function createResponse(result,data){
+  if (document.querySelector('.information_request')) {
+    document.querySelector('.information_request').remove();
+  }
   document.getElementById('response3').innerHTML='';
   for (const [key, value] of Object.entries(result)) {
     if (typeof(value)!='object') {
@@ -178,16 +183,37 @@ function createResponse(result,data){
     console.log();
   }
   const createInformationRequest=document.createElement('div');
-  const parent=document.querySelector('.row_com');
+  
+  const parent=document.querySelector('.content');
   createInformationRequest.classList.add('information_request');
   for (const [key, value] of Object.entries(data)) {
     if (typeof(value)!='object') {
+      if (key=='start_datetime_iso') {
+        createInformationRequest.innerHTML+=`<div>Точка начала отсчета: ${value}</div><br>`;  
+      }
+      else{
+        createInformationRequest.innerHTML+=`<div>${key}: ${value}</div><br>`;
+      }
       
-      createInformationRequest.innerHTML+=`<div>${key}: ${value}</div><br>`;
     }
    else{
     for (const [key, values] of Object.entries(value)){
-      createInformationRequest.innerHTML+=`<div>${key}: ${values}</div><br>`;
+      if (key=='name') {
+        createInformationRequest.innerHTML+=`<div>Имя:${result.satellite_name} ${values}</div><br>`;
+      }
+      else if (key=='lat') {
+        createInformationRequest.innerHTML+=`<div>Широта: ${values}</div><br>`;
+      }
+      else if (key=='lon') {
+        createInformationRequest.innerHTML+=`<div>Долгота: ${values}</div><br>`;
+      }
+      else if (key=='radius') {
+        createInformationRequest.innerHTML+=`<div>Радиус: ${values}</div><br>`;
+      }
+      else{
+        createInformationRequest.innerHTML+=`<div>${key}: ${values}</div><br>`;
+      }
+      
     }
    
    }
@@ -198,8 +224,10 @@ function createResponse(result,data){
   const spanSiple=document.createElement('span');
   const spanDuplex=document.createElement('span');
   const btnSend=document.createElement('button');
-  spanSiple.textContent='Simplex';
-  spanDuplex.textContent='Duplex';
+  const radio=document.createElement('div');
+  radio.classList.add('radio-dvi');
+  spanSiple.textContent='Симплекс';
+  spanDuplex.textContent='Дуплекс';
   btnSend.classList.add('btn-send');
   btnSend.textContent='Отправить';
   checkboxSimple.type='radio';
@@ -211,11 +239,17 @@ function createResponse(result,data){
   checkboxDuplex.name='radio';
   checkboxSimple.classList.add('simple-checkbox');
   checkboxDuplex.classList.add('duplex-checkbox');
-  createInformationRequest.append(spanSiple);
-  createInformationRequest.append(checkboxSimple);
-  createInformationRequest.append(spanSiple);
-  createInformationRequest.append(checkboxDuplex);
-  createInformationRequest.append(spanDuplex);
+  radio.append(spanSiple);
+  radio.append(checkboxSimple);
+  radio.append(spanDuplex);
+  radio.append(checkboxDuplex);
+  
+  // createInformationRequest.append(spanSiple);
+  // createInformationRequest.append(checkboxSimple);
+  // createInformationRequest.append(spanSiple);
+  // createInformationRequest.append(checkboxDuplex);
+  // createInformationRequest.append(spanDuplex);
+  createInformationRequest.append(radio);
   createInformationRequest.innerHTML+=`<br>`;
   createInformationRequest.append(btnSend);
   parent.append(createInformationRequest);
@@ -225,7 +259,7 @@ const btnStartSim=document.getElementById('task-btn_sim');
 btnStartSim.addEventListener('click',()=>{
   const data = {
     'point':{
-          "name":name,
+          "name":'',
           "lat": document.getElementById('lat3').value,
           "lon": document.getElementById('lon3').value,
           "radius": 2500
