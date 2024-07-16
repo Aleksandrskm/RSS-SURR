@@ -161,8 +161,8 @@ async function postJSON(data) {
 //   });
 //   // console.log(json);
 // });
- const simDate=document.getElementById('simulator_this_time');
- simDate.value=new Date().toISOString();
+//  const simDate=document.getElementById('simulator_this_time');
+//  simDate.value=new Date().toISOString();
  console.log(new Date().toISOString());
 function createResponse(result,data){
   if (document.querySelector('.information_request')) {
@@ -227,18 +227,25 @@ function createResponse(result,data){
   checkboxDuplex.type='radio';
   checkboxSimple.value='Simplex';
   checkboxDuplex.value='Duplex';
+  
   checkboxSimple.name='radio';
   checkboxDuplex.name='radio';
   checkboxSimple.classList.add('simple-checkbox');
   checkboxDuplex.classList.add('duplex-checkbox');
+  
+  
   radio.append(spanSiple);
   radio.append(checkboxSimple);
   radio.append(spanDuplex);
   radio.append(checkboxDuplex);
+
   createInformationRequest.append(radio);
   createInformationRequest.innerHTML+=`<br>`;
   createInformationRequest.append(btnSend);
   parent.append(createInformationRequest);
+  if (!document.querySelector('.duplex-checkbox').defaultChecked) {
+    document.querySelector('.duplex-checkbox').checked=true;
+  }
   
 }
 const btnStartSim=document.getElementById('task-btn_sim');
@@ -250,10 +257,15 @@ btnStartSim.addEventListener('click',()=>{
           "lon": document.getElementById('lon3').value,
           "radius": 2500
         },
-        "start_datetime_iso": document.getElementById('simulator_this_time').value
+        "start_datetime_iso": new Date().toISOString()
+  }
+  document.getElementById('response3').innerHTML='Получение первого  доступного KA';
+  if (document.querySelector('.information_request')) {
+    document.querySelector('.information_request').remove();
   }
   calculateFirstAvailableInterval(data)
   .then(result=>{
+    
   });
 })
 
