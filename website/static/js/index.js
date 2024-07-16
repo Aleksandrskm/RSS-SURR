@@ -119,49 +119,48 @@ async function postJSON(data) {
     }
   }
 
-let url = 'http://185.192.247.60:7128/Database/DBTables';
-let response =  fetch(url)
-.then(response =>response.json())
-.then(json=>{
-  json.forEach(element => {
-    const elem =document.createElement('div');
-    elem.innerHTML=`<div class="container__nav__el"> ${element}</div>`;
-    elem.addEventListener('click',(e)=>{
-      let content = e.target.innerHTML;
-      // console.log(content);
-      const data = {name:content};
-      document.querySelector('.container_content').innerHTML='';
-      postJSON(data).then(result=>{
-        if (result.total_rows_count==0) {
-          const name=document.createElement('div');
-            name.innerHTML=`<div>${result.name}</div>`;
-            document.querySelector('.container_content').append(name);
-        }
-        result.rows.forEach(element => {
-          if (result.rows[0]===element) {
-            const name=document.createElement('div');
-            name.innerHTML=`<div>${result.name}</div>`;
-            document.querySelector('.container_content').append(name);
-          }
-          const table=document.createElement('tr');
+// let url = 'http://185.192.247.60:7128/Database/DBTables';
+// let response =  fetch(url)
+// .then(response =>response.json())
+// .then(json=>{
+//   json.forEach(element => {
+//     const elem =document.createElement('div');
+//     elem.innerHTML=`<div class="container__nav__el"> ${element}</div>`;
+//     elem.addEventListener('click',(e)=>{
+//       let content = e.target.innerHTML;
+//       // console.log(content);
+//       const data = {name:content};
+//       document.querySelector('.container_content').innerHTML='';
+//       postJSON(data).then(result=>{
+//         if (result.total_rows_count==0) {
+//           const name=document.createElement('div');
+//             name.innerHTML=`<div>${result.name}</div>`;
+//             document.querySelector('.container_content').append(name);
+//         }
+//         result.rows.forEach(element => {
+//           if (result.rows[0]===element) {
+//             const name=document.createElement('div');
+//             name.innerHTML=`<div>${result.name}</div>`;
+//             document.querySelector('.container_content').append(name);
+//           }
+//           const table=document.createElement('tr');
 
-          table.innerHTML+=`<tr></tr>`;
-          document.querySelector('.container_content').append(table);
-          element.forEach(el=>{
-            table.innerHTML+=`<td>${el}</td>
-            `;
-          });
-          // console.log(element);
-          document.querySelector('.container_content').append(table);
-        });
-        // console.log(result.rows);
-      });
-    });
-    document.querySelector('.container__nav').append(elem);
-  });
-  // console.log(json);
-});
-
+//           table.innerHTML+=`<tr></tr>`;
+//           document.querySelector('.container_content').append(table);
+//           element.forEach(el=>{
+//             table.innerHTML+=`<td>${el}</td>
+//             `;
+//           });
+//           // console.log(element);
+//           document.querySelector('.container_content').append(table);
+//         });
+//         // console.log(result.rows);
+//       });
+//     });
+//     document.querySelector('.container__nav').append(elem);
+//   });
+//   // console.log(json);
+// });
  const simDate=document.getElementById('simulator_this_time');
  simDate.value=new Date().toISOString();
  console.log(new Date().toISOString());
@@ -178,12 +177,9 @@ function createResponse(result,data){
     for (const [key, values] of Object.entries(value)){
       document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div><br>`;
     }
-   
    }
-    console.log();
   }
   const createInformationRequest=document.createElement('div');
-  
   const parent=document.querySelector('.content');
   createInformationRequest.classList.add('information_request');
   for (const [key, value] of Object.entries(data)) {
@@ -194,7 +190,6 @@ function createResponse(result,data){
       else{
         createInformationRequest.innerHTML+=`<div>${key}: ${value}</div><br>`;
       }
-      
     }
    else{
     for (const [key, values] of Object.entries(value)){
@@ -212,12 +207,9 @@ function createResponse(result,data){
       }
       else{
         createInformationRequest.innerHTML+=`<div>${key}: ${values}</div><br>`;
-      }
-      
+      } 
     }
-   
    }
-    console.log();
   }
   const checkboxSimple=document.createElement('input'); 
   const checkboxDuplex=document.createElement('input');
@@ -243,12 +235,6 @@ function createResponse(result,data){
   radio.append(checkboxSimple);
   radio.append(spanDuplex);
   radio.append(checkboxDuplex);
-  
-  // createInformationRequest.append(spanSiple);
-  // createInformationRequest.append(checkboxSimple);
-  // createInformationRequest.append(spanSiple);
-  // createInformationRequest.append(checkboxDuplex);
-  // createInformationRequest.append(spanDuplex);
   createInformationRequest.append(radio);
   createInformationRequest.innerHTML+=`<br>`;
   createInformationRequest.append(btnSend);
@@ -268,22 +254,6 @@ btnStartSim.addEventListener('click',()=>{
   }
   calculateFirstAvailableInterval(data)
   .then(result=>{
-   
-   
-    
-    // for (const [key, value] of Object.entries(result)) {
-    //   if (typeof(value)!='object') {
-    //     document.getElementById('response3').innerHTML+=`${key}: ${value}<br>`;
-    //   }
-    //  else{
-    //   for (const [key, values] of Object.entries(value)){
-    //     document.getElementById('response3').innerHTML+=`${key}: ${values}<br>`;
-    //   }
-     
-    //  }
-    //   console.log();
-    // }
-    
   });
 })
 
