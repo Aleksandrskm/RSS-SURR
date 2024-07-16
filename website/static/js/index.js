@@ -1,4 +1,36 @@
 'use strict';
+function getDateTime() {
+  let now     = new Date(); 
+  let year    = now.getFullYear();
+  let month   = now.getMonth()+1; 
+  let day     = now.getDate();
+  let hour    = now.getHours();
+  let minute  = now.getMinutes();
+  let second  = now.getSeconds(); 
+  if(month.toString().length == 1) {
+       month = '0'+month;
+  }
+  if(day.toString().length == 1) {
+       day = '0'+day;
+  }   
+  if(hour.toString().length == 1) {
+       hour = '0'+hour;
+  }
+  if(minute.toString().length == 1) {
+       minute = '0'+minute;
+  }
+  if(second.toString().length == 1) {
+       second = '0'+second;
+  }   
+  var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
+   return dateTime;
+}
+
+// example usage: realtime clock
+setInterval(function(){
+  let currentTime = getDateTime();
+  document.getElementById("timer").innerHTML = currentTime;
+}, 1000);
 function azimuth_and_elevation_angle() {
     const lat1 = document.getElementById('lat1').value;
     const lon1 = document.getElementById('lon1').value;
@@ -119,50 +151,51 @@ async function postJSON(data) {
     }
   }
 
-// let url = 'http://185.192.247.60:7128/Database/DBTables';
-// let response =  fetch(url)
-// .then(response =>response.json())
-// .then(json=>{
-//   json.forEach(element => {
-//     const elem =document.createElement('div');
-//     elem.innerHTML=`<div class="container__nav__el"> ${element}</div>`;
-//     elem.addEventListener('click',(e)=>{
-//       let content = e.target.innerHTML;
-//       // console.log(content);
-//       const data = {name:content};
-//       document.querySelector('.container_content').innerHTML='';
-//       postJSON(data).then(result=>{
-//         if (result.total_rows_count==0) {
-//           const name=document.createElement('div');
-//             name.innerHTML=`<div>${result.name}</div>`;
-//             document.querySelector('.container_content').append(name);
-//         }
-//         result.rows.forEach(element => {
-//           if (result.rows[0]===element) {
-//             const name=document.createElement('div');
-//             name.innerHTML=`<div>${result.name}</div>`;
-//             document.querySelector('.container_content').append(name);
-//           }
-//           const table=document.createElement('tr');
+let url = 'http://185.192.247.60:7128/Database/DBTables';
+let response =  fetch(url)
+.then(response =>response.json())
+.then(json=>{
+  json.forEach(element => {
+    const elem =document.createElement('div');
+    elem.innerHTML=`<div class="container__nav__el"> ${element}</div>`;
+    elem.addEventListener('click',(e)=>{
+      let content = e.target.innerHTML;
+      // console.log(content);
+      const data = {name:content};
+      document.querySelector('.container_content').innerHTML='';
+      postJSON(data).then(result=>{
+        if (result.total_rows_count==0) {
+          const name=document.createElement('div');
+            name.innerHTML=`<div>${result.name}</div>`;
+            document.querySelector('.container_content').append(name);
+        }
+        result.rows.forEach(element => {
+          if (result.rows[0]===element) {
+            const name=document.createElement('div');
+            name.innerHTML=`<div>${result.name}</div>`;
+            document.querySelector('.container_content').append(name);
+          }
+          const table=document.createElement('tr');
 
-//           table.innerHTML+=`<tr></tr>`;
-//           document.querySelector('.container_content').append(table);
-//           element.forEach(el=>{
-//             table.innerHTML+=`<td>${el}</td>
-//             `;
-//           });
-//           // console.log(element);
-//           document.querySelector('.container_content').append(table);
-//         });
-//         // console.log(result.rows);
-//       });
-//     });
-//     document.querySelector('.container__nav').append(elem);
-//   });
-//   // console.log(json);
-// });
-//  const simDate=document.getElementById('simulator_this_time');
-//  simDate.value=new Date().toISOString();
+          table.innerHTML+=`<tr></tr>`;
+          document.querySelector('.container_content').append(table);
+          element.forEach(el=>{
+            table.innerHTML+=`<td>${el}</td>
+            `;
+          });
+          // console.log(element);
+          document.querySelector('.container_content').append(table);
+        });
+        // console.log(result.rows);
+      });
+    });
+    document.querySelector('.container__nav').append(elem);
+  });
+  // console.log(json);
+});
+
+ const simDate=document.getElementById('simulator_this_time');
+ simDate.value=new Date().toISOString();
  console.log(new Date().toISOString());
 function createResponse(result,data){
   if (document.querySelector('.information_request')) {
@@ -177,9 +210,12 @@ function createResponse(result,data){
     for (const [key, values] of Object.entries(value)){
       document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div><br>`;
     }
+   
    }
+    console.log();
   }
   const createInformationRequest=document.createElement('div');
+  
   const parent=document.querySelector('.content');
   createInformationRequest.classList.add('information_request');
   for (const [key, value] of Object.entries(data)) {
@@ -190,6 +226,7 @@ function createResponse(result,data){
       else{
         createInformationRequest.innerHTML+=`<div>${key}: ${value}</div><br>`;
       }
+      
     }
    else{
     for (const [key, values] of Object.entries(value)){
@@ -207,9 +244,12 @@ function createResponse(result,data){
       }
       else{
         createInformationRequest.innerHTML+=`<div>${key}: ${values}</div><br>`;
-      } 
+      }
+      
     }
+   
    }
+    console.log();
   }
   const checkboxSimple=document.createElement('input'); 
   const checkboxDuplex=document.createElement('input');
@@ -227,25 +267,24 @@ function createResponse(result,data){
   checkboxDuplex.type='radio';
   checkboxSimple.value='Simplex';
   checkboxDuplex.value='Duplex';
-  
   checkboxSimple.name='radio';
   checkboxDuplex.name='radio';
   checkboxSimple.classList.add('simple-checkbox');
   checkboxDuplex.classList.add('duplex-checkbox');
-  
-  
   radio.append(spanSiple);
   radio.append(checkboxSimple);
   radio.append(spanDuplex);
   radio.append(checkboxDuplex);
-
+  
+  // createInformationRequest.append(spanSiple);
+  // createInformationRequest.append(checkboxSimple);
+  // createInformationRequest.append(spanSiple);
+  // createInformationRequest.append(checkboxDuplex);
+  // createInformationRequest.append(spanDuplex);
   createInformationRequest.append(radio);
   createInformationRequest.innerHTML+=`<br>`;
   createInformationRequest.append(btnSend);
   parent.append(createInformationRequest);
-  if (!document.querySelector('.duplex-checkbox').defaultChecked) {
-    document.querySelector('.duplex-checkbox').checked=true;
-  }
   
 }
 const btnStartSim=document.getElementById('task-btn_sim');
@@ -257,14 +296,25 @@ btnStartSim.addEventListener('click',()=>{
           "lon": document.getElementById('lon3').value,
           "radius": 2500
         },
-        "start_datetime_iso": new Date().toISOString()
-  }
-  document.getElementById('response3').innerHTML='Получение первого  доступного KA';
-  if (document.querySelector('.information_request')) {
-    document.querySelector('.information_request').remove();
+        "start_datetime_iso": document.getElementById('simulator_this_time').value
   }
   calculateFirstAvailableInterval(data)
   .then(result=>{
+   
+   
+    
+    // for (const [key, value] of Object.entries(result)) {
+    //   if (typeof(value)!='object') {
+    //     document.getElementById('response3').innerHTML+=`${key}: ${value}<br>`;
+    //   }
+    //  else{
+    //   for (const [key, values] of Object.entries(value)){
+    //     document.getElementById('response3').innerHTML+=`${key}: ${values}<br>`;
+    //   }
+     
+    //  }
+    //   console.log();
+    // }
     
   });
 })

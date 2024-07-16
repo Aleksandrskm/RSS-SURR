@@ -8,14 +8,19 @@
 </head>
 <body>
     <header>
+        
         <div class="ref">
+            
             <a class="home-ref" href="/" title="Главная страница">
                 <img class="home" src="{{ url_for('static', filename='img/home.svg') }}" alt="Стартовая страница">
             </a>
+            <div id="timer"></div>
         </div>
+       
         <h1>Имитатор центра обработки вызовов</h1>
+        
     </header>
-
+    
     {% block content %}
 
     <main class="butt">
