@@ -1,4 +1,36 @@
 'use strict';
+function getDateTime() {
+  let now     = new Date(); 
+  let year    = now.getFullYear();
+  let month   = now.getMonth()+1; 
+  let day     = now.getDate();
+  let hour    = now.getHours();
+  let minute  = now.getMinutes();
+  let second  = now.getSeconds(); 
+  if(month.toString().length == 1) {
+       month = '0'+month;
+  }
+  if(day.toString().length == 1) {
+       day = '0'+day;
+  }   
+  if(hour.toString().length == 1) {
+       hour = '0'+hour;
+  }
+  if(minute.toString().length == 1) {
+       minute = '0'+minute;
+  }
+  if(second.toString().length == 1) {
+       second = '0'+second;
+  }   
+  var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
+   return dateTime;
+}
+
+// example usage: realtime clock
+setInterval(function(){
+  let currentTime = getDateTime();
+  document.getElementById("timer").innerHTML = currentTime;
+}, 1000);
 function azimuth_and_elevation_angle() {
     const lat1 = document.getElementById('lat1').value;
     const lon1 = document.getElementById('lon1').value;
@@ -162,9 +194,9 @@ let response =  fetch(url)
   // console.log(json);
 });
 
- const simDate=document.getElementById('simulator_this_time');
- simDate.value=new Date().toISOString();
- console.log(new Date().toISOString());
+//  const simDate=document.getElementById('simulator_this_time');
+//  simDate.value=new Date().toISOString();
+//  console.log(new Date().toISOString());
 function createResponse(result,data){
   if (document.querySelector('.information_request')) {
     document.querySelector('.information_request').remove();
@@ -253,7 +285,9 @@ function createResponse(result,data){
   createInformationRequest.innerHTML+=`<br>`;
   createInformationRequest.append(btnSend);
   parent.append(createInformationRequest);
-  
+  if (!document.querySelector('.duplex-checkbox').defaultChecked) {
+    document.querySelector('.duplex-checkbox').checked=true;
+  }
 }
 const btnStartSim=document.getElementById('task-btn_sim');
 btnStartSim.addEventListener('click',()=>{
@@ -264,7 +298,12 @@ btnStartSim.addEventListener('click',()=>{
           "lon": document.getElementById('lon3').value,
           "radius": 2500
         },
-        "start_datetime_iso": document.getElementById('simulator_this_time').value
+        "start_datetime_iso": new Date().toISOString()
+      
+  }
+  document.getElementById('response3').innerHTML='Получение первого  доступного KA';
+  if (document.querySelector('.information_request')) {
+    document.querySelector('.information_request').remove();
   }
   calculateFirstAvailableInterval(data)
   .then(result=>{

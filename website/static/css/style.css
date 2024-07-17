@@ -284,7 +284,11 @@ img {
 
 .tables_vi {
 }
-
+#timer{
+    margin-right: 56%;
+    margin-top: 2%;
+    color: #0060df;
+}
 .row_vi {
     display: flex;
     flex-direction: row;
@@ -324,12 +328,13 @@ img {
 
 
 header {
+    grid-template-columns: 1fr 43rem 1fr;
     white-space: nowrap;
     background-color: #999999;
     height: 75px;
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 33rem 1fr;
+    
 }
 
 h1 {
@@ -343,11 +348,13 @@ h1 {
 }
 .home-ref {
     margin-right: auto;
-    margin-right: 90%;
+    /* margin-right: 90%; */
 }
 
 .ref{
     margin: 15px;
+    display: flex;
+    flex-direction: row;
 }
 
 h2 {
