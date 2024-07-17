@@ -194,9 +194,9 @@ let response =  fetch(url)
   // console.log(json);
 });
 
- const simDate=document.getElementById('simulator_this_time');
- simDate.value=new Date().toISOString();
- console.log(new Date().toISOString());
+//  const simDate=document.getElementById('simulator_this_time');
+//  simDate.value=new Date().toISOString();
+//  console.log(new Date().toISOString());
 function createResponse(result,data){
   if (document.querySelector('.information_request')) {
     document.querySelector('.information_request').remove();
@@ -285,7 +285,9 @@ function createResponse(result,data){
   createInformationRequest.innerHTML+=`<br>`;
   createInformationRequest.append(btnSend);
   parent.append(createInformationRequest);
-  
+  if (!document.querySelector('.duplex-checkbox').defaultChecked) {
+    document.querySelector('.duplex-checkbox').checked=true;
+  }
 }
 const btnStartSim=document.getElementById('task-btn_sim');
 btnStartSim.addEventListener('click',()=>{
@@ -296,7 +298,12 @@ btnStartSim.addEventListener('click',()=>{
           "lon": document.getElementById('lon3').value,
           "radius": 2500
         },
-        "start_datetime_iso": document.getElementById('simulator_this_time').value
+        "start_datetime_iso": new Date().toISOString()
+      
+  }
+  document.getElementById('response3').innerHTML='Получение первого  доступного KA';
+  if (document.querySelector('.information_request')) {
+    document.querySelector('.information_request').remove();
   }
   calculateFirstAvailableInterval(data)
   .then(result=>{
