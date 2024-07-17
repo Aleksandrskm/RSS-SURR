@@ -129,6 +129,26 @@ async function calculateFirstAvailableInterval(data){
     console.log("Success:", result);
     
     createResponse(result,data);
+    if (document.querySelector('.duplex-checkbox').checked) {
+      postOcFrREs(result.satellite_id,document.querySelector('.duplex-checkbox').value)
+      .then(respons=>{
+        console.log(respons);
+        setTimeout(function(){
+          console.log(respons.Nomera_zanyatyih_yacheek);
+          // postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id);
+        },4000);
+       
+      });
+    }
+    else{
+      postOcFrREs(result.satellite_id,document.querySelector('.simple-checkbox').value).then(response=>{
+        setTimeout(function(){
+          console.log(response.Nomera_zanyatyih_yacheek);
+          postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id);
+          
+        },4000);
+      });
+    }
     return result;
   } catch (error) {
     console.error("Error:", error);
@@ -151,48 +171,48 @@ async function postJSON(data) {
     }
   }
 
-let url = 'http://185.192.247.60:7128/Database/DBTables';
-let response =  fetch(url)
-.then(response =>response.json())
-.then(json=>{
-  json.forEach(element => {
-    const elem =document.createElement('div');
-    elem.innerHTML=`<div class="container__nav__el"> ${element}</div>`;
-    elem.addEventListener('click',(e)=>{
-      let content = e.target.innerHTML;
-      // console.log(content);
-      const data = {name:content};
-      document.querySelector('.container_content').innerHTML='';
-      postJSON(data).then(result=>{
-        if (result.total_rows_count==0) {
-          const name=document.createElement('div');
-            name.innerHTML=`<div>${result.name}</div>`;
-            document.querySelector('.container_content').append(name);
-        }
-        result.rows.forEach(element => {
-          if (result.rows[0]===element) {
-            const name=document.createElement('div');
-            name.innerHTML=`<div>${result.name}</div>`;
-            document.querySelector('.container_content').append(name);
-          }
-          const table=document.createElement('tr');
+// let url = 'http://185.192.247.60:7128/Database/DBTables';
+// let response =  fetch(url)
+// .then(response =>response.json())
+// .then(json=>{
+//   json.forEach(element => {
+//     const elem =document.createElement('div');
+//     elem.innerHTML=`<div class="container__nav__el"> ${element}</div>`;
+//     elem.addEventListener('click',(e)=>{
+//       let content = e.target.innerHTML;
+//       // console.log(content);
+//       const data = {name:content};
+//       document.querySelector('.container_content').innerHTML='';
+//       postJSON(data).then(result=>{
+//         if (result.total_rows_count==0) {
+//           const name=document.createElement('div');
+//             name.innerHTML=`<div>${result.name}</div>`;
+//             document.querySelector('.container_content').append(name);
+//         }
+//         result.rows.forEach(element => {
+//           if (result.rows[0]===element) {
+//             const name=document.createElement('div');
+//             name.innerHTML=`<div>${result.name}</div>`;
+//             document.querySelector('.container_content').append(name);
+//           }
+//           const table=document.createElement('tr');
 
-          table.innerHTML+=`<tr></tr>`;
-          document.querySelector('.container_content').append(table);
-          element.forEach(el=>{
-            table.innerHTML+=`<td>${el}</td>
-            `;
-          });
-          // console.log(element);
-          document.querySelector('.container_content').append(table);
-        });
-        // console.log(result.rows);
-      });
-    });
-    document.querySelector('.container__nav').append(elem);
-  });
-  // console.log(json);
-});
+//           table.innerHTML+=`<tr></tr>`;
+//           document.querySelector('.container_content').append(table);
+//           element.forEach(el=>{
+//             table.innerHTML+=`<td>${el}</td>
+//             `;
+//           });
+//           // console.log(element);
+//           document.querySelector('.container_content').append(table);
+//         });
+//         // console.log(result.rows);
+//       });
+//     });
+//     document.querySelector('.container__nav').append(elem);
+//   });
+//   // console.log(json);
+// });
 
 //  const simDate=document.getElementById('simulator_this_time');
 //  simDate.value=new Date().toISOString();
@@ -251,42 +271,74 @@ function createResponse(result,data){
    }
     console.log();
   }
-  const checkboxSimple=document.createElement('input'); 
-  const checkboxDuplex=document.createElement('input');
-  const spanSiple=document.createElement('span');
-  const spanDuplex=document.createElement('span');
-  const btnSend=document.createElement('button');
-  const radio=document.createElement('div');
-  radio.classList.add('radio-dvi');
-  spanSiple.textContent='Симплекс';
-  spanDuplex.textContent='Дуплекс';
-  btnSend.classList.add('btn-send');
-  btnSend.textContent='Отправить';
-  checkboxSimple.type='radio';
-  checkboxSimple.checked=true;
-  checkboxDuplex.type='radio';
-  checkboxSimple.value='Simplex';
-  checkboxDuplex.value='Duplex';
-  checkboxSimple.name='radio';
-  checkboxDuplex.name='radio';
-  checkboxSimple.classList.add('simple-checkbox');
-  checkboxDuplex.classList.add('duplex-checkbox');
-  radio.append(spanSiple);
-  radio.append(checkboxSimple);
-  radio.append(spanDuplex);
-  radio.append(checkboxDuplex);
+  // const checkboxSimple=document.createElement('input'); 
+  // const checkboxDuplex=document.createElement('input');
+  // const spanSiple=document.createElement('span');
+  // const spanDuplex=document.createElement('span');
+  // const btnSend=document.createElement('button');
+  // const radio=document.createElement('div');
+  // radio.classList.add('radio-dvi');
+  // spanSiple.textContent='Симплекс';
+  // spanDuplex.textContent='Дуплекс';
+  // btnSend.classList.add('btn-send');
+  // btnSend.textContent='Отправить';
+  // checkboxSimple.type='radio';
+  // checkboxSimple.checked=true;
+  // checkboxDuplex.type='radio';
+  // checkboxSimple.value=1;
+  // checkboxDuplex.value=2;
+  // checkboxSimple.name='radio';
+  // checkboxDuplex.name='radio';
+  // checkboxSimple.classList.add('simple-checkbox');
+  // checkboxDuplex.classList.add('duplex-checkbox');
+  // radio.append(spanSiple);
+  // radio.append(checkboxSimple);
+  // radio.append(spanDuplex);
+  // radio.append(checkboxDuplex);
   
   // createInformationRequest.append(spanSiple);
   // createInformationRequest.append(checkboxSimple);
   // createInformationRequest.append(spanSiple);
   // createInformationRequest.append(checkboxDuplex);
   // createInformationRequest.append(spanDuplex);
-  createInformationRequest.append(radio);
-  createInformationRequest.innerHTML+=`<br>`;
-  createInformationRequest.append(btnSend);
+  // createInformationRequest.append(radio);
+  // createInformationRequest.innerHTML+=`<br>`;
+  // createInformationRequest.append(btnSend);
   parent.append(createInformationRequest);
-  if (!document.querySelector('.duplex-checkbox').defaultChecked) {
-    document.querySelector('.duplex-checkbox').checked=true;
+  // if (!document.querySelector('.duplex-checkbox').defaultChecked) {
+  //   document.querySelector('.duplex-checkbox').checked=true;
+  // }
+}
+async function postOcFrREs(stId,type){
+  try {
+    const response = await fetch(`http://185.192.247.60:7130/CommunicationAvailability/OccupyFrequencyResource?satellite_id=${stId}&number_of_cells_for_reservation=${type}`, {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      
+    });
+    const result = await response.json();
+    console.log("Success:", result);
+    return result;
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+async function postRelaeseFrRes(data,stId){
+  try {
+    const response = await fetch(`http://185.192.247.60:7130/CommunicationAvailability/ReleaseFrequencyResource?satellite_id=${stId}`, {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    console.log("Success:", result);
+    return result;
+  } catch (error) {
+    console.error("Error:", error);
   }
 }
 const btnStartSim=document.getElementById('task-btn_sim');
@@ -305,11 +357,12 @@ btnStartSim.addEventListener('click',()=>{
   if (document.querySelector('.information_request')) {
     document.querySelector('.information_request').remove();
   }
-  calculateFirstAvailableInterval(data)
-  .then(result=>{
+  calculateFirstAvailableInterval(data);
    
-   
+
     
+   
+  
     // for (const [key, value] of Object.entries(result)) {
     //   if (typeof(value)!='object') {
     //     document.getElementById('response3').innerHTML+=`${key}: ${value}<br>`;
@@ -323,6 +376,6 @@ btnStartSim.addEventListener('click',()=>{
     //   console.log();
     // }
     
-  });
+  
 })
 
