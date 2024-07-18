@@ -132,21 +132,31 @@ async function calculateFirstAvailableInterval(data){
     if (document.querySelector('.duplex-checkbox').checked) {
       postOcFrREs(result.satellite_id,document.querySelector('.duplex-checkbox').value)
       .then(respons=>{
-        console.log(respons);
+        
+        document.querySelector('.information_request').innerHTML+=`<div> Заняты следующие ячейки 
+        ${respons.Nomera_zanyatyih_yacheek[0]} ${respons.Nomera_zanyatyih_yacheek[1]}</div> `;
+        console.log(respons.Nomera_zanyatyih_yacheek[0]);
         setTimeout(function(){
           console.log(respons.Nomera_zanyatyih_yacheek);
-          // postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id);
-        },4000);
+           postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
+            document.querySelector('.information_request').innerHTML+=`Ячейки освобождены`;
+           });
+           
+        },10000);
        
       });
     }
     else{
       postOcFrREs(result.satellite_id,document.querySelector('.simple-checkbox').value).then(response=>{
+        
+        document.querySelector('.information_request').innerHTML+=`<div>Заняты следующие ячейки ${response.Nomera_zanyatyih_yacheek}</div> `;
         setTimeout(function(){
-          console.log(response.Nomera_zanyatyih_yacheek);
-          postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id);
+         
+          postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
+            document.querySelector('.information_request').innerHTML+=`<br> <div>Ячейки освобождены</div>`;
+          });
           
-        },4000);
+        },10000);
       });
     }
     return result;
