@@ -137,7 +137,7 @@ async function calculateFirstAvailableInterval(data){
     if (document.querySelector('.duplex-checkbox').checked) {
       postOcFrREs(result.satellite_id,document.querySelector('.duplex-checkbox').value)
       .then(respons=>{
-        
+        const randTime=getRandomNumber(30000,60000);
         document.querySelector('.information_request').innerHTML+=`<div> 
         ${result.satellite_name} Заняты следующие ячейки 
         ${respons.Nomera_zanyatyih_yacheek[0][0]} - ${respons.Nomera_zanyatyih_yacheek[0][1]}
@@ -147,25 +147,25 @@ async function calculateFirstAvailableInterval(data){
         setTimeout(function(){
           console.log(respons.Nomera_zanyatyih_yacheek);
            postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
-            document.querySelector('.information_request').innerHTML+=`<div>Ячейки освобождены</div>`;
+            document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены через ${randTime/1000} секунд</div>`;
            });
            
-        },getRandomNumber(30000,60000));
+        },randTime);
        
       });
     }
     else{
       postOcFrREs(result.satellite_id,document.querySelector('.simple-checkbox').value).then(response=>{
-       
+        const randTime=getRandomNumber(30000,60000);
         document.querySelector('.information_request').innerHTML+=`<div>${result.satellite_name} Заняты частотные каналы ${response.Nomera_zanyatyih_yacheek[0][0]} -
          ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
         setTimeout(function(){
          
           postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
-            document.querySelector('.information_request').innerHTML+=`<br> <div>Ячейки освобождены</div>`;
+            document.querySelector('.information_request').innerHTML+=`<br> <div>Каналы освобождены через ${randTime/1000} секунд</div>`;
           });
           
-        },getRandomNumber(30000,60000));
+        },randTime);
       });
     }
     return result;
