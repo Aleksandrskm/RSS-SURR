@@ -137,7 +137,7 @@ async function calculateFirstAvailableInterval(data){
     if (document.querySelector('.duplex-checkbox').checked) {
       postOcFrREs(result.satellite_id,document.querySelector('.duplex-checkbox').value)
       .then(respons=>{
-        const randTime=getRandomNumber(30000,60000);
+        const randTime=getRandomNumber(60000,120000);
         document.querySelector('.information_request').innerHTML+=`<div> 
         ${result.satellite_name} Заняты следующие ячейки 
         ${respons.Nomera_zanyatyih_yacheek[0][0]} - ${respons.Nomera_zanyatyih_yacheek[0][1]}
@@ -156,7 +156,7 @@ async function calculateFirstAvailableInterval(data){
     }
     else{
       postOcFrREs(result.satellite_id,document.querySelector('.simple-checkbox').value).then(response=>{
-        const randTime=getRandomNumber(30000,60000);
+        const randTime=getRandomNumber(60000,120000);
         document.querySelector('.information_request').innerHTML+=`<div>${result.satellite_name} Заняты частотные каналы ${response.Nomera_zanyatyih_yacheek[0][0]} -
          ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
         setTimeout(function(){
