@@ -139,7 +139,7 @@ async function calculateFirstAvailableInterval(data){
       .then(respons=>{
         const randTime=getRandomNumber(60000,120000);
         document.querySelector('.information_request').innerHTML+=`<div> 
-        ${result.satellite_name} Заняты частотные каналы:
+        ${result.satellite_name} Заняты частотные каналы: ${result.satellite_name}
         ${respons.Nomera_zanyatyih_yacheek[0][0]} - ${respons.Nomera_zanyatyih_yacheek[0][1]}
         ${respons.Nomera_zanyatyih_yacheek[1][0]} - ${respons.Nomera_zanyatyih_yacheek[1][1]}
         </div> `;
@@ -157,7 +157,7 @@ async function calculateFirstAvailableInterval(data){
     else{
       postOcFrREs(result.satellite_id,document.querySelector('.simple-checkbox').value).then(response=>{
         const randTime=getRandomNumber(60000,120000);
-        document.querySelector('.information_request').innerHTML+=`<div> Заняты частотные каналы: ${response.Nomera_zanyatyih_yacheek[0][0]} -
+        document.querySelector('.information_request').innerHTML+=`<div> Заняты частотные каналы:${result.satellite_name} ${response.Nomera_zanyatyih_yacheek[0][0]} -
          ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
         setTimeout(function(){
          
