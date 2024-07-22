@@ -157,7 +157,7 @@ async function calculateFirstAvailableInterval(data){
     else{
       postOcFrREs(result.satellite_id,document.querySelector('.simple-checkbox').value).then(response=>{
         const randTime=getRandomNumber(60000,120000);
-        document.querySelector('.information_request').innerHTML+=`<div>${result.satellite_name} Заняты частотные каналы ${response.Nomera_zanyatyih_yacheek[0][0]} -
+        document.querySelector('.information_request').innerHTML+=`<div> Заняты частотные каналы  ${result.satellite_name} ${response.Nomera_zanyatyih_yacheek[0][0]} -
          ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
         setTimeout(function(){
          
@@ -279,8 +279,8 @@ function createResponse(result,data){
   for (const [key, value] of Object.entries(data)) {
     if (typeof(value)!='object') {
       if (key=='start_datetime_iso') {
-        createInformationRequest.innerHTML+=`<div>Время  вызова функции: ${value}</div><br>`; 
-        document.getElementById('response3').innerHTML+=`<div>Время  вызова функции: ${value}</div>` ;
+        createInformationRequest.innerHTML+=`<div>Время  начала вызова : ${value}</div><br>`; 
+        document.getElementById('response3').innerHTML+=`<div>Время  начала вызова : ${value}</div>` ;
       
        
 

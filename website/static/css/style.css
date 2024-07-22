@@ -290,7 +290,9 @@ img {
 #timer{
     margin-right: 56%;
     margin-top: 2%;
-    color: #0060df;
+    color: black;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
 }
 .row_vi {
     display: flex;
