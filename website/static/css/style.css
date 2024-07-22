@@ -341,7 +341,12 @@ img {
     padding-left: 30px;
     box-sizing: border-box;
 }
-
+.duplex-checkbox{
+    width: 20px
+}
+.simple-checkbox{
+    width: 20px
+}
 
 header {
     grid-template-columns: 1fr 43rem 1fr;
