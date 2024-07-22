@@ -11,27 +11,31 @@
         <span>Расположение абонента:</span>
                 <br>
         <span>Широта , градусы</span>
-        <input id="lat3" type="text" value="42">
+        <input id="lat3" type="text" value="51">
         <span>Долгота, градусы</span>
-        <input id="lon3" type="text" value="140">
+        <input id="lon3" type="text" value="39">
         <div class="radio-dvi">
-            <span>Симплекс</span>
+            <span>Симплекс прием</span>
+            <input type="radio" value="1" name="radio" class="simple-checkbox">
+            <span>Симплекс отдача</span>
             <input type="radio" value="1" name="radio" class="simple-checkbox">
             <span>Дуплекс</span>
             <input type="radio" value="2" name="radio" class="duplex-checkbox" checked>
         </div>
-        <!-- <span>Имитация от текущего времени</span>
-        <input id="simulator_this_time" type="text" value=""> -->
-        <!-- <span>Продолжительность</span>
-        <input id="time3" type="text" value="1000"> -->
+        
             </div>
+            <!-- <div class="column3_com"> -->
+               
+                
+            <!-- </div> -->
         </div>
+        <div class="min-time-call">Минимальная Продолжительность вызова 30 секунд</div>
         <div class="btn2">
             <button id="task-btn_sim" onclick="">Старт</button>
         </div>
 
         <span>ОТВЕТ:</span>
-        <br>
+        
         <span id="response3"></span>
 
     </div>
