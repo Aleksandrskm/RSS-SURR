@@ -139,7 +139,7 @@ async function calculateFirstAvailableInterval(data){
       .then(respons=>{
         const randTime=getRandomNumber(60000,120000);
         document.querySelector('.information_request').innerHTML+=`<div> 
-        ${result.satellite_name} Заняты частотные каналы: ${result.satellite_name}
+        ${result.satellite_name} Заняты частотные каналы:  ${result.satellite_name}
         ${respons.Nomera_zanyatyih_yacheek[0][0]} - ${respons.Nomera_zanyatyih_yacheek[0][1]}
         ${respons.Nomera_zanyatyih_yacheek[1][0]} - ${respons.Nomera_zanyatyih_yacheek[1][1]}
         </div> `;
