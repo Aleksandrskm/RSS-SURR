@@ -1,4 +1,9 @@
 'use strict';
+function getRandomNumber(min, max) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min) + min)
+}
 function getDateTime() {
   let now     = new Date(); 
   let year    = now.getFullYear();
@@ -132,31 +137,35 @@ async function calculateFirstAvailableInterval(data){
     if (document.querySelector('.duplex-checkbox').checked) {
       postOcFrREs(result.satellite_id,document.querySelector('.duplex-checkbox').value)
       .then(respons=>{
-        
-        document.querySelector('.information_request').innerHTML+=`<div> Заняты следующие ячейки 
-        ${respons.Nomera_zanyatyih_yacheek[0]} ${respons.Nomera_zanyatyih_yacheek[1]}</div> `;
+        const randTime=getRandomNumber(60000,120000);
+        document.querySelector('.information_request').innerHTML+=`<div> 
+        ${result.satellite_name} Заняты частотные каналы: ${result.satellite_name}
+        ${respons.Nomera_zanyatyih_yacheek[0][0]} - ${respons.Nomera_zanyatyih_yacheek[0][1]}
+        ${respons.Nomera_zanyatyih_yacheek[1][0]} - ${respons.Nomera_zanyatyih_yacheek[1][1]}
+        </div> `;
         console.log(respons.Nomera_zanyatyih_yacheek[0]);
         setTimeout(function(){
           console.log(respons.Nomera_zanyatyih_yacheek);
            postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
-            document.querySelector('.information_request').innerHTML+=`Ячейки освобождены`;
+            document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены через ${randTime/1000} секунд</div>`;
            });
            
-        },10000);
+        },randTime);
        
       });
     }
     else{
       postOcFrREs(result.satellite_id,document.querySelector('.simple-checkbox').value).then(response=>{
-        
-        document.querySelector('.information_request').innerHTML+=`<div>Заняты следующие ячейки ${response.Nomera_zanyatyih_yacheek}</div> `;
+        const randTime=getRandomNumber(60000,120000);
+        document.querySelector('.information_request').innerHTML+=`<div> Заняты частотные каналы:${result.satellite_name} ${response.Nomera_zanyatyih_yacheek[0][0]} -
+         ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
         setTimeout(function(){
          
           postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
-            document.querySelector('.information_request').innerHTML+=`<br> <div>Ячейки освобождены</div>`;
+            document.querySelector('.information_request').innerHTML+=`<br> <div>Каналы освобождены через ${randTime/1000} секунд</div>`;
           });
           
-        },10000);
+        },randTime);
       });
     }
     return result;
@@ -234,16 +243,35 @@ function createResponse(result,data){
   document.getElementById('response3').innerHTML='';
   for (const [key, value] of Object.entries(result)) {
     if (typeof(value)!='object') {
-      document.getElementById('response3').innerHTML+=`<div>${key}: ${value}</div><br>`;
+      if (key=='duration_in_sec') {
+        document.getElementById('response3').innerHTML+=`<div> total_duration_in_sec: ${value}</div><br>`;
+      }
+      else {
+        document.getElementById('response3').innerHTML+=`<div>${key}: ${value}</div><br>`;
+      }
+     
     }
    else{
     for (const [key, values] of Object.entries(value)){
-      document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div><br>`;
+      if (key=='duration_in_sec') {
+        document.getElementById('response3').innerHTML+=`<div> total_duration_in_sec: ${values}</div><br>`;
+      }
+      else  if (key=='end_datetime_iso') {
+        document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div><br>`;
+        document.getElementById('response3').innerHTML+=`<div>Максимальная продолжительность вызова : ${(new Date(values)-new Date(data.start_datetime_iso))/1000}</div><br>`;
+        console.log(new Date(values));
+        console.log(new Date(data.start_datetime_iso));
+      }
+      else{
+        document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div><br>`;
+      }
+     
+      
     }
-   
    }
     console.log();
   }
+  
   const createInformationRequest=document.createElement('div');
   
   const parent=document.querySelector('.content');
@@ -251,8 +279,19 @@ function createResponse(result,data){
   for (const [key, value] of Object.entries(data)) {
     if (typeof(value)!='object') {
       if (key=='start_datetime_iso') {
-        createInformationRequest.innerHTML+=`<div>Точка начала отсчета: ${value}</div><br>`;  
+        createInformationRequest.innerHTML+=`<div>Время начала вызова: ${value}</div><br>`; 
+        document.getElementById('response3').innerHTML+=`<div>Время начала вызова: ${value}</div>` ;
+      
+       
+
       }
+      // if (key=='end_datetime_iso'){
+      //   const  endDate=+new Date(result.end_datetime_iso)/1000;
+      //   const thisDate=+new Date(value)/1000;
+      //   document.getElementById('response3').innerHTML+=`<div>Максимальная продолжительность: ${endDate-thisDate}</div>` ;
+      //   console.log(endDate);
+      //   console.log(thisDate);
+      // }
       else{
         createInformationRequest.innerHTML+=`<div>${key}: ${value}</div><br>`;
       }
