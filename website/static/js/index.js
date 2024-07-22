@@ -139,19 +139,22 @@ async function calculateFirstAvailableInterval(data){
       .then(respons=>{
         const randTime=getRandomNumber(60000,120000);
         document.querySelector('.information_request').innerHTML+=`<div> 
-        ${result.satellite_name} Заняты частотные каналы:  ${result.satellite_name}
+         Заняты частотные каналы:  ${result.satellite_name}
         ${respons.Nomera_zanyatyih_yacheek[0][0]} - ${respons.Nomera_zanyatyih_yacheek[0][1]}
-        ${respons.Nomera_zanyatyih_yacheek[1][0]} - ${respons.Nomera_zanyatyih_yacheek[1][1]}
+        ${respons.Nomera_zanyatyih_yacheek[1][1]} - ${respons.Nomera_zanyatyih_yacheek[1][0]}
         </div> `;
         console.log(respons.Nomera_zanyatyih_yacheek[0]);
         setTimeout(function(){
           console.log(respons.Nomera_zanyatyih_yacheek);
            postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
-            document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены через ${randTime/1000} секунд</div>`;
+            document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
+            document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${randTime/1000} секунд</div>`;
+            const dataEndCall=new Date();
+            document.querySelector('.information_request').innerHTML+=` <div> Время завершения вызова ${String(dataEndCall)}</div>`;
            });
            
         },randTime);
-       
+        
       });
     }
     else{
@@ -162,10 +165,14 @@ async function calculateFirstAvailableInterval(data){
         setTimeout(function(){
          
           postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
-            document.querySelector('.information_request').innerHTML+=`<br> <div>Каналы освобождены через ${randTime/1000} секунд</div>`;
+            document.querySelector('.information_request').innerHTML+=` <div>Каналы освобождены  </div>`;
+            document.querySelector('.information_request').innerHTML+=` <div> Продолжительность вызова ${randTime/1000} секунд</div>`;
+            const dataEndCall=new Date();
+            document.querySelector('.information_request').innerHTML+=` <div> Время завершения вызова ${String(dataEndCall)}</div>`;
           });
           
         },randTime);
+        
       });
     }
     return result;
@@ -244,26 +251,26 @@ function createResponse(result,data){
   for (const [key, value] of Object.entries(result)) {
     if (typeof(value)!='object') {
       if (key=='duration_in_sec') {
-        document.getElementById('response3').innerHTML+=`<div> total_duration_in_sec: ${value}</div><br>`;
+        document.getElementById('response3').innerHTML+=`<div> total_duration_in_sec: ${value}</div>`;
       }
       else {
-        document.getElementById('response3').innerHTML+=`<div>${key}: ${value}</div><br>`;
+        document.getElementById('response3').innerHTML+=`<div>${key}: ${value}</div>`;
       }
      
     }
    else{
     for (const [key, values] of Object.entries(value)){
       if (key=='duration_in_sec') {
-        document.getElementById('response3').innerHTML+=`<div> total_duration_in_sec: ${values}</div><br>`;
+        document.getElementById('response3').innerHTML+=`<div> total_duration_in_sec: ${values}</div>`;
       }
       else  if (key=='end_datetime_iso') {
-        document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div><br>`;
-        document.getElementById('response3').innerHTML+=`<div>Максимальная продолжительность вызова : ${(new Date(values)-new Date(data.start_datetime_iso))/1000}</div><br>`;
+        document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div>`;
+        document.getElementById('response3').innerHTML+=`<div>Максимальная продолжительность вызова : ${(new Date(values)-new Date(data.start_datetime_iso))/1000}</div>`;
         console.log(new Date(values));
         console.log(new Date(data.start_datetime_iso));
       }
       else{
-        document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div><br>`;
+        document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div>`;
       }
      
       
@@ -279,8 +286,8 @@ function createResponse(result,data){
   for (const [key, value] of Object.entries(data)) {
     if (typeof(value)!='object') {
       if (key=='start_datetime_iso') {
-        createInformationRequest.innerHTML+=`<div>Время начала вызова: ${value}</div><br>`; 
-        document.getElementById('response3').innerHTML+=`<div>Время начала вызова: ${value}</div>` ;
+        createInformationRequest.innerHTML+=`<div>Время начала вызова: ${value}</div>`; 
+        document.getElementById('response3').innerHTML+=`<div>Время начала вызова: ${value}` ;
       
        
 
@@ -293,26 +300,26 @@ function createResponse(result,data){
       //   console.log(thisDate);
       // }
       else{
-        createInformationRequest.innerHTML+=`<div>${key}: ${value}</div><br>`;
+        createInformationRequest.innerHTML+=`<div>${key}: ${value}</div>`;
       }
       
     }
    else{
     for (const [key, values] of Object.entries(value)){
       if (key=='name') {
-        createInformationRequest.innerHTML+=`<div>Имя:${result.satellite_name} ${values}</div><br>`;
+        createInformationRequest.innerHTML+=`<div>Имя:${result.satellite_name} ${values}</div>`;
       }
       else if (key=='lat') {
-        createInformationRequest.innerHTML+=`<div>Широта: ${values}</div><br>`;
+        createInformationRequest.innerHTML+=`<div>Широта: ${values}</div>`;
       }
       else if (key=='lon') {
-        createInformationRequest.innerHTML+=`<div>Долгота: ${values}</div><br>`;
+        createInformationRequest.innerHTML+=`<div>Долгота: ${values}</div>`;
       }
       else if (key=='radius') {
-        createInformationRequest.innerHTML+=`<div>Радиус: ${values}</div><br>`;
+        createInformationRequest.innerHTML+=`<div>Радиус: ${values}</div>`;
       }
       else{
-        createInformationRequest.innerHTML+=`<div>${key}: ${values}</div><br>`;
+        createInformationRequest.innerHTML+=`<div>${key}: ${values}</div>`;
       }
       
     }

@@ -122,7 +122,12 @@ img {
     display: flex;
     margin: 10px 10px;
 }
-
+.min-time-call{
+    margin: 3px 0;
+    font-size: calc(1.0rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
 .column1_az,
 .column2_az {
     flex: 1;
@@ -355,7 +360,12 @@ h1 {
     margin-right: auto;
     /* margin-right: 90%; */
 }
-
+.duplex-checkbox{
+    width: 20px;
+}
+.simple-checkbox{
+    width: 20px; 
+}
 .ref{
     margin: 15px;
     display: flex;
