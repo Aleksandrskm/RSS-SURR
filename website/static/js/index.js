@@ -134,6 +134,9 @@ async function calculateFirstAvailableInterval(data){
     console.log("Success:", result);
     
     createResponse(result,data);
+    document.getElementById('response3').innerHTML+=`<div>Время нахождения КА  ${new Date()}</div>`;
+    document.getElementById('response3').innerHTML+=`<div>Время вызова функции занятия каналов  ${new Date()}</div>`;
+    document.getElementById('response3').innerHTML+=`<div>Отправленны данные для занятия каналов</div>`;
     if (document.querySelector('.duplex-checkbox').checked) {
       postOcFrREs(result.satellite_id,document.querySelector('.duplex-checkbox').value)
       .then(respons=>{
@@ -151,6 +154,7 @@ async function calculateFirstAvailableInterval(data){
             document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${randTime/1000} секунд</div>`;
             const dataEndCall=new Date();
             document.querySelector('.information_request').innerHTML+=` <div> Время завершения вызова ${String(dataEndCall)}</div>`;
+            document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
            });
            
         },randTime);
@@ -196,53 +200,6 @@ async function postJSON(data) {
       console.error("Error:", error);
     }
   }
-
-// let url = 'http://185.192.247.60:7128/Database/DBTables';
-// let response =  fetch(url)
-// .then(response =>response.json())
-// .then(json=>{
-//   json.forEach(element => {
-//     const elem =document.createElement('div');
-//     elem.innerHTML=`<div class="container__nav__el"> ${element}</div>`;
-//     elem.addEventListener('click',(e)=>{
-//       let content = e.target.innerHTML;
-//       // console.log(content);
-//       const data = {name:content};
-//       document.querySelector('.container_content').innerHTML='';
-//       postJSON(data).then(result=>{
-//         if (result.total_rows_count==0) {
-//           const name=document.createElement('div');
-//             name.innerHTML=`<div>${result.name}</div>`;
-//             document.querySelector('.container_content').append(name);
-//         }
-//         result.rows.forEach(element => {
-//           if (result.rows[0]===element) {
-//             const name=document.createElement('div');
-//             name.innerHTML=`<div>${result.name}</div>`;
-//             document.querySelector('.container_content').append(name);
-//           }
-//           const table=document.createElement('tr');
-
-//           table.innerHTML+=`<tr></tr>`;
-//           document.querySelector('.container_content').append(table);
-//           element.forEach(el=>{
-//             table.innerHTML+=`<td>${el}</td>
-//             `;
-//           });
-//           // console.log(element);
-//           document.querySelector('.container_content').append(table);
-//         });
-//         // console.log(result.rows);
-//       });
-//     });
-//     document.querySelector('.container__nav').append(elem);
-//   });
-//   // console.log(json);
-// });
-
-//  const simDate=document.getElementById('simulator_this_time');
-//  simDate.value=new Date().toISOString();
-//  console.log(new Date().toISOString());
 function createResponse(result,data){
   if (document.querySelector('.information_request')) {
     document.querySelector('.information_request').remove();
@@ -292,13 +249,6 @@ function createResponse(result,data){
        
 
       }
-      // if (key=='end_datetime_iso'){
-      //   const  endDate=+new Date(result.end_datetime_iso)/1000;
-      //   const thisDate=+new Date(value)/1000;
-      //   document.getElementById('response3').innerHTML+=`<div>Максимальная продолжительность: ${endDate-thisDate}</div>` ;
-      //   console.log(endDate);
-      //   console.log(thisDate);
-      // }
       else{
         createInformationRequest.innerHTML+=`<div>${key}: ${value}</div>`;
       }
@@ -307,7 +257,7 @@ function createResponse(result,data){
    else{
     for (const [key, values] of Object.entries(value)){
       if (key=='name') {
-        createInformationRequest.innerHTML+=`<div>Имя:${result.satellite_name} ${values}</div>`;
+        createInformationRequest.innerHTML+=`<div>Наименование КА:${result.satellite_name} ${values}</div>`;
       }
       else if (key=='lat') {
         createInformationRequest.innerHTML+=`<div>Широта: ${values}</div>`;
@@ -327,43 +277,7 @@ function createResponse(result,data){
    }
     console.log();
   }
-  // const checkboxSimple=document.createElement('input'); 
-  // const checkboxDuplex=document.createElement('input');
-  // const spanSiple=document.createElement('span');
-  // const spanDuplex=document.createElement('span');
-  // const btnSend=document.createElement('button');
-  // const radio=document.createElement('div');
-  // radio.classList.add('radio-dvi');
-  // spanSiple.textContent='Симплекс';
-  // spanDuplex.textContent='Дуплекс';
-  // btnSend.classList.add('btn-send');
-  // btnSend.textContent='Отправить';
-  // checkboxSimple.type='radio';
-  // checkboxSimple.checked=true;
-  // checkboxDuplex.type='radio';
-  // checkboxSimple.value=1;
-  // checkboxDuplex.value=2;
-  // checkboxSimple.name='radio';
-  // checkboxDuplex.name='radio';
-  // checkboxSimple.classList.add('simple-checkbox');
-  // checkboxDuplex.classList.add('duplex-checkbox');
-  // radio.append(spanSiple);
-  // radio.append(checkboxSimple);
-  // radio.append(spanDuplex);
-  // radio.append(checkboxDuplex);
-  
-  // createInformationRequest.append(spanSiple);
-  // createInformationRequest.append(checkboxSimple);
-  // createInformationRequest.append(spanSiple);
-  // createInformationRequest.append(checkboxDuplex);
-  // createInformationRequest.append(spanDuplex);
-  // createInformationRequest.append(radio);
-  // createInformationRequest.innerHTML+=`<br>`;
-  // createInformationRequest.append(btnSend);
   parent.append(createInformationRequest);
-  // if (!document.querySelector('.duplex-checkbox').defaultChecked) {
-  //   document.querySelector('.duplex-checkbox').checked=true;
-  // }
 }
 async function postOcFrREs(stId,type){
   try {

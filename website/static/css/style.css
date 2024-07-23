@@ -446,7 +446,9 @@ body {
     justify-content: center;
     align-items: center;
 }
-
+.div-abonent{
+    font-size: calc(1.2rem);
+}
 /*.container{
     display: flex;
     flex-direction: row;
