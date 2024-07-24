@@ -460,6 +460,11 @@ body {
     justify-content: center;
     align-items: center;
 }
+
+.div-abonent{
+    font-size: calc(1.2rem);
+}
+
 .radio-dvi input{
     width: 13px;
 }
