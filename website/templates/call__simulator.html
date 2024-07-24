@@ -2,22 +2,27 @@
 
 {% block content %}
 
-    <h2>Имитатор вызовов</h2>
+    <h2>Имитатор одиночных вызовов</h2>
 <div class="content">
     <div class="input_parameters_imitator">
         <div class="row_com">
             
             <div class="column2_com">
-        <span>Расположение абонента:</span>
+        <div class="div-abonent">Данные абонента</div>
                 <br>
-        <span>Широта , градусы</span>
-        <input id="lat3" type="text" value="51">
-        <span>Долгота, градусы</span>
-        <input id="lon3" type="text" value="39">
+        <div class="data-abonent">
+            <span>Широта , градусы</span>
+            <input id="lat3" type="text" value="51">
+            <span>Долгота, градусы</span>
+            <input id="lon3" type="text" value="39">
+            <span>Минимальная продолжительность вызова,сек</span>
+            <input id="min-call-time" type="text" value="30">
+        </div>
+        
         <div class="radio-dvi">
             <span>Симплекс прием</span>
             <input type="radio" value="1" name="radio" class="simple-checkbox">
-            <span>Симплекс отдача</span>
+            <span>Симплекс передача</span>
             <input type="radio" value="1" name="radio" class="simple-checkbox">
             <span>Дуплекс</span>
             <input type="radio" value="2" name="radio" class="duplex-checkbox" checked>
@@ -29,7 +34,7 @@
                 
             <!-- </div> -->
         </div>
-        <div class="min-time-call">Минимальная Продолжительность вызова 30 секунд</div>
+       
         <div class="btn2">
             <button id="task-btn_sim" onclick="">Старт</button>
         </div>
