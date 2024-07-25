@@ -333,13 +333,13 @@ async function postRelaeseFrRes(data,stId){
   }
 }
 
-// const imgRe=document.querySelector('.re-date');
-// imgRe.addEventListener('click',()=>{
-//   document.getElementById('lat3').value=getRandomNumber(41,77);
-//   document.getElementById('lon3').value=getRandomNumber(27,169);
+const imgRe=document.querySelector('.re-date');
+imgRe.addEventListener('click',()=>{
+  document.getElementById('lat3').value=getRandomNumber(41,77);
+  document.getElementById('lon3').value=getRandomNumber(27,169);
   
 
-// });
+});
 const btnStartSim=document.getElementById('task-btn_sim');
 btnStartSim.addEventListener('click',()=>{
   const data = {

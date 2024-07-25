@@ -475,7 +475,12 @@ body {
 .radio-dvi input{
     width: 13px;
 }
-
+.re-date{
+    width: 20px;
+    height: 20px;
+    margin-left: 90%;
+    margin-right: 0%;
+}
 /*.container{
     display: flex;
     flex-direction: row;
