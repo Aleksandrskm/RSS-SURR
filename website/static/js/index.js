@@ -146,11 +146,14 @@ async function calculateFirstAvailableInterval(data){
         postOcFrREs(result.satellite_id,document.querySelector('.duplex-checkbox').value)
         .then(respons=>{
           const randTime=getRandomNumber(60000,120000);
+          document.querySelector('.information_request').innerHTML+=`<div>Время нахождения КА  ${new Date()}</div>`;
+      document.querySelector('.information_request').innerHTML+=`<div>Время вызова функции занятия каналов  ${new Date()}</div>`;
           document.querySelector('.information_request').innerHTML+=`<div> 
            Заняты частотные каналы:  ${result.satellite_name}
           ${respons.Nomera_zanyatyih_yacheek[0][0]} - ${respons.Nomera_zanyatyih_yacheek[0][1]}
           ${respons.Nomera_zanyatyih_yacheek[1][1]} - ${respons.Nomera_zanyatyih_yacheek[1][0]}
           </div> `;
+          
           console.log(respons.Nomera_zanyatyih_yacheek[0]);
           setTimeout(function(){
             console.log(respons.Nomera_zanyatyih_yacheek);
@@ -169,6 +172,8 @@ async function calculateFirstAvailableInterval(data){
       else{
         postOcFrREs(result.satellite_id,document.querySelector('.simple-checkbox').value).then(response=>{
           const randTime=getRandomNumber(60000,120000);
+          document.querySelector('.information_request').innerHTML+=`<div>Время нахождения КА  ${new Date()}</div>`;
+      document.querySelector('.information_request').innerHTML+=`<div>Время вызова функции занятия каналов  ${new Date()}</div>`;
           document.querySelector('.information_request').innerHTML+=`<div> Заняты частотные каналы:${result.satellite_name} ${response.Nomera_zanyatyih_yacheek[0][0]} -
            ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
           setTimeout(function(){
@@ -252,14 +257,14 @@ function createResponse(result,data){
       if (key=='start_datetime_iso') {
         createInformationRequest.innerHTML+=`<div>Время начала вызова: ${value}</div>`; 
         document.getElementById('response3').innerHTML+=`<div>Время начала вызова: ${value}` ;
-      
-       
-
+      }
+      else if (key=='min_duration_in_sec') {
+        createInformationRequest.innerHTML+=`<div>Минимальная продолжительность вызова, сек: ${value}</div>`;
+        console.log(value);
       }
       else{
         createInformationRequest.innerHTML+=`<div>${key}: ${value}</div>`;
       }
-      
     }
    else{
     for (const [key, values] of Object.entries(value)){
@@ -275,11 +280,8 @@ function createResponse(result,data){
       else if (key=='radius') {
         createInformationRequest.innerHTML+=`<div>Радиус зоны действия КА, км: ${values}</div>`;
       }
-      else if (key=='min_duration_in_sec') {
-        createInformationRequest.innerHTML+=`<div>Минимальная продолжительность вызова, сек: ${values}</div>`;
-      }
       else{
-        createInformationRequest.innerHTML+=`<div>${key}: ${values}</div>`;
+         createInformationRequest.innerHTML+=`<div>${key}: ${values}</div>`;
       }
       
     }
