@@ -264,16 +264,19 @@ function createResponse(result,data){
    else{
     for (const [key, values] of Object.entries(value)){
       if (key=='name') {
-        createInformationRequest.innerHTML+=`<div>Наименование КА:${result.satellite_name} ${values}</div>`;
+        createInformationRequest.innerHTML+=`<div>Наименование КА: ${result.satellite_name} ${values}</div>`;
       }
       else if (key=='lat') {
-        createInformationRequest.innerHTML+=`<div>Широта: ${values}</div>`;
+        createInformationRequest.innerHTML+=`<div>Широта, градусы: ${values}</div>`;
       }
       else if (key=='lon') {
-        createInformationRequest.innerHTML+=`<div>Долгота: ${values}</div>`;
+        createInformationRequest.innerHTML+=`<div>Долгота, градусы: ${values}</div>`;
       }
       else if (key=='radius') {
-        createInformationRequest.innerHTML+=`<div>Радиус: ${values}</div>`;
+        createInformationRequest.innerHTML+=`<div>Радиус зоны действия КА, км: ${values}</div>`;
+      }
+      else if (key=='min_duration_in_sec') {
+        createInformationRequest.innerHTML+=`<div>Минимальная продолжительность вызова, сек: ${values}</div>`;
       }
       else{
         createInformationRequest.innerHTML+=`<div>${key}: ${values}</div>`;
