@@ -302,8 +302,7 @@ img {
 .tables_vi {
 }
 #timer{
-    margin-right: 56%;
-    margin-top: 2%;
+    margin: auto;
     color: black;
     font-weight: bold;
     font-family: Arial, sans-serif;
@@ -352,7 +351,7 @@ img {
 }
 
 header {
-    grid-template-columns: 1fr 43rem 1fr;
+    grid-template-columns: 1fr 2fr 1fr;
     white-space: nowrap;
     background-color: #999999;
     height: 75px;
