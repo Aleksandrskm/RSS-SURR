@@ -306,6 +306,7 @@ img {
     color: black;
     font-weight: bold;
     font-family: Arial, sans-serif;
+    font-size: calc(0.5rem + 0.5vw);
 }
 .row_vi {
     display: flex;
