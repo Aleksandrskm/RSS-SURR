@@ -1,4 +1,62 @@
 'use strict';
+class Loader {
+  /**
+   * Конструктор класса загрузчика.
+   * 
+   * @param {string} selector - селектор элемента загрузчика.
+   */
+  constructor(selector, delay = 300) {
+      this.delay = delay;
+      /**
+       * DOM-элемент, представляющий загрузчик.
+       * @type {HTMLElement}
+       */
+      this.element = document.querySelector(selector);
+      /**
+       * DOM-элемент, представляющий заголовок загрузчика.
+       * @type {HTMLElement}
+       */
+      this.titleElement = this.element.querySelector('.loader-container__title');
+
+      this.isLoading = false;
+  }
+
+  /**
+   * Открывает загрузчик.
+   * 
+   * Этот метод удаляет класс 'loder-container--hidden' у элемента загрузчика,
+   * что приведет к его отображению.
+   */
+  open() {
+      this.isLoading = true;
+      setTimeout(() => {
+          if (!this.isLoading) return;
+          this.element.classList.remove('loader-container--hidden');
+      }, this.delay);
+  }
+
+  /**
+   * Скрывает загрузчик.
+   * 
+   * Этот метод добавляет класс 'loder-container--hidden' к элементу загрузчика,
+   * что приведет к его скрытию.
+   */
+  close() {
+      this.isLoading = false;
+      this.element.classList.add('loader-container--hidden');
+  }
+
+  /**
+   * Устанавливает заголовок загрузчика и открывает его.
+   *
+   * @param {string} title - Заголовок загрузчика.
+   */
+  show(title) {
+      // Устанавливаем заголовок загрузчика
+      this.titleElement.innerText = title;
+      this.open()
+  }
+}
 function getRandomNumber(min, max) {
   min = Math.ceil(min)
   max = Math.floor(max)
@@ -35,7 +93,7 @@ function getDateTime() {
 setInterval(function(){
   let currentTime = getDateTime();
   document.getElementById("timer").innerHTML = currentTime;
-}, 1000);
+}, 0);
 function azimuth_and_elevation_angle() {
     const lat1 = document.getElementById('lat1').value;
     const lon1 = document.getElementById('lon1').value;
@@ -130,11 +188,13 @@ async function calculateFirstAvailableInterval(data){
       },
       body: JSON.stringify(data)
     });
+    
     const result = await response.json();
     console.log("Success:", result);
     if (result.detail || Date.parse(new Date((result.start_datetime_iso)))<Date.parse(new Date())) {
       // console.log("Success:", result);
       document.getElementById('response3').innerHTML='Нет доступного KA';
+      
     }
     else
     {
@@ -194,7 +254,7 @@ async function calculateFirstAvailableInterval(data){
                   document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
               });
               
-            });
+            },{once:true});
           }
           else{
             const timer=setTimeout(function(){
@@ -229,7 +289,7 @@ async function calculateFirstAvailableInterval(data){
                   document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
               });
               
-            });
+            },{once:true});
           }
           
         });
@@ -278,7 +338,7 @@ async function calculateFirstAvailableInterval(data){
                   document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
               });
               
-            });
+            },{once:true});
           }
           else{
             setTimeout(function(){
@@ -314,7 +374,7 @@ async function calculateFirstAvailableInterval(data){
                   document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
               });
               
-            });
+            },{once:true});
           }
          
           
@@ -480,11 +540,15 @@ btnStartSim.addEventListener('click',()=>{
         "min_duration_in_sec":document.getElementById('min-call-time').value
       
   }
-  document.getElementById('response3').innerHTML='Получение первого  доступного KA';
+   document.getElementById('response3').innerHTML='';
   if (document.querySelector('.information_request')) {
     document.querySelector('.information_request').remove();
   }
-  calculateFirstAvailableInterval(data);
+  const loader = new Loader('.loader-container');
+    loader.show('Получение первого доступного КА');
+  calculateFirstAvailableInterval(data).then(()=>{
+    loader.close();
+  });
    
 
     

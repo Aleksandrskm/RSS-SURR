@@ -457,6 +457,9 @@ body {
 #task-btn_sim:hover{
     background-color: #C0C0C0; 
 }
+#task-btn_cansel:hover {
+    background-color: #C0C0C0;
+}
 .butt {
         display: flex;
         flex-direction: column;
@@ -497,6 +500,86 @@ body {
 .header-log{
     font-size: calc(1.2rem);
 }
+/* Контейнер загрузки */
+.loader-container {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    z-index: 999999;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  /* Селекторы скрытия контейнера */
+  .loader-container--hidden {
+    display: none;
+  }
+  
+  /* Заголовок загрузки */
+  .loader-container__title {
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-normal);
+    color: white;
+  }
+  
+  /* Анимация загрузки */
+  .loader {
+    width: calc(100px - 24px);
+    height: 50px;
+    position: relative;
+    animation: flippx 2s infinite linear;
+  }
+  
+  /* Предыдущее состояние загрузки */
+  .loader:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #e6e3e3;
+    transform-origin: -24px 50%;
+    animation: spin 1s infinite linear;
+  }
+  
+  /* Текущее состояние загрузки */
+  .loader:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #e6e3e3;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+  }
+  
+  /* Анимация изменения направления загрузки */
+  @keyframes flippx {
+    0%, 49% {
+      transform: scaleX(1);
+    }
+    50%, 100% {
+      transform: scaleX(-1);
+    }
+  }
+  
+  /* Анимация вращения загрузки */
+  @keyframes spin {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  
 /*.container{
     display: flex;
     flex-direction: row;
