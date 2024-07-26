@@ -139,26 +139,36 @@ async function calculateFirstAvailableInterval(data){
     else
     {
       createResponse(result,data);
-      document.getElementById('response3').innerHTML+=`<div>Время нахождения КА  ${new Date()}</div>`;
-      document.getElementById('response3').innerHTML+=`<div>Время вызова функции занятия каналов  ${new Date()}</div>`;
-      document.getElementById('response3').innerHTML+=`<div>Отправленны данные для занятия каналов</div>`;
+      document.getElementById('response3').innerHTML+=`<div>Время получения КА для связи ${new Date()}</div>`;
+      document.getElementById('response3').innerHTML+=`<div>Время запроса сеанса связи ${new Date()}</div>`;
+     
       if (document.querySelector('.duplex-checkbox').checked) {
         postOcFrREs(result.satellite_id,document.querySelector('.duplex-checkbox').value)
         .then(respons=>{
           const randTime=getRandomNumber(60000,120000);
+          document.querySelector('.information_request').innerHTML+=`<div>Время получения КА для связи  ${new Date()}</div>`;
+          document.getElementById('response3').innerHTML+=`<div>Время вызова сеанса связи ${new Date()}</div>`;
+          document.getElementById('response3').innerHTML+=`<div>Каналы выделены</div>`;
+          document.querySelector('.information_request').innerHTML+=`<div>Время вызова сеанса связи ${new Date()}</div>`;
+          
           document.querySelector('.information_request').innerHTML+=`<div> 
            Заняты частотные каналы:  ${result.satellite_name}
-          ${respons.Nomera_zanyatyih_yacheek[0][0]} - ${respons.Nomera_zanyatyih_yacheek[0][1]}
+          ${respons.Nomera_zanyatyih_yacheek[0][1]} - ${respons.Nomera_zanyatyih_yacheek[0][0]}
           ${respons.Nomera_zanyatyih_yacheek[1][1]} - ${respons.Nomera_zanyatyih_yacheek[1][0]}
           </div> `;
+          
           console.log(respons.Nomera_zanyatyih_yacheek[0]);
           setTimeout(function(){
             console.log(respons.Nomera_zanyatyih_yacheek);
              postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
+              document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
               document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
               document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${randTime/1000} секунд</div>`;
               const dataEndCall=new Date();
-              document.querySelector('.information_request').innerHTML+=` <div> Время завершения вызова ${String(dataEndCall)}</div>`;
+              document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова ${String(dataEndCall)}:</div> <br>`;
+              document.getElementById('response3').innerHTML+=`<br><div style="
+              font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
+              document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
               document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
              });
              
@@ -169,11 +179,14 @@ async function calculateFirstAvailableInterval(data){
       else{
         postOcFrREs(result.satellite_id,document.querySelector('.simple-checkbox').value).then(response=>{
           const randTime=getRandomNumber(60000,120000);
+          document.querySelector('.information_request').innerHTML+=`<div>Время получения КА для связи ${new Date()}</div>`;
+      document.querySelector('.information_request').innerHTML+=`<div>Время вызова функции занятия каналов  ${new Date()}</div>`;
           document.querySelector('.information_request').innerHTML+=`<div> Заняты частотные каналы:${result.satellite_name} ${response.Nomera_zanyatyih_yacheek[0][0]} -
            ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
           setTimeout(function(){
            
             postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
+              document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
               document.querySelector('.information_request').innerHTML+=` <div>Каналы освобождены  </div>`;
               document.querySelector('.information_request').innerHTML+=` <div> Продолжительность вызова ${randTime/1000} секунд</div>`;
               const dataEndCall=new Date();
@@ -225,7 +238,8 @@ function createResponse(result,data){
    else{
     for (const [key, values] of Object.entries(value)){
       if (key=='duration_in_sec') {
-        document.getElementById('response3').innerHTML+=`<div> total_duration_in_sec: ${values}</div>`;
+        document.getElementById('response3').innerHTML+=`<div> total_duration_in_sec: ${values}</div> <br><span style="
+        font-size: calc(1.2rem);">Вызов:</span>`;
       }
       else  if (key=='end_datetime_iso') {
         document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div>`;
@@ -250,33 +264,37 @@ function createResponse(result,data){
   for (const [key, value] of Object.entries(data)) {
     if (typeof(value)!='object') {
       if (key=='start_datetime_iso') {
+        createInformationRequest.innerHTML+=`<br><div style="
+        font-size: calc(1.2rem);">Характеристики абонента:</div>`; 
         createInformationRequest.innerHTML+=`<div>Время начала вызова: ${value}</div>`; 
         document.getElementById('response3').innerHTML+=`<div>Время начала вызова: ${value}` ;
-      
-       
-
+      }
+      else if (key=='min_duration_in_sec') {
+        createInformationRequest.innerHTML+=`<div>Минимальная продолжительность вызова, сек: ${value}</div>`;
+        console.log(value);
       }
       else{
         createInformationRequest.innerHTML+=`<div>${key}: ${value}</div>`;
       }
-      
     }
    else{
     for (const [key, values] of Object.entries(value)){
       if (key=='name') {
-        createInformationRequest.innerHTML+=`<div>Наименование КА:${result.satellite_name} ${values}</div>`;
+        createInformationRequest.innerHTML+=`<div style="
+        font-size: calc(1.2rem);">Характеристики КА:</div>`;
+        createInformationRequest.innerHTML+=`<div>Наименование КА: ${result.satellite_name} ${values}</div>`;
       }
       else if (key=='lat') {
-        createInformationRequest.innerHTML+=`<div>Широта: ${values}</div>`;
+        createInformationRequest.innerHTML+=`<div>Широта, градусы: ${values}</div>`;
       }
       else if (key=='lon') {
-        createInformationRequest.innerHTML+=`<div>Долгота: ${values}</div>`;
+        createInformationRequest.innerHTML+=`<div>Долгота, градусы: ${values}</div>`;
       }
       else if (key=='radius') {
-        createInformationRequest.innerHTML+=`<div>Радиус: ${values}</div>`;
+        createInformationRequest.innerHTML+=`<div>Радиус зоны действия КА, км: ${values}</div>`;
       }
       else{
-        createInformationRequest.innerHTML+=`<div>${key}: ${values}</div>`;
+         createInformationRequest.innerHTML+=`<div>${key}: ${values}</div>`;
       }
       
     }
@@ -318,6 +336,14 @@ async function postRelaeseFrRes(data,stId){
     console.error("Error:", error);
   }
 }
+
+const imgRe=document.querySelector('.re-date');
+imgRe.addEventListener('click',()=>{
+  document.getElementById('lat3').value=getRandomNumber(41,77);
+  document.getElementById('lon3').value=getRandomNumber(27,169);
+  
+
+});
 const btnStartSim=document.getElementById('task-btn_sim');
 btnStartSim.addEventListener('click',()=>{
   const data = {
@@ -355,5 +381,5 @@ btnStartSim.addEventListener('click',()=>{
     // }
     
   
-})
+});
 

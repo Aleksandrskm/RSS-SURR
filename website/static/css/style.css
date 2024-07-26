@@ -106,9 +106,7 @@ img {
 .radio-dvi span{
     margin: 20px 20px;
 }
-.radio-dvi input{
-    width: 13px;
-}
+
 .centered_az {
     flex: 1;
     text-align: center;
@@ -177,7 +175,7 @@ img {
     border-radius: 20px;
     padding: 20px;
     box-sizing: border-box;
-    align-items: center;
+    
 }
 .information_request div {
     text-align: left;
@@ -246,6 +244,17 @@ img {
     font-family: Arial, sans-serif;
 }
 
+.input_parameters_imitator input {
+    margin: 7px;
+    padding: 7px;
+    width: 200px;
+    border-radius: 6px;
+    border-width: 1px;
+    font-size: calc(0.9rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+
 .row_com {
     display: flex;
     margin: 10px 10px;
@@ -293,11 +302,11 @@ img {
 .tables_vi {
 }
 #timer{
-    margin-right: 56%;
-    margin-top: 2%;
+    margin: auto;
     color: black;
     font-weight: bold;
     font-family: Arial, sans-serif;
+    font-size: calc(0.5rem + 0.5vw);
 }
 .row_vi {
     display: flex;
@@ -335,10 +344,15 @@ img {
     padding-left: 30px;
     box-sizing: border-box;
 }
-
+.duplex-checkbox{
+    width: 10px
+}
+.simple-checkbox{
+    width: 20px
+}
 
 header {
-    grid-template-columns: 1fr 43rem 1fr;
+    grid-template-columns: 1fr 2fr 1fr;
     white-space: nowrap;
     background-color: #999999;
     height: 75px;
@@ -454,6 +468,22 @@ body {
     width: 13px;
 }
 
+.div-abonent{
+    font-size: calc(1.2rem);
+}
+
+.radio-dvi input{
+    width: 13px;
+}
+.re-date{
+    width: 20px;
+    height: 20px;
+    margin-left: 90%;
+    margin-right: 0%;
+}
+.header-log{
+    font-size: calc(1.2rem);
+}
 /*.container{
     display: flex;
     flex-direction: row;
