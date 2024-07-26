@@ -481,6 +481,9 @@ body {
     margin-left: 90%;
     margin-right: 0%;
 }
+.header-log{
+    font-size: calc(1.2rem);
+}
 /*.container{
     display: flex;
     flex-direction: row;

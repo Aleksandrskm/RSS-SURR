@@ -161,12 +161,13 @@ async function calculateFirstAvailableInterval(data){
           setTimeout(function(){
             console.log(respons.Nomera_zanyatyih_yacheek);
              postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
-              document.querySelector('.information_request').innerHTML+=` <br><div>Завершение сеанса связи: </div>`;
+              document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
               document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
               document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${randTime/1000} секунд</div>`;
               const dataEndCall=new Date();
               document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова ${String(dataEndCall)}:</div> <br>`;
-              document.getElementById('response3').innerHTML+=`<br><div>Завершение сеанса связи:</div>`;
+              document.getElementById('response3').innerHTML+=`<br><div style="
+              font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
               document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
               document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
              });
@@ -185,7 +186,7 @@ async function calculateFirstAvailableInterval(data){
           setTimeout(function(){
            
             postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
-              document.querySelector('.information_request').innerHTML+=` <br><div>Завершение сеанса связи: </div>`;
+              document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
               document.querySelector('.information_request').innerHTML+=` <div>Каналы освобождены  </div>`;
               document.querySelector('.information_request').innerHTML+=` <div> Продолжительность вызова ${randTime/1000} секунд</div>`;
               const dataEndCall=new Date();
@@ -237,7 +238,8 @@ function createResponse(result,data){
    else{
     for (const [key, values] of Object.entries(value)){
       if (key=='duration_in_sec') {
-        document.getElementById('response3').innerHTML+=`<div> total_duration_in_sec: ${values}</div> <br><span>Вызов:</span>`;
+        document.getElementById('response3').innerHTML+=`<div> total_duration_in_sec: ${values}</div> <br><span style="
+        font-size: calc(1.2rem);">Вызов:</span>`;
       }
       else  if (key=='end_datetime_iso') {
         document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div>`;
@@ -262,7 +264,8 @@ function createResponse(result,data){
   for (const [key, value] of Object.entries(data)) {
     if (typeof(value)!='object') {
       if (key=='start_datetime_iso') {
-        createInformationRequest.innerHTML+=`<br><div>Характеристики абонента:</div>`; 
+        createInformationRequest.innerHTML+=`<br><div style="
+        font-size: calc(1.2rem);">Характеристики абонента:</div>`; 
         createInformationRequest.innerHTML+=`<div>Время начала вызова: ${value}</div>`; 
         document.getElementById('response3').innerHTML+=`<div>Время начала вызова: ${value}` ;
       }
@@ -277,7 +280,8 @@ function createResponse(result,data){
    else{
     for (const [key, values] of Object.entries(value)){
       if (key=='name') {
-        createInformationRequest.innerHTML+=`<div>Характеристики КА:</div>`;
+        createInformationRequest.innerHTML+=`<div style="
+        font-size: calc(1.2rem);">Характеристики КА:</div>`;
         createInformationRequest.innerHTML+=`<div>Наименование КА: ${result.satellite_name} ${values}</div>`;
       }
       else if (key=='lat') {
