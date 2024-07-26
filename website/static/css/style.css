@@ -175,7 +175,7 @@ img {
     border-radius: 20px;
     padding: 20px;
     box-sizing: border-box;
-    align-items: center;
+    
 }
 .information_request div {
     text-align: left;
@@ -475,7 +475,15 @@ body {
 .radio-dvi input{
     width: 13px;
 }
-
+.re-date{
+    width: 20px;
+    height: 20px;
+    margin-left: 90%;
+    margin-right: 0%;
+}
+.header-log{
+    font-size: calc(1.2rem);
+}
 /*.container{
     display: flex;
     flex-direction: row;
