@@ -179,6 +179,13 @@ function communication_availability() {
         console.error('Error:', error);
       });
    }
+
+
+function release_all_frequency_resources(){
+
+}
+
+
 async function calculateFirstAvailableInterval(data){
   try {
     const response = await fetch("http://185.192.247.60:7130/CommunicationAvailability/CalculateFirstAvailableInterval", {
