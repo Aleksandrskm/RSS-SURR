@@ -251,7 +251,7 @@ async function calculateFirstAvailableInterval(data){
           if (document.querySelector('.time_call-max').checked) {
             console.log(respons.Nomera_zanyatyih_yacheek[0]);
             const time =String(document.querySelector('.total-time').innerText);
-            document.getElementById('response3').innerHTML+=`Прогнозируемая продолжительность сеанса ,сек: ${time.substring(time.length-3)}`;
+            document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${time.substring(time.length-3)}</div>`;
             console.log(time.substring(time.length-3));
             const timer=setTimeout(function(){
               postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
@@ -268,6 +268,7 @@ async function calculateFirstAvailableInterval(data){
             },Number(time.substring(time.length-3))*1000);
             const btnEnd=document.getElementById('task-btn_cansel');
             btnEnd.addEventListener('click',()=>{
+              document.getElementById("task-btn_sim").disabled = true;
               clearTimeout(timer);
               postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                 const dataEndCall=new Date();
@@ -283,11 +284,11 @@ async function calculateFirstAvailableInterval(data){
                   document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
                   document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
               });
-              
+              document.getElementById("task-btn_sim").disabled = false;  
             },{once:true});
           }
           else{
-            document.getElementById('response3').innerHTML+=`Прогнозируемая продолжительность сеанса ,сек: ${randTime/1000}`;
+            document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${randTime/1000}</div>`;
             const timer=setTimeout(function(){
               postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                 
@@ -305,6 +306,7 @@ async function calculateFirstAvailableInterval(data){
             },randTime);
             const btnEnd=document.getElementById('task-btn_cansel');
             btnEnd.addEventListener('click',()=>{
+              document.getElementById("task-btn_sim").disabled = true; 
               clearTimeout(timer);
               postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                 const dataEndCall=new Date();
@@ -320,7 +322,7 @@ async function calculateFirstAvailableInterval(data){
                   document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
                   document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
               });
-              
+              document.getElementById("task-btn_sim").disabled = false;   
             },{once:true});
           }
           
@@ -339,7 +341,7 @@ async function calculateFirstAvailableInterval(data){
            ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
           if (document.querySelector('.time_call-max').checked) {
             const time =String(document.querySelector('.total-time').innerText);
-            document.getElementById('response3').innerHTML+=`Прогнозируемая продолжительность сеанса ,сек: ${time.substring(time.length-3)}`;
+            document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${time.substring(time.length-3)}</div>`;
             console.log(time.substring(time.length-3));
             const timer=setTimeout(function(){
               postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
@@ -356,6 +358,8 @@ async function calculateFirstAvailableInterval(data){
             },Number(time.substring(time.length-3))*1000);
             const btnEnd=document.getElementById('task-btn_cansel');
             btnEnd.addEventListener('click',()=>{
+              document.getElementById("task-btn_sim").disabled = true;
+              
               clearTimeout(timer);
               postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                 const dataEndCall=new Date();
@@ -371,11 +375,11 @@ async function calculateFirstAvailableInterval(data){
                   document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
                   document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
               });
-              
+              document.getElementById("task-btn_sim").disabled = false;   
             },{once:true});
           }
           else{
-            document.getElementById('response3').innerHTML+=`Прогнозируемая продолжительность сеанса ,сек: ${randTime/1000}`;
+            document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${randTime/1000}</div>`;
             setTimeout(function(){
            
               postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
@@ -393,6 +397,7 @@ async function calculateFirstAvailableInterval(data){
             },randTime);
             const btnEnd=document.getElementById('task-btn_cansel');
             btnEnd.addEventListener('click',()=>{
+              document.getElementById("task-btn_sim").disabled = true;
               clearTimeout(timer);
               postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                 const dataEndCall=new Date();
@@ -408,7 +413,7 @@ async function calculateFirstAvailableInterval(data){
                   document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
                   document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
               });
-              
+              document.getElementById("task-btn_sim").disabled = false;    
             },{once:true});
           }
          
@@ -572,6 +577,7 @@ imgRe.addEventListener('click',()=>{
   
 
 });
+document.getElementById("task-btn_cansel").disabled = true;
 const btnStartSim=document.getElementById('task-btn_sim');
 btnStartSim.addEventListener('click',()=>{
   const data = {
@@ -593,6 +599,7 @@ btnStartSim.addEventListener('click',()=>{
     loader.show('Получение первого доступного КА');
   calculateFirstAvailableInterval(data).then(()=>{
     loader.close();
+    document.getElementById("task-btn_cansel").disabled = false;
   });
 });
 
