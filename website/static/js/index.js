@@ -556,24 +556,5 @@ btnStartSim.addEventListener('click',()=>{
   calculateFirstAvailableInterval(data).then(()=>{
     loader.close();
   });
-   
-
-    
-   
-  
-    // for (const [key, value] of Object.entries(result)) {
-    //   if (typeof(value)!='object') {
-    //     document.getElementById('response3').innerHTML+=`${key}: ${value}<br>`;
-    //   }
-    //  else{
-    //   for (const [key, values] of Object.entries(value)){
-    //     document.getElementById('response3').innerHTML+=`${key}: ${values}<br>`;
-    //   }
-     
-    //  }
-    //   console.log();
-    // }
-    
-  
 });
 
