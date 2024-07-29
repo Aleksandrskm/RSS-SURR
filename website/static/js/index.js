@@ -182,8 +182,30 @@ function communication_availability() {
 
 
 function release_all_frequency_resources(){
+    const url = "http://185.192.247.60:7130/CommunicationAvailability/ReleaseAllFrequencyResources";
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => {
 
+        if (!response.ok) {
+            console.error("Ошибка при выполнении запроса:", response.status);
+        }
+        else {
+        alert("Освобожден частотный ресурс");
+
+        }
+    })
+    .catch(error => {
+        console.error("Сетевая ошибка:", error);
+    });
 }
+
+
 
 
 async function calculateFirstAvailableInterval(data){
