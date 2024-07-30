@@ -209,8 +209,10 @@ img {
     font-family: Arial, sans-serif; 
 }
 #task-btn_cansel{
-    margin-left: 10px;
-    /* margin-top: 10px; */
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-left: 35px;
+    
     padding: 6px;
     text-align: center;
     /* width: 130px; */
@@ -286,7 +288,7 @@ img {
     width: 30%; /* Добавляем равное распределение ширины для столбцов */
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
 }
 
 .input_parameters_com button {
@@ -485,6 +487,7 @@ body {
 
 .div-abonent{
     font-size: calc(1.2rem);
+    text-align: center;
 }
 
 .radio-dvi input{
