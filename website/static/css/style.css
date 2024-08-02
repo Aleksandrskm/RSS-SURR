@@ -208,6 +208,32 @@ img {
     font-weight: bold;
     font-family: Arial, sans-serif; 
 }
+#task-btn_sim_flow{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 6px;
+    text-align: center;
+    width: 130px;
+    border-radius: 6px;
+    border-width: 2px;
+    font-size: calc(1rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif;  
+}
+#task-btn_cansel_flow{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-left: 35px;
+    
+    padding: 6px;
+    text-align: center;
+    /* width: 130px; */
+    border-radius: 6px;
+    border-width: 2px;
+    font-size: calc(1rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif; 
+}
 #task-btn_cansel{
     margin-bottom: 10px;
     margin-top: 10px;
@@ -495,6 +521,12 @@ body {
     margin-left: 20px;
 }
 .re-date{
+    width: 20px;
+    height: 20px;
+    /* margin-left: 90%; */
+    margin-right: 0%;
+}
+.re-date-flow{
     width: 20px;
     height: 20px;
     /* margin-left: 90%; */
