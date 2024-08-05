@@ -89,7 +89,6 @@ function getDateTime() {
   let dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
    return dateTime;
 }
-
 // example usage: realtime clock
 setInterval(function(){
   let currentTime = getDateTime();
@@ -113,8 +112,7 @@ function azimuth_and_elevation_angle() {
       .catch(error => {
         console.error('Error:', error);
       });
-  }
-
+}
 function finding_coordinates() {
     const lat1 = document.getElementById('first_TLE_line').value;
     const lon1 = document.getElementById('second_TLE_line').value;
@@ -131,9 +129,7 @@ function finding_coordinates() {
       .catch(error => {
         console.error('Error:', error);
       });
-  }
-
-
+}
 function get_coordinates() {
     const first_TLE_line = document.getElementById('first_TLE_line').value;
     const second_TLE_line = document.getElementById('second_TLE_line').value;
@@ -152,8 +148,7 @@ function get_coordinates() {
       .catch(error => {
         console.error('Error:', error);
       });
-  }
-
+}
 function communication_availability() {
     const acceptable_session_time_in_sec = document.getElementById('acceptable_session_time_in_sec').value;
     const dates_delta_in_sec = document.getElementById('dates_delta_in_sec').value;
@@ -179,9 +174,7 @@ function communication_availability() {
       .catch(error => {
         console.error('Error:', error);
       });
-   }
-
-
+}
 function release_all_frequency_resources(){
     const url = "http://185.192.247.60:7130/CommunicationAvailability/ReleaseAllFrequencyResources";
     fetch(url, {
@@ -205,10 +198,6 @@ function release_all_frequency_resources(){
         console.error("Сетевая ошибка:", error);
     });
 }
-
-
-
-
 async function calculateFirstAvailableInterval(data){
   try {
     const response = await fetch("http://185.192.247.60:7130/CommunicationAvailability/CalculateFirstAvailableInterval", {
@@ -570,13 +559,16 @@ async function postRelaeseFrRes(data,stId){
     console.error("Error:", error);
   }
 }
-if (document.querySelector('h2').innerHTML=='Имитатор одиночных вызовов') {
+const modal = document.getElementById("myModal");
+const btn = document.getElementById("openModal");
+const span = document.getElementsByClassName("close")[0];
+btn.addEventListener("click", ()=>{modal.style.display = "flex"});
+span.addEventListener("click", ()=>{modal.style.display = "none"});  
+if (document.querySelector('h2')) {
   const imgRe=document.querySelector('.re-date');
 imgRe.addEventListener('click',()=>{
   document.getElementById('lat3').value=getRandomNumber(41,77);
   document.getElementById('lon3').value=getRandomNumber(27,169);
-  
-
 });
 document.getElementById("task-btn_cansel").disabled = true;
 const btnStartSim=document.getElementById('task-btn_sim');
@@ -606,15 +598,6 @@ btnStartSim.addEventListener('click',()=>{
 }
 
 
-
-const modal = document.getElementById("myModal");
-
-const btn = document.getElementById("openModal");
-
-const span = document.getElementsByClassName("close")[0];
-
-btn.addEventListener("click", ()=>{modal.style.display = "flex"});
-span.addEventListener("click", ()=>{modal.style.display = "none"});  
 
 
 
