@@ -22,6 +22,9 @@ def function_az():
 def function_find():
     return render_template('finding_coordinates.html')
 
+@views.route('/call_flow_simulator')
+def function_call_flow():
+    return render_template('call_flow_simulator.html')
 
 @views.route('/get_coordinates')
 def function_get():

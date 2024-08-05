@@ -84,8 +84,9 @@ function getDateTime() {
   }
   if(second.toString().length == 1) {
        second = '0'+second;
-  }   
-  var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
+  }  
+   
+  let dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
    return dateTime;
 }
 
@@ -569,8 +570,8 @@ async function postRelaeseFrRes(data,stId){
     console.error("Error:", error);
   }
 }
-
-const imgRe=document.querySelector('.re-date');
+if (document.querySelector('h2').innerHTML=='Имитатор одиночных вызовов') {
+  const imgRe=document.querySelector('.re-date');
 imgRe.addEventListener('click',()=>{
   document.getElementById('lat3').value=getRandomNumber(41,77);
   document.getElementById('lon3').value=getRandomNumber(27,169);
@@ -602,4 +603,18 @@ btnStartSim.addEventListener('click',()=>{
     document.getElementById("task-btn_cansel").disabled = false;
   });
 });
+}
+
+
+
+const modal = document.getElementById("myModal");
+
+const btn = document.getElementById("openModal");
+
+const span = document.getElementsByClassName("close")[0];
+
+btn.addEventListener("click", ()=>{modal.style.display = "flex"});
+span.addEventListener("click", ()=>{modal.style.display = "none"});  
+
+
 
