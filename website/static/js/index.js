@@ -84,8 +84,9 @@ function getDateTime() {
   }
   if(second.toString().length == 1) {
        second = '0'+second;
-  }   
-  var dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
+  }  
+   
+  let dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
    return dateTime;
 }
 
@@ -569,8 +570,8 @@ async function postRelaeseFrRes(data,stId){
     console.error("Error:", error);
   }
 }
-
-const imgRe=document.querySelector('.re-date');
+if (document.querySelector('h2').innerHTML=='Имитатор одиночных вызовов') {
+  const imgRe=document.querySelector('.re-date');
 imgRe.addEventListener('click',()=>{
   document.getElementById('lat3').value=getRandomNumber(41,77);
   document.getElementById('lon3').value=getRandomNumber(27,169);
@@ -602,28 +603,18 @@ btnStartSim.addEventListener('click',()=>{
     document.getElementById("task-btn_cansel").disabled = false;
   });
 });
+}
 
 
-// Получаем модальное окно
+
 const modal = document.getElementById("myModal");
-// Получаем кнопку, которая открывает модальное окно
-const btn = document.getElementById("openModal");
-// Получаем элемент <span>, который закрывает модальное окно
-const span = document.getElementsByClassName("close")[0];
-//// Когда пользователь нажимает на кнопку, открываем модальное окно
-//btn.onclick = function() {
-//    modal.style.display = "block";
-//}
-//// Когда пользователь нажимает на <span> (x), закрываем модальное окно
-//span.onclick = function() {
-//    modal.style.display = "none";
-//}
-//// Когда пользователь кликает вне модального окна, закрываем его
-//window.onclick = function(event) {
-//    if (event.target == modal) {
-//        modal.style.display = "none";
-//    }
-//}
 
-btn.addEventListener("click", ()=>{modal.style.display = "flex"})
-span.addEventListener("click", ()=>{modal.style.display = "none"})
+const btn = document.getElementById("openModal");
+
+const span = document.getElementsByClassName("close")[0];
+
+btn.addEventListener("click", ()=>{modal.style.display = "flex"});
+span.addEventListener("click", ()=>{modal.style.display = "none"});  
+
+
+

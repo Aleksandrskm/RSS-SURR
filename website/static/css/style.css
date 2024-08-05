@@ -682,7 +682,7 @@ body {
     padding: 20px;
     border: 1px solid #888;
     width: 70%;
-    height: 53%;
+    /* height: 53%; */
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
