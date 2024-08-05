@@ -573,6 +573,7 @@ imgRe.addEventListener('click',()=>{
 document.getElementById("task-btn_cansel").disabled = true;
 const btnStartSim=document.getElementById('task-btn_sim');
 btnStartSim.addEventListener('click',()=>{
+  
   const data = {
     'point':{
           "name":'',
@@ -590,8 +591,10 @@ btnStartSim.addEventListener('click',()=>{
   }
   const loader = new Loader('.loader-container');
     loader.show('Получение первого доступного КА');
+    
   calculateFirstAvailableInterval(data).then(()=>{
     loader.close();
+    document.querySelector('.header-log').style.display='block';
     document.getElementById("task-btn_cansel").disabled = false;
   });
 });
