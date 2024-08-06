@@ -11,6 +11,11 @@
     justify-content: center;
     
 }
+#response3{
+    overflow-y: scroll;
+    max-height: 300px;
+    display: none;
+}
 .input_parameters {
     display: flex;
     flex-direction: column;
@@ -23,7 +28,7 @@
     box-sizing: border-box;
 }
 img {
-    margin-right: 90%;
+    /* margin-right: 90%; */
     height: 40px;
     width: 44px;
 }
@@ -227,7 +232,7 @@ img {
     
     padding: 6px;
     text-align: center;
-    /* width: 130px; */
+     width: 130px; 
     border-radius: 6px;
     border-width: 2px;
     font-size: calc(1rem);
@@ -534,6 +539,7 @@ body {
 }
 .header-log{
     font-size: calc(1.2rem);
+    display: none;
 }
 /* Контейнер загрузки */
 .loader-container {
