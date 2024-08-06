@@ -437,13 +437,15 @@ function createResponse(result,data){
   if (document.querySelector('.information_request')) {
     document.querySelector('.information_request').remove();
   }
-  document.getElementById('response3').innerHTML='';
+  // document.getElementById('response3').innerHTML='';
+  document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Доступный КА:</div>`;  
   for (const [key, value] of Object.entries(result)) {
     if (typeof(value)!='object') {
       if (key=='duration_in_sec') {
         document.getElementById('response3').innerHTML+=`<div class="total-time"> total_duration_in_sec: ${value}</div>`;
       }
       else {
+        
         document.getElementById('response3').innerHTML+=`<div>${key}: ${value}</div>`;
       }
      
@@ -585,7 +587,7 @@ btnStartSim.addEventListener('click',()=>{
         "min_duration_in_sec":document.getElementById('min-call-time').value
       
   }
-   document.getElementById('response3').innerHTML='';
+  // document.getElementById('response3').innerHTML='';
   if (document.querySelector('.information_request')) {
     document.querySelector('.information_request').remove();
   }
@@ -594,7 +596,7 @@ btnStartSim.addEventListener('click',()=>{
     
   calculateFirstAvailableInterval(data).then(()=>{
     loader.close();
-    document.querySelector('.header-log').style.display='block';
+   document.getElementById('response3').style.display='block';
     document.getElementById("task-btn_cansel").disabled = false;
   });
 });
