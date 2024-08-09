@@ -679,19 +679,27 @@ body {
     padding: 20px;
     border: 1px solid #888;
     width: 80%; /* Ширина модального окна */
-    max-width: 500px; /* Максимальная ширина модального окна */
+    max-width: 700px; /* Максимальная ширина модального окна */
 }
 
 .close {
-    color: #aaa;
+    color: black;
     float: right;
     font-size: 28px;
     font-weight: bold;
+    padding: 6px;
+    text-align: center;
+    width: 130px;
+    border-radius: 6px;
+    border-width: 2px;
+    font-size: calc(1rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif;
 }
 
 .close:hover,
 .close:focus {
-    color: black;
+    background-color: #C0C0C0;
     text-decoration: none;
     cursor: pointer;
 }
@@ -703,7 +711,7 @@ body {
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 70%;
+    width: 80%;
     /* height: 53%; */
     flex-direction: column;
     justify-content: flex-start;
@@ -732,19 +740,21 @@ body {
     font-weight: bold;
     font-family: Arial, sans-serif;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .modal-header {
   color: #000000;
   line-height: 1;
-  font-size: calc(1rem + 1vw);
+  font-size: calc(0.7rem + 1vw);
   font-weight: normal;
   font-family: Arial, sans-serif;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   text-align: center; /* Центрируем текст заголовка */
   padding-bottom: 15px; /* Отступ снизу */
   border-bottom: 6px solid #999999; /* Темная полоса снизу */
+  width: 100%;
 }
 
 .modal_row{
