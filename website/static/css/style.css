@@ -652,14 +652,28 @@ body {
 .button_settings{
     background-color: #999999;
     border: none;
+}
 
+.button_settings:hover{
+    cursor:pointer;
 }
 
 .settings{
     margin-left: 70%;
 }
 
+.btn:hover{
+    cursor:pointer;
+}
+.btn:hover, #task-btn_sim_flow, #task-btn_cansel_flow,
+#task-btn_cansel:hover,
+#task-btn_sim:hover{
+    cursor:pointer;
+}
 
+#task-btn_cansel:hover{
+    cursor:pointer;
+}
 
 .modal {
     display: none; /* Скрываем модальное окно по умолчанию */
