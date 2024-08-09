@@ -222,7 +222,7 @@ async function calculateFirstAvailableInterval(data){
       document.getElementById('response3').innerHTML+=`<div>Время запроса сеанса связи ${new Date()}</div>`;
      
       if (document.querySelector('.duplex-checkbox').checked) {
-        postOcFrREs(result.satellite_id,document.querySelector('.duplex-checkbox').value)
+        postOcFrREs(result.satellite_id,document.querySelector('.duplex-checkbox').value,1,1)
         .then(respons=>{
           const randTime=getRandomNumber(60000,120000);
           document.querySelector('.information_request').innerHTML+=`<div>Время получения КА для связи  ${new Date()}</div>`;
@@ -231,8 +231,9 @@ async function calculateFirstAvailableInterval(data){
           document.querySelector('.information_request').innerHTML+=`<div>Время вызова сеанса связи ${new Date()}</div>`;
           
           document.querySelector('.information_request').innerHTML+=`<div> 
-           Заняты частотные каналы:  ${result.satellite_name}
+           Заняты частотные каналы:  ${result.satellite_name} на прием: 
           ${respons.Nomera_zanyatyih_yacheek[0][1]} - ${respons.Nomera_zanyatyih_yacheek[0][0]}
+          на передачу: 
           ${respons.Nomera_zanyatyih_yacheek[1][1]} - ${respons.Nomera_zanyatyih_yacheek[1][0]}
           </div> `;
           
@@ -318,8 +319,8 @@ async function calculateFirstAvailableInterval(data){
           
         });
       }
-      else{
-        postOcFrREs(result.satellite_id,document.querySelector('.simple-checkbox').value).then(response=>{
+      else if(document.querySelector('.simple-checkbox').checked){
+        postOcFrREs(result.satellite_id,document.querySelector('.simple-checkbox').value,1,0).then(response=>{
           const randTime=getRandomNumber(60000,120000);
           
           document.querySelector('.information_request').innerHTML+=`<div>Время получения КА для связи  ${new Date()}</div>`;
@@ -327,7 +328,99 @@ async function calculateFirstAvailableInterval(data){
           document.getElementById('response3').innerHTML+=`<div>Каналы выделены</div>`;
           document.querySelector('.information_request').innerHTML+=`<div>Время вызова сеанса связи ${new Date()}</div>`;
           
-          document.querySelector('.information_request').innerHTML+=`<div> Заняты частотные каналы:${result.satellite_name} ${response.Nomera_zanyatyih_yacheek[0][0]} -
+          document.querySelector('.information_request').innerHTML+=`<div> Заняты частотные каналы:${result.satellite_name} на прием: ${response.Nomera_zanyatyih_yacheek[0][0]} -
+           ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
+          if (document.querySelector('.time_call-max').checked) {
+            const time =String(document.querySelector('.total-time').innerText);
+            document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${time.substring(time.length-3)}</div>`;
+            console.log(time.substring(time.length-3));
+            const timer=setTimeout(function(){
+              postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
+                document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${time.substring(time.length-3)} секунд</div>`;
+                const dataEndCall=new Date();
+                document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова ${String(dataEndCall)}:</div> <br>`;
+                document.getElementById('response3').innerHTML+=`<br><div style="
+                font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
+                document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
+                document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
+              });  
+            },Number(time.substring(time.length-3))*1000);
+            const btnEnd=document.getElementById('task-btn_cansel');
+            btnEnd.addEventListener('click',()=>{
+              document.getElementById("task-btn_sim").disabled = true;
+              
+              clearTimeout(timer);
+              postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
+                const dataEndCall=new Date();
+                document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
+                  document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
+                  // document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${dataEndCall} секунд</div>`;
+                  document.querySelector('.information_request').innerHTML+=` <div>Продолжительность вызова 
+                  ${(dataEndCall-new Date(data.start_datetime_iso))/1000} секунд</div>`;
+                  document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова 
+                  ${dataEndCall}</div> <br>`;
+                  document.getElementById('response3').innerHTML+=`<br><div style="
+                  font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
+                  document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
+                  document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
+              });
+              document.getElementById("task-btn_sim").disabled = false;   
+            },{once:true});
+          }
+          else{
+            document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${randTime/1000}</div>`;
+            setTimeout(function(){
+           
+              postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
+                document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${randTime/1000} секунд</div>`;
+                const dataEndCall=new Date();
+                document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова ${String(dataEndCall)}:</div> <br>`;
+                document.getElementById('response3').innerHTML+=`<br><div style="
+                font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
+                document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
+                document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
+              });
+              
+            },randTime);
+            const btnEnd=document.getElementById('task-btn_cansel');
+            btnEnd.addEventListener('click',()=>{
+              document.getElementById("task-btn_sim").disabled = true;
+              clearTimeout(timer);
+              postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
+                const dataEndCall=new Date();
+                document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
+                  document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
+                  // document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${dataEndCall} секунд</div>`;
+                  document.querySelector('.information_request').innerHTML+=` <div>Продолжительность вызова 
+                  ${(dataEndCall-new Date(data.start_datetime_iso))/1000} секунд</div>`;
+                  document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова 
+                  ${dataEndCall}</div> <br>`;
+                  document.getElementById('response3').innerHTML+=`<br><div style="
+                  font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
+                  document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
+                  document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall)}</div>`;
+              });
+              document.getElementById("task-btn_sim").disabled = false;    
+            },{once:true});
+          }
+         
+          
+        });
+      }
+      else if(document.querySelector('.simplex-checkbox').checked){
+        postOcFrREs(result.satellite_id,document.querySelector('.simplex-checkbox').value,0,1).then(response=>{
+          const randTime=getRandomNumber(60000,120000);
+          
+          document.querySelector('.information_request').innerHTML+=`<div>Время получения КА для связи  ${new Date()}</div>`;
+          document.getElementById('response3').innerHTML+=`<div>Время вызова сеанса связи ${new Date()}</div>`;
+          document.getElementById('response3').innerHTML+=`<div>Каналы выделены</div>`;
+          document.querySelector('.information_request').innerHTML+=`<div>Время вызова сеанса связи ${new Date()}</div>`;
+          
+          document.querySelector('.information_request').innerHTML+=`<div> Заняты частотные каналы ${result.satellite_name} на передачу: ${response.Nomera_zanyatyih_yacheek[0][0]} -
            ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
           if (document.querySelector('.time_call-max').checked) {
             const time =String(document.querySelector('.total-time').innerText);
@@ -529,9 +622,9 @@ function createResponse(result,data){
   }
   parent.append(createInformationRequest);
 }
-async function postOcFrREs(stId,type){
+async function postOcFrREs(stId,type,reception,transmission){
   try {
-    const response = await fetch(`http://185.192.247.60:7130/CommunicationAvailability/OccupyFrequencyResource?satellite_id=${stId}&number_of_cells_for_reservation=${type}`, {
+    const response = await fetch(`http://185.192.247.60:7130/CommunicationAvailability/OccupyFrequencyResource?satellite_id=${stId}&number_of_cells_for_reservation=${type}&number_of_cells_for_reception=${reception}&number_of_cells_for_transmission=${transmission}`, {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",

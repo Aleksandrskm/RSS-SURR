@@ -16,6 +16,19 @@
     max-height: 300px;
     display: none;
 }
+#abonent-select{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-right: 20px;
+    padding: 6px;
+    /* text-align: center; */
+    width: 210px;
+    border-radius: 6px;
+    border-width: 2px;
+    font-size: calc(1rem);
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
 .input_parameters {
     display: flex;
     flex-direction: column;
@@ -393,6 +406,9 @@ img {
     width: 10px
 }
 .simple-checkbox{
+    width: 20px
+}
+.simplex-checkbox{
     width: 20px
 }
 
