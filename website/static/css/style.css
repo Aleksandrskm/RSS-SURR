@@ -408,6 +408,9 @@ img {
 .simple-checkbox{
     width: 20px
 }
+.simplex-checkbox{
+    width: 20px
+}
 
 header {
     grid-template-columns: 1fr 2fr 1fr;
