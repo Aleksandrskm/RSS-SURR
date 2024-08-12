@@ -1068,7 +1068,8 @@ btnStartSim.addEventListener('click',()=>{
   });
 });
 }
-const select = document.getElementById('abonent-select');
+if (document.getElementById('abonent-select')) {
+  const select = document.getElementById('abonent-select');
 let number = document.querySelectorAll('.number');
 let lastIndex = 0; 
 select.addEventListener('change', function() {
@@ -1081,6 +1082,8 @@ select.addEventListener('change', function() {
   
   lastIndex = index; 
 });
+}
+
 
 
 
