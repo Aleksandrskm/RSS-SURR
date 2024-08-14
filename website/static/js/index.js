@@ -245,22 +245,26 @@ async function calculateFirstAvailableInterval(data){
             console.log(respons.Nomera_zanyatyih_yacheek[0]);
             const time =result.datetime_period.duration_in_sec;
             let numPhone ='';
-
-            console.log(document.getElementById('abonent-select').value);
-            document.querySelectorAll('.number').forEach((number)=>{
-              console.log(number.innerHTML);
-              if (number.style.display=='inline') {
-                numPhone=number.innerHTML;
-              }
-                
-                console.log(numPhone);
-              
-            })
+            if(document.getElementById('abonent-select')){
+              console.log(document.getElementById('abonent-select').value);
+              document.querySelectorAll('.number').forEach((number)=>{
+                console.log(number.innerHTML);
+                if (number.style.display=='inline') {
+                  numPhone=number.innerHTML;
+                }
+                  
+                  console.log(numPhone);
+              });
+            }
+            let valueAbonent=0;
+           if (document.getElementById('abonent-select')) {
+            valueAbonent=Number(document.getElementById('abonent-select').value);
+           }
             document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${time}</div>`;
             const dataSession={
               "ID_Zapros_Seans_Tek": 0,
               "Tlf1": String(numPhone),
-              "ID_Abonent_T1": Number(document.getElementById('abonent-select').value),
+              "ID_Abonent_T1": valueAbonent,
               "ID_KA1": result.satellite_id,
               "ID_RSS1": 0,
               "Canal1": respons.Nomera_zanyatyih_yacheek[0][1],
@@ -299,62 +303,82 @@ async function calculateFirstAvailableInterval(data){
               
               }); 
             },Number(time)*1000);
-            const btnEnd=document.getElementById('task-btn_cansel');
-            btnEnd.addEventListener('click',()=>{
-              document.getElementById("task-btn_sim").disabled = true;
-              clearTimeout(timer);
-              postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
-                const dataEndCall=new Date();
-                document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
-                  document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
-                  // document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${dataEndCall} секунд</div>`;
-                  document.querySelector('.information_request').innerHTML+=` <div>Продолжительность вызова 
-                  ${(dataEndCall-new Date(data.start_datetime_iso))/1000} секунд</div>`;
-                  document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова 
-                  ${dataEndCall.toISOString()}</div>`;
-                  document.getElementById('response3').innerHTML+=`<br><div style="
-                  font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
-                  document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
-                  document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall.toISOString())}</div>`;
-                //   const dataSession={
-                //     "ID_Zapros_Seans_Tek": 0,
-                //     "Tlf1": "+79002000022",
-                //     "ID_Abonent_T1": result.satellite_id,
-                //     "ID_KA1": result.satellite_id,
-                //     "ID_RSS1": 0,
-                //     "Canal1": respons.Nomera_zanyatyih_yacheek[0][1],
-                //     "Time_Slot1": respons.Nomera_zanyatyih_yacheek[0][0],
-                //     "Canal_pr1": respons.Nomera_zanyatyih_yacheek[1][1],
-                //     "Time_Slot_pr1": respons.Nomera_zanyatyih_yacheek[1][0],
-                //     "Tlf2": "string",
-                //     "ID_Abonent_T2": 0,
-                //     "ID_KA2": 0,
-                //     "ID_RSS2": 0,
-                //     "Canal2": 0,
-                //     "Time_Slot2": 0,
-                //     "Canal_pr2": 0,
-                //     "Time_Slot_pr2": 0,
-                //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
-                //     "Data_Otv": String(datesStartTime.toISOString()),
-                //     "Data_Beg": String(dateStartTime.toISOString()),
-                //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
-                //     "Data_End": String(dataEndCall.toISOString()),
-                //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
-                //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
-                //     "Id_Seans_Rez": 7
-                // }
-                // postActiveSession(dataSession);
-              });
-              
-              document.getElementById("task-btn_sim").disabled = false;  
-            },{once:true});
+            if (document.querySelector('h2').innerHTML=='Имитатор одиночных вызовов'){
+              const btnEnd=document.getElementById('task-btn_cansel');
+              btnEnd.addEventListener('click',()=>{
+                document.getElementById("task-btn_sim").disabled = true;
+                clearTimeout(timer);
+                postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
+                  const dataEndCall=new Date();
+                  document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
+                    document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
+                    // document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${dataEndCall} секунд</div>`;
+                    document.querySelector('.information_request').innerHTML+=` <div>Продолжительность вызова 
+                    ${(dataEndCall-new Date(data.start_datetime_iso))/1000} секунд</div>`;
+                    document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова 
+                    ${dataEndCall.toISOString()}</div>`;
+                    document.getElementById('response3').innerHTML+=`<br><div style="
+                    font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
+                    document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
+                    document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall.toISOString())}</div>`;
+                  //   const dataSession={
+                  //     "ID_Zapros_Seans_Tek": 0,
+                  //     "Tlf1": "+79002000022",
+                  //     "ID_Abonent_T1": result.satellite_id,
+                  //     "ID_KA1": result.satellite_id,
+                  //     "ID_RSS1": 0,
+                  //     "Canal1": respons.Nomera_zanyatyih_yacheek[0][1],
+                  //     "Time_Slot1": respons.Nomera_zanyatyih_yacheek[0][0],
+                  //     "Canal_pr1": respons.Nomera_zanyatyih_yacheek[1][1],
+                  //     "Time_Slot_pr1": respons.Nomera_zanyatyih_yacheek[1][0],
+                  //     "Tlf2": "string",
+                  //     "ID_Abonent_T2": 0,
+                  //     "ID_KA2": 0,
+                  //     "ID_RSS2": 0,
+                  //     "Canal2": 0,
+                  //     "Time_Slot2": 0,
+                  //     "Canal_pr2": 0,
+                  //     "Time_Slot_pr2": 0,
+                  //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+                  //     "Data_Otv": String(datesStartTime.toISOString()),
+                  //     "Data_Beg": String(dateStartTime.toISOString()),
+                  //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
+                  //     "Data_End": String(dataEndCall.toISOString()),
+                  //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
+                  //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
+                  //     "Id_Seans_Rez": 7
+                  // }
+                  // postActiveSession(dataSession);
+                });
+                
+                document.getElementById("task-btn_sim").disabled = false;  
+              },{once:true});
+            }
+            
           }
           else{
+            let numPhone='';
+            if(document.getElementById('abonent-select')){
+              console.log(document.getElementById('abonent-select').value);
+              document.querySelectorAll('.number').forEach((number)=>{
+                console.log(number.innerHTML);
+                if (number.style.display=='inline') {
+                  numPhone=number.innerHTML;
+                }
+                  
+                  console.log(numPhone);
+                
+              });
+            }
+            let valueAbonent=0;
+           if (document.getElementById('abonent-select')) {
+            valueAbonent=Number(document.getElementById('abonent-select').value);
+           }
             document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${randTime/1000}</div>`;
             const dataSession={
               "ID_Zapros_Seans_Tek": 0,
-              "Tlf1": "+79002000022",
-              "ID_Abonent_T1": Number(document.getElementById('abonent-select').value),
+              "Tlf1": String(numPhone),
+              "ID_Abonent_T1": valueAbonent,
               "ID_KA1": result.satellite_id,
               "ID_RSS1": 0,
               "Canal1": respons.Nomera_zanyatyih_yacheek[0][1],
@@ -395,7 +419,8 @@ async function calculateFirstAvailableInterval(data){
               });
               
             },randTime);
-            const btnEnd=document.getElementById('task-btn_cansel');
+            if (document.querySelector('h2').innerHTML=='Имитатор одиночных вызовов'){
+               const btnEnd=document.getElementById('task-btn_cansel');
             btnEnd.addEventListener('click',()=>{
               document.getElementById("task-btn_sim").disabled = true; 
               clearTimeout(timer);
@@ -443,6 +468,8 @@ async function calculateFirstAvailableInterval(data){
               });
               document.getElementById("task-btn_sim").disabled = false;   
             },{once:true});
+            }
+           
           }
           
         });
@@ -463,10 +490,27 @@ async function calculateFirstAvailableInterval(data){
             const time =result.datetime_period.duration_in_sec;
             document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${time}</div>`;
             console.log(time);
+            let numPhone='';
+            if(document.getElementById('abonent-select')){
+              console.log(document.getElementById('abonent-select').value);
+              document.querySelectorAll('.number').forEach((number)=>{
+                console.log(number.innerHTML);
+                if (number.style.display=='inline') {
+                  numPhone=number.innerHTML;
+                }
+                  
+                  console.log(numPhone);
+                
+              });
+            }
+            let valueAbonent=0;
+           if (document.getElementById('abonent-select')) {
+            valueAbonent=Number(document.getElementById('abonent-select').value);
+           }
             const dataSession={
               "ID_Zapros_Seans_Tek": 0,
-              "Tlf1": "+79002000022",
-              "ID_Abonent_T1": Number(document.getElementById('abonent-select').value),
+              "Tlf1": numPhone,
+              "ID_Abonent_T1": Number(valueAbonent),
               "ID_KA1": result.satellite_id,
               "ID_RSS1": 0,
               "Canal1": response.Nomera_zanyatyih_yacheek[0][1],
@@ -505,7 +549,8 @@ async function calculateFirstAvailableInterval(data){
                 
               });  
             },Number(time)*1000);
-            const btnEnd=document.getElementById('task-btn_cansel');
+            if (document.querySelector('h2').innerHTML=='Имитатор одиночных вызовов'){
+              const btnEnd=document.getElementById('task-btn_cansel');
             btnEnd.addEventListener('click',()=>{
               document.getElementById("task-btn_sim").disabled = true;
               
@@ -554,13 +599,32 @@ async function calculateFirstAvailableInterval(data){
               });
               document.getElementById("task-btn_sim").disabled = false;   
             },{once:true});
+            }
+            
           }
           else{
+            let numPhone='';
+            if(document.getElementById('abonent-select')){
+              console.log(document.getElementById('abonent-select').value);
+              document.querySelectorAll('.number').forEach((number)=>{
+                console.log(number.innerHTML);
+                if (number.style.display=='inline') {
+                  numPhone=number.innerHTML;
+                }
+                  
+                  console.log(numPhone);
+                
+              });
+            }
+            let valueAbonent=0;
+           if (document.getElementById('abonent-select')) {
+            valueAbonent=Number(document.getElementById('abonent-select').value);
+           }
             document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${randTime/1000}</div>`;
             const dataSession={
               "ID_Zapros_Seans_Tek": 0,
-              "Tlf1": "+79002000022",
-              "ID_Abonent_T1": Number(document.getElementById('abonent-select').value),
+              "Tlf1": numPhone,
+              "ID_Abonent_T1": Number(valueAbonent),
               "ID_KA1": result.satellite_id,
               "ID_RSS1": 0,
               "Canal1": response.Nomera_zanyatyih_yacheek[0][1],
@@ -601,54 +665,57 @@ async function calculateFirstAvailableInterval(data){
               });
               
             },randTime);
-            const btnEnd=document.getElementById('task-btn_cansel');
-            btnEnd.addEventListener('click',()=>{
-              document.getElementById("task-btn_sim").disabled = true;
-              clearTimeout(timer);
-              postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
-                const dataEndCall=new Date();
-                document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
-                  document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
-                  // document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${dataEndCall} секунд</div>`;
-                  document.querySelector('.information_request').innerHTML+=` <div>Продолжительность вызова 
-                  ${(dataEndCall-new Date(data.start_datetime_iso))/1000} секунд</div>`;
-                  document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова 
-                  ${dataEndCall.toISOString()}</div> <br>`;
-                  document.getElementById('response3').innerHTML+=`<br><div style="
-                  font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
-                  document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
-                  document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall.toISOString())}</div>`;
-                //   const dataSession={
-                //     "ID_Zapros_Seans_Tek": 0,
-                //     "Tlf1": "+79002000022",
-                //     "ID_Abonent_T1": result.satellite_id,
-                //     "ID_KA1": result.satellite_id,
-                //     "ID_RSS1": 0,
-                //     "Canal1": response.Nomera_zanyatyih_yacheek[0][1],
-                //     "Time_Slot1": response.Nomera_zanyatyih_yacheek[0][0],
-                //     "Canal_pr1": 0,
-                //     "Time_Slot_pr1": 0,
-                //     "Tlf2": "string",
-                //     "ID_Abonent_T2": 0,
-                //     "ID_KA2": 0,
-                //     "ID_RSS2": 0,
-                //     "Canal2": 0,
-                //     "Time_Slot2": 0,
-                //     "Canal_pr2": 0,
-                //     "Time_Slot_pr2": 0,
-                //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
-                //     "Data_Otv": String(datesStartTime.toISOString()),
-                //     "Data_Beg": String(dateStartTime.toISOString()),
-                //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
-                //     "Data_End": String(dataEndCall.toISOString()),
-                //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
-                //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
-                //     "Id_Seans_Rez": 7
-                // }
-                // postActiveSession(dataSession);
-              });
-              document.getElementById("task-btn_sim").disabled = false;    
-            },{once:true});
+            if (document.querySelector('h2').innerHTML=='Имитатор одиночных вызовов'){
+              const btnEnd=document.getElementById('task-btn_cansel');
+              btnEnd.addEventListener('click',()=>{
+                document.getElementById("task-btn_sim").disabled = true;
+                clearTimeout(timer);
+                postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
+                  const dataEndCall=new Date();
+                  document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
+                    document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
+                    // document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${dataEndCall} секунд</div>`;
+                    document.querySelector('.information_request').innerHTML+=` <div>Продолжительность вызова 
+                    ${(dataEndCall-new Date(data.start_datetime_iso))/1000} секунд</div>`;
+                    document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова 
+                    ${dataEndCall.toISOString()}</div> <br>`;
+                    document.getElementById('response3').innerHTML+=`<br><div style="
+                    font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
+                    document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
+                    document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall.toISOString())}</div>`;
+                  //   const dataSession={
+                  //     "ID_Zapros_Seans_Tek": 0,
+                  //     "Tlf1": "+79002000022",
+                  //     "ID_Abonent_T1": result.satellite_id,
+                  //     "ID_KA1": result.satellite_id,
+                  //     "ID_RSS1": 0,
+                  //     "Canal1": response.Nomera_zanyatyih_yacheek[0][1],
+                  //     "Time_Slot1": response.Nomera_zanyatyih_yacheek[0][0],
+                  //     "Canal_pr1": 0,
+                  //     "Time_Slot_pr1": 0,
+                  //     "Tlf2": "string",
+                  //     "ID_Abonent_T2": 0,
+                  //     "ID_KA2": 0,
+                  //     "ID_RSS2": 0,
+                  //     "Canal2": 0,
+                  //     "Time_Slot2": 0,
+                  //     "Canal_pr2": 0,
+                  //     "Time_Slot_pr2": 0,
+                  //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+                  //     "Data_Otv": String(datesStartTime.toISOString()),
+                  //     "Data_Beg": String(dateStartTime.toISOString()),
+                  //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
+                  //     "Data_End": String(dataEndCall.toISOString()),
+                  //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
+                  //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
+                  //     "Id_Seans_Rez": 7
+                  // }
+                  // postActiveSession(dataSession);
+                });
+                document.getElementById("task-btn_sim").disabled = false;    
+              },{once:true});
+            }
+            
           }
          
           
@@ -663,17 +730,33 @@ async function calculateFirstAvailableInterval(data){
           document.getElementById('response3').innerHTML+=`<div>Время вызова сеанса связи ${dateStartTime.toISOString()}</div>`;
           document.getElementById('response3').innerHTML+=`<div>Каналы выделены</div>`;
           document.querySelector('.information_request').innerHTML+=`<div>Время вызова сеанса связи ${dateStartTime.toISOString()}</div>`;
-          
           document.querySelector('.information_request').innerHTML+=`<div> Заняты частотные каналы ${result.satellite_name} на передачу: ${response.Nomera_zanyatyih_yacheek[0][0]} -
            ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
           if (document.querySelector('.time_call-max').checked) {
             const time =result.datetime_period.duration_in_sec;
+            let numPhone='';
+            if(document.getElementById('abonent-select')){
+              console.log(document.getElementById('abonent-select').value);
+              document.querySelectorAll('.number').forEach((number)=>{
+                console.log(number.innerHTML);
+                if (number.style.display=='inline') {
+                  numPhone=number.innerHTML;
+                }
+                  
+                  console.log(numPhone);
+                
+              });
+            }
+            let valueAbonent=0;
+           if (document.getElementById('abonent-select')) {
+            valueAbonent=Number(document.getElementById('abonent-select').value);
+           }
             document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${time}</div>`;
             console.log(time);
             const dataSession={
               "ID_Zapros_Seans_Tek": 0,
-              "Tlf1": "+79002000022",
-              "ID_Abonent_T1": Number(document.getElementById('abonent-select').value),
+              "Tlf1": numPhone,
+              "ID_Abonent_T1": Number(valueAbonent),
               "ID_KA1": result.satellite_id,
               "ID_RSS1": 0,
               "Canal1": 0,
@@ -807,7 +890,8 @@ async function calculateFirstAvailableInterval(data){
               });
               
             },randTime);
-            const btnEnd=document.getElementById('task-btn_cansel');
+            if (document.querySelector('h2').innerHTML=='Имитатор одиночных вызовов'){
+              const btnEnd=document.getElementById('task-btn_cansel_flow');
             btnEnd.addEventListener('click',()=>{
               document.getElementById("task-btn_sim").disabled = true;
               clearTimeout(timer);
@@ -855,6 +939,58 @@ async function calculateFirstAvailableInterval(data){
               });
               document.getElementById("task-btn_sim").disabled = false;    
             },{once:true});
+            }
+            else{
+              const btnEnd=document.getElementById('task-btn_cansel_flow');
+            btnEnd.addEventListener('click',()=>{
+              // document.getElementById("task-btn_sim").disabled = true;
+              clearTimeout(timer);
+              postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
+                const dataEndCall=new Date();
+                document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
+                  document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
+                  // document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${dataEndCall} секунд</div>`;
+                  document.querySelector('.information_request').innerHTML+=` <div>Продолжительность вызова 
+                  ${(dataEndCall-new Date(data.start_datetime_iso))/1000} секунд</div>`;
+                  document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова 
+                  ${dataEndCall.toISOString()}</div> <br>`;
+                  document.getElementById('response3').innerHTML+=`<br><div style="
+                  font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
+                  document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
+                  document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall.toISOString())}</div>`;
+                //   const dataSession={
+                //     "ID_Zapros_Seans_Tek": 0,
+                //     "Tlf1": "+79002000022",
+                //     "ID_Abonent_T1": result.satellite_id,
+                //     "ID_KA1": result.satellite_id,
+                //     "ID_RSS1": 0,
+                //     "Canal1": 0,
+                //     "Time_Slot1": 0,
+                //     "Canal_pr1": response.Nomera_zanyatyih_yacheek[0][1],
+                //     "Time_Slot_pr1": response.Nomera_zanyatyih_yacheek[0][0],
+                //     "Tlf2": "string",
+                //     "ID_Abonent_T2": 0,
+                //     "ID_KA2": 0,
+                //     "ID_RSS2": 0,
+                //     "Canal2": 0,
+                //     "Time_Slot2": 0,
+                //     "Canal_pr2": 0,
+                //     "Time_Slot_pr2": 0,
+                //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+                //     "Data_Otv": String(datesStartTime.toISOString()),
+                //     "Data_Beg": String(dateStartTime.toISOString()),
+                //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
+                //     "Data_End": String(dataEndCall.toISOString()),
+                //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
+                //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
+                //     "Id_Seans_Rez": 7
+                // }
+                // postActiveSession(dataSession);
+              });
+              // document.getElementById("task-btn_sim").disabled = false;    
+            },{once:true});
+            }
+            
           }
          
           
@@ -921,7 +1057,7 @@ function createResponse(result,data){
     for (const [key, values] of Object.entries(value)){
       if (key=='duration_in_sec') {
         document.getElementById('response3').innerHTML+=`<div class="total-time"> total_duration_in_sec: ${values}</div> <br><span style="
-        font-size: calc(1.2rem);">Вызов:</span>`;
+        font-size: calc(1.2rem);">Сеанс связи: </span>`;
       }
       else  if (key=='end_datetime_iso') {
         document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div>`;
@@ -1034,39 +1170,64 @@ const span = document.getElementsByClassName("close")[0];
 btn.addEventListener("click", ()=>{modal.style.display = "flex"});
 span.addEventListener("click", ()=>{modal.style.display = "none"});  
 if (document.querySelector('h2')) {
-  const imgRe=document.querySelector('.re-date');
-imgRe.addEventListener('click',()=>{
-  document.getElementById('lat3').value=getRandomNumber(41,77);
-  document.getElementById('lon3').value=getRandomNumber(27,169);
-});
-document.getElementById("task-btn_cansel").disabled = true;
-const btnStartSim=document.getElementById('task-btn_sim');
-btnStartSim.addEventListener('click',()=>{
-  
+  if (document.querySelector('h2').innerHTML=='Имитатор одиночных вызовов') {
+    const imgRe=document.querySelector('.re-date');
+    imgRe.addEventListener('click',()=>{
+      document.getElementById('lat3').value=getRandomNumber(41,77);
+      document.getElementById('lon3').value=getRandomNumber(27,169);
+    });
+    document.getElementById("task-btn_cansel").disabled = true;
+    const btnStartSim=document.getElementById('task-btn_sim');
+    btnStartSim.addEventListener('click',()=>{
+      
+      const data = {
+        'point':{
+              "name":'',
+              "lat": document.getElementById('lat3').value,
+              "lon": document.getElementById('lon3').value,
+              "radius": 2500
+            },
+            "start_datetime_iso": new Date().toISOString(),
+            "min_duration_in_sec":document.getElementById('min-call-time').value
+          
+      }
+      // document.getElementById('response3').innerHTML='';
+      if (document.querySelector('.information_request')) {
+        document.querySelector('.information_request').remove();
+      }
+      const loader = new Loader('.loader-container');
+        loader.show('Получение первого доступного КА');
+        
+      calculateFirstAvailableInterval(data).then(()=>{
+        loader.close();
+       document.getElementById('response3').style.display='block';
+        document.getElementById("task-btn_cansel").disabled = false;
+      });
+    });
+  }
+  else if (document.querySelector('h2').innerHTML=='Имитатор потока вызовов') {
+    const btnFlawStart=document.querySelector('#task-btn_sim_flow');
+btnFlawStart.addEventListener('click',()=>{
   const data = {
     'point':{
           "name":'',
-          "lat": document.getElementById('lat3').value,
-          "lon": document.getElementById('lon3').value,
+          "lat": document.getElementById('lat4').value,
+          "lon": document.getElementById('lon4').value,
           "radius": 2500
         },
         "start_datetime_iso": new Date().toISOString(),
         "min_duration_in_sec":document.getElementById('min-call-time').value
       
   }
-  // document.getElementById('response3').innerHTML='';
-  if (document.querySelector('.information_request')) {
-    document.querySelector('.information_request').remove();
-  }
   const loader = new Loader('.loader-container');
-    loader.show('Получение первого доступного КА');
-    
+  loader.show('Получение первого доступного КА');
   calculateFirstAvailableInterval(data).then(()=>{
     loader.close();
-   document.getElementById('response3').style.display='block';
-    document.getElementById("task-btn_cansel").disabled = false;
+    document.getElementById('response3').style.display='block';
   });
+ 
 });
+  }
 }
 if (document.getElementById('abonent-select')) {
   const select = document.getElementById('abonent-select');
