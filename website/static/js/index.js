@@ -191,12 +191,35 @@ function release_all_frequency_resources(){
         }
         else {
         alert("Освобожден частотный ресурс");
+        clearActiveSessions();
 
         }
     })
     .catch(error => {
         console.error("Сетевая ошибка:", error);
     });
+}
+function clearActiveSessions(){
+  const url = "http://185.192.247.60:7130/CommunicationAvailability/ClearActiveSessions";
+  fetch(url, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+  })
+  .then(response => {
+
+      if (!response.ok) {
+          console.error("Ошибка при выполнении запроса:", response.status);
+      }
+      else {
+        console.error("Очищены активные сеансы", response.status);
+
+      }
+  })
+  .catch(error => {
+      console.error("Сетевая ошибка:", error);
+  });
 }
 async function addArchivalSession(id,dataEnd,timeSeans,timeCall,idSeansRes){
   try {
