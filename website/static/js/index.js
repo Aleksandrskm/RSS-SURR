@@ -267,13 +267,16 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               const dateStartTime=new Date();
               document.querySelector('.information_request').innerHTML+=`<div>Время получения КА для связи  ${dateStartTime.toISOString()}</div>`;
               document.getElementById('response3').innerHTML+=`<div>Время вызова сеанса связи ${dateStartTime.toISOString()}</div>`;
-              document.getElementById('response3').innerHTML+=`<div>Каналы выделены</div>`;
+              document.getElementById('response3').innerHTML+=`<div>Каналы выделены: ${result.satellite_name} на передачу: канал
+              ${respons.Nomera_zanyatyih_yacheek[0][1]} тайм слот  ${respons.Nomera_zanyatyih_yacheek[0][0]}, 
+              на прием: канал
+              ${respons.Nomera_zanyatyih_yacheek[1][1]} тайм слот ${respons.Nomera_zanyatyih_yacheek[1][0]}</div>`;
               document.querySelector('.information_request').innerHTML+=`<div>Время вызова сеанса связи ${dateStartTime.toISOString()}</div>`;
               document.querySelector('.information_request').innerHTML+=`<div> 
-              Заняты частотные каналы:  ${result.satellite_name} на передачу: тайм слот
-              ${respons.Nomera_zanyatyih_yacheek[0][1]} канал  ${respons.Nomera_zanyatyih_yacheek[0][0]}, 
-              на прием: тайм слот
-              ${respons.Nomera_zanyatyih_yacheek[1][1]} канал ${respons.Nomera_zanyatyih_yacheek[1][0]}
+              Заняты частотные каналы:  ${result.satellite_name} на передачу: канал
+              ${respons.Nomera_zanyatyih_yacheek[0][1]} тайм слот  ${respons.Nomera_zanyatyih_yacheek[0][0]}, 
+              на прием: канал
+              ${respons.Nomera_zanyatyih_yacheek[1][1]} тайм слот ${respons.Nomera_zanyatyih_yacheek[1][0]}
               </div> `;
               console.log(respons.Nomera_zanyatyih_yacheek[0]);
               if (document.querySelector('.time_call-max').checked) {
@@ -659,11 +662,12 @@ async function calculateFirstAvailableInterval(data,arrTimers){
           document.querySelector('.information_request').innerHTML+=`<div>Время получения КА для связи  ${dateStartTime.toISOString()}
           </div>`;
           document.getElementById('response3').innerHTML+=`<div>Время вызова сеанса связи ${dateStartTime.toISOString()}</div>`;
-          document.getElementById('response3').innerHTML+=`<div>Каналы выделены</div>`;
+          document.getElementById('response3').innerHTML+=`<div>Каналы выделены: на прием: канал ${response.Nomera_zanyatyih_yacheek[0][0]} тайм слот
+           ${response.Nomera_zanyatyih_yacheek[0][1]}</div>`;
           document.querySelector('.information_request').innerHTML+=`<div>Время вызова сеанса связи ${dateStartTime.toISOString()}</div>`;
           
           document.querySelector('.information_request').innerHTML+=`<div> Заняты частотные каналы:${result.satellite_name} 
-          на прием: тайм слот ${response.Nomera_zanyatyih_yacheek[0][0]} канал
+          на прием: канал ${response.Nomera_zanyatyih_yacheek[0][0]} тайм слот
            ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
           if (document.querySelector('.time_call-max').checked) {
             const time =result.datetime_period.duration_in_sec;
@@ -1017,10 +1021,12 @@ async function calculateFirstAvailableInterval(data,arrTimers){
           document.querySelector('.information_request').innerHTML+=`<div>Время получения КА для связи  ${dateStartTime.toISOString()}
           </div>`;
           document.getElementById('response3').innerHTML+=`<div>Время вызова сеанса связи ${dateStartTime.toISOString()}</div>`;
-          document.getElementById('response3').innerHTML+=`<div>Каналы выделены</div>`;
+          document.getElementById('response3').innerHTML+=`<div>Каналы выделены: ${result.satellite_name} 
+          на передачу:канал ${response.Nomera_zanyatyih_yacheek[0][0]} тайм слот
+           ${response.Nomera_zanyatyih_yacheek[0][1]}</div>`;
           document.querySelector('.information_request').innerHTML+=`<div>Время вызова сеанса связи ${dateStartTime.toISOString()}</div>`;
           document.querySelector('.information_request').innerHTML+=`<div> Заняты частотные каналы ${result.satellite_name} 
-          на передачу:тайм слот ${response.Nomera_zanyatyih_yacheek[0][0]} канал
+          на передачу:канал ${response.Nomera_zanyatyih_yacheek[0][0]} тайм слот
            ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
           if (document.querySelector('.time_call-max').checked) {
             const time =result.datetime_period.duration_in_sec;
