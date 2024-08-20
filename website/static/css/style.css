@@ -1,6 +1,6 @@
 .content {
-    
-    margin: 100px auto;
+    height: calc(76vh);
+    /* margin: 100px auto; */
     padding: 7px;
     display: flex;
     border-radius: 6px;
@@ -12,9 +12,10 @@
     
 }
 #response3{
+    min-height: 14vh;
     overflow-y: scroll;
     max-height: 300px;
-    /* display: none; */
+    display: none;
 }
 #abonent-select{
     margin-bottom: 10px;
@@ -195,7 +196,7 @@ img {
     padding: 20px;
     box-sizing: border-box;
     overflow-y: scroll;
-    max-height: 800px;
+    /* max-height: 800px; */
 }
 .information_request div {
     text-align: left;
@@ -269,15 +270,17 @@ img {
     font-family: Arial, sans-serif; 
 }
 .input_parameters_imitator{
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
     max-width: 900px;
     margin: 15px 15px;
     background-color: #f1f1f1;
     border-radius: 20px;
     padding: 20px;
     box-sizing: border-box;
+    
 }
 
 .input_parameters_com input {

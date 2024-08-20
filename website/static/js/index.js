@@ -252,6 +252,15 @@ async function calculateFirstAvailableInterval(data,arrTimers){
     if (result.detail || Date.parse(new Date((result.start_datetime_iso)))<Date.parse(new Date())) {
       // console.log("Success:", result);
       document.getElementById('response3').innerHTML+='Нет доступного KA <br>';
+      document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Характеристики Абонента:</div>`;
+    const latRes=document.createElement('div');
+    latRes.classList.add('latitude-res');
+    latRes.innerHTML=`Широта, градусы: ${document.getElementById('lat3').value}`;
+    const lonRes=document.createElement('div')
+    lonRes.innerHTML=`Долгота, градусы: ${document.getElementById('lon3').value}`;
+    lonRes.classList.add('long-res');
+    document.getElementById('response3').append(latRes);
+    document.getElementById('response3').append(lonRes);
       
     }
     else
@@ -1413,6 +1422,15 @@ async function postActiveSession(data) {
 }
 function createResponse(result,data){
   if (document.querySelector('.information_request')) {
+    document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Характеристики Абонента:</div>`;
+    const latRes=document.createElement('div');
+    latRes.classList.add('latitude-res');
+    latRes.innerHTML=`Широта, градусы: ${document.getElementById('lat3').value}`;
+    const lonRes=document.createElement('div')
+    lonRes.innerHTML=`Долгота, градусы: ${document.getElementById('lon3').value}`;
+    lonRes.classList.add('long-res');
+    document.getElementById('response3').append(latRes);
+    document.getElementById('response3').append(lonRes);
     document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Доступный КА:</div>`;  
     for (const [key, value] of Object.entries(result)) {
       if (typeof(value)!='object') {
@@ -1651,12 +1669,12 @@ if (document.querySelector('h2')) {
       const randLat=getRandomNumber(41,77)
       document.getElementById('lat3').value=randLat;
       document.getElementById('lon3').value=randLong;
-      document.getElementById('latitude-res').innerHTML=`Широта, градусы: ${randLat}`;
-      document.getElementById('long-res').innerHTML=`Долгота, градусы: ${randLong}`;
+      // document.getElementById('latitude-res').innerHTML=`Широта, градусы: ${randLat}`;
+      // document.getElementById('long-res').innerHTML=`Долгота, градусы: ${randLong}`;
 
     });
-    document.getElementById('latitude-res').innerHTML+=document.getElementById('lat3').value;
-      document.getElementById('long-res').innerHTML+=document.getElementById('lon3').value;
+    // document.getElementById('latitude-res').innerHTML+=document.getElementById('lat3').value;
+    //   document.getElementById('long-res').innerHTML+=document.getElementById('lon3').value;
     document.getElementById("task-btn_cansel").disabled = true;
     const btnStartSim=document.getElementById('task-btn_sim');
     btnStartSim.addEventListener('click',()=>{
