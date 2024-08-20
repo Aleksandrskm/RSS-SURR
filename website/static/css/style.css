@@ -195,7 +195,7 @@ img {
     border-radius: 20px;
     padding: 20px;
     box-sizing: border-box;
-    overflow-y: scroll;
+    overflow-y: auto;
     /* max-height: 800px; */
 }
 .information_request div {
@@ -656,11 +656,11 @@ body {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-}
+} */
 .hide{
     display: none;
 }
- */
+
  .show{
     display: inline;
 }

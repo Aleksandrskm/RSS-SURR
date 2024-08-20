@@ -251,7 +251,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
     console.log("Success:", result);
     if (result.detail || Date.parse(new Date((result.start_datetime_iso)))<Date.parse(new Date())) {
       // console.log("Success:", result);
-      document.getElementById('response3').innerHTML+='Нет доступного KA <br>';
+      document.getElementById('response3').innerHTML+='<br>Нет доступного KA <br>';
       document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Характеристики Абонента:</div>`;
     const latRes=document.createElement('div');
     latRes.classList.add('latitude-res');
@@ -297,7 +297,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
             console.log(document.getElementById('abonent-select').value);
             document.querySelectorAll('.number').forEach((number)=>{
               console.log(number.innerHTML);
-              if (number.style.display=='inline') {
+              if (number.classList.contains('show') ){
                 numPhone=number.innerHTML;
               }
                 
@@ -417,7 +417,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               console.log(document.getElementById('abonent-select').value);
               document.querySelectorAll('.number').forEach((number)=>{
               console.log(number.innerHTML);
-              if (number.style.display=='inline') {
+              if (number.classList.contains('show')) {
                 numPhone=number.innerHTML;
               }
                 
@@ -498,7 +498,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               console.log(document.getElementById('abonent-select').value);
               document.querySelectorAll('.number').forEach((number)=>{
                 console.log(number.innerHTML);
-                if (number.style.display=='inline') {
+                if (number.classList.contains('show')) {
                   numPhone=number.innerHTML;
                 }
                   
@@ -687,7 +687,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               console.log(document.getElementById('abonent-select').value);
               document.querySelectorAll('.number').forEach((number)=>{
                 console.log(number.innerHTML);
-                if (number.style.display=='inline') {
+                if (number.classList.contains('show')) {
                   numPhone=number.innerHTML;
                 }
                   
@@ -855,7 +855,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               console.log(document.getElementById('abonent-select').value);
               document.querySelectorAll('.number').forEach((number)=>{
                 console.log(number.innerHTML);
-                if (number.style.display=='inline') {
+                if (number.classList.contains('show')) {
                   numPhone=number.innerHTML;
                 }
                   
@@ -1044,7 +1044,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               console.log(document.getElementById('abonent-select').value);
               document.querySelectorAll('.number').forEach((number)=>{
                 console.log(number.innerHTML);
-                if (number.style.display=='inline') {
+                if (number.classList.contains('show')) {
                   numPhone=number.innerHTML;
                 }
                   
@@ -1213,7 +1213,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               console.log(document.getElementById('abonent-select').value);
               document.querySelectorAll('.number').forEach((number)=>{
                 console.log(number.innerHTML);
-                if (number.style.display=='inline') {
+                if (number.classList.contains('show')) {
                   numPhone=number.innerHTML;
                 }
                   
@@ -1756,12 +1756,20 @@ if (document.getElementById('abonent-select')) {
 let number = document.querySelectorAll('.number');
 let lastIndex = 0; 
 select.addEventListener('change', function() {
-  number[lastIndex].style.display = "none"; 
+  number[lastIndex].classList.remove ("hide"); 
+  number[lastIndex].classList.remove ("show"); 
 
 
   let index = select.selectedIndex; 
- 
-  number[index].style.display = "inline"; // Показать блок с соответствующим индексом
+ if (!index) {
+  number[lastIndex].classList.remove ("hide"); 
+  number[lastIndex].classList.remove ("show"); 
+ }
+ else{
+  number[index].classList.add("show"); // Показать блок с соответствующим индексом
+  number[index].classList.remove ("hide");
+ }
+  
   
   lastIndex = index; 
 });
