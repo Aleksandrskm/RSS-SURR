@@ -251,7 +251,16 @@ async function calculateFirstAvailableInterval(data,arrTimers){
     console.log("Success:", result);
     if (result.detail || Date.parse(new Date((result.start_datetime_iso)))<Date.parse(new Date())) {
       // console.log("Success:", result);
-      document.getElementById('response3').innerHTML+='Нет доступного KA <br>';
+      document.getElementById('response3').innerHTML+='<br>Нет доступного KA <br>';
+      document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Характеристики Абонента:</div>`;
+    const latRes=document.createElement('div');
+    latRes.classList.add('latitude-res');
+    latRes.innerHTML=`Широта, градусы: ${document.getElementById('lat3').value}`;
+    const lonRes=document.createElement('div')
+    lonRes.innerHTML=`Долгота, градусы: ${document.getElementById('lon3').value}`;
+    lonRes.classList.add('long-res');
+    document.getElementById('response3').append(latRes);
+    document.getElementById('response3').append(lonRes);
       
     }
     else
@@ -288,7 +297,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
             console.log(document.getElementById('abonent-select').value);
             document.querySelectorAll('.number').forEach((number)=>{
               console.log(number.innerHTML);
-              if (number.style.display=='inline') {
+              if (number.classList.contains('show') ){
                 numPhone=number.innerHTML;
               }
                 
@@ -408,7 +417,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               console.log(document.getElementById('abonent-select').value);
               document.querySelectorAll('.number').forEach((number)=>{
               console.log(number.innerHTML);
-              if (number.style.display=='inline') {
+              if (number.classList.contains('show')) {
                 numPhone=number.innerHTML;
               }
                 
@@ -489,7 +498,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               console.log(document.getElementById('abonent-select').value);
               document.querySelectorAll('.number').forEach((number)=>{
                 console.log(number.innerHTML);
-                if (number.style.display=='inline') {
+                if (number.classList.contains('show')) {
                   numPhone=number.innerHTML;
                 }
                   
@@ -678,7 +687,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               console.log(document.getElementById('abonent-select').value);
               document.querySelectorAll('.number').forEach((number)=>{
                 console.log(number.innerHTML);
-                if (number.style.display=='inline') {
+                if (number.classList.contains('show')) {
                   numPhone=number.innerHTML;
                 }
                   
@@ -846,7 +855,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               console.log(document.getElementById('abonent-select').value);
               document.querySelectorAll('.number').forEach((number)=>{
                 console.log(number.innerHTML);
-                if (number.style.display=='inline') {
+                if (number.classList.contains('show')) {
                   numPhone=number.innerHTML;
                 }
                   
@@ -1035,7 +1044,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               console.log(document.getElementById('abonent-select').value);
               document.querySelectorAll('.number').forEach((number)=>{
                 console.log(number.innerHTML);
-                if (number.style.display=='inline') {
+                if (number.classList.contains('show')) {
                   numPhone=number.innerHTML;
                 }
                   
@@ -1204,7 +1213,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               console.log(document.getElementById('abonent-select').value);
               document.querySelectorAll('.number').forEach((number)=>{
                 console.log(number.innerHTML);
-                if (number.style.display=='inline') {
+                if (number.classList.contains('show')) {
                   numPhone=number.innerHTML;
                 }
                   
@@ -1413,6 +1422,15 @@ async function postActiveSession(data) {
 }
 function createResponse(result,data){
   if (document.querySelector('.information_request')) {
+    document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Характеристики Абонента:</div>`;
+    const latRes=document.createElement('div');
+    latRes.classList.add('latitude-res');
+    latRes.innerHTML=`Широта, градусы: ${document.getElementById('lat3').value}`;
+    const lonRes=document.createElement('div')
+    lonRes.innerHTML=`Долгота, градусы: ${document.getElementById('lon3').value}`;
+    lonRes.classList.add('long-res');
+    document.getElementById('response3').append(latRes);
+    document.getElementById('response3').append(lonRes);
     document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Доступный КА:</div>`;  
     for (const [key, value] of Object.entries(result)) {
       if (typeof(value)!='object') {
@@ -1651,12 +1669,12 @@ if (document.querySelector('h2')) {
       const randLat=getRandomNumber(41,77)
       document.getElementById('lat3').value=randLat;
       document.getElementById('lon3').value=randLong;
-      document.getElementById('latitude-res').innerHTML=`Широта, градусы: ${randLat}`;
-      document.getElementById('long-res').innerHTML=`Долгота, градусы: ${randLong}`;
+      // document.getElementById('latitude-res').innerHTML=`Широта, градусы: ${randLat}`;
+      // document.getElementById('long-res').innerHTML=`Долгота, градусы: ${randLong}`;
 
     });
-    document.getElementById('latitude-res').innerHTML+=document.getElementById('lat3').value;
-      document.getElementById('long-res').innerHTML+=document.getElementById('lon3').value;
+    // document.getElementById('latitude-res').innerHTML+=document.getElementById('lat3').value;
+    //   document.getElementById('long-res').innerHTML+=document.getElementById('lon3').value;
     document.getElementById("task-btn_cansel").disabled = true;
     const btnStartSim=document.getElementById('task-btn_sim');
     btnStartSim.addEventListener('click',()=>{
@@ -1738,12 +1756,20 @@ if (document.getElementById('abonent-select')) {
 let number = document.querySelectorAll('.number');
 let lastIndex = 0; 
 select.addEventListener('change', function() {
-  number[lastIndex].style.display = "none"; 
+  number[lastIndex].classList.remove ("hide"); 
+  number[lastIndex].classList.remove ("show"); 
 
 
   let index = select.selectedIndex; 
- 
-  number[index].style.display = "inline"; // Показать блок с соответствующим индексом
+ if (!index) {
+  number[lastIndex].classList.remove ("hide"); 
+  number[lastIndex].classList.remove ("show"); 
+ }
+ else{
+  number[index].classList.add("show"); // Показать блок с соответствующим индексом
+  number[index].classList.remove ("hide");
+ }
+  
   
   lastIndex = index; 
 });
