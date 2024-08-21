@@ -616,7 +616,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                 const dataEndCall=new Date();
                 document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
-                document.querySelector('.information_request').innerHTML+=`<div>СУРР: СОВ: Запрос на освобождение частотного ресурса</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СОВ: Запрос на освобождение частотного ресурса</div>`;
                   document.querySelector('.information_request').innerHTML+=` <div>СОВ: Время запроса:${new Date().toLocaleString()}</div>`;
                   document.querySelector('.information_request').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
                   document.querySelector('.information_request').innerHTML+=` <div>СУРР: Продолжительность вызова 
