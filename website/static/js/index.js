@@ -249,46 +249,61 @@ async function calculateFirstAvailableInterval(data,arrTimers){
     
     const result = await response.json();
     console.log("Success:", result);
-    if (result.detail || Date.parse(new Date((result.start_datetime_iso)))<Date.parse(new Date())) {
-      // console.log("Success:", result);
+    if (result.detail || Date.parse((new Date((result.start_datetime_iso)))<Date.parse(new Date())))  {
+      console.log(document.getElementById('max-time-dur').value);
       
       document.getElementById('response3').innerHTML+=`<br><div  class="header-log">Вызов:</div>`;
-      document.getElementById('response3').innerHTML+=`
-      <div  class="header-log">ID запроса на инициирование сеанса связи:
-      ${new Date(result.datetime_period.start_datetime_iso).toLocaleString()}</div>`;
-
-      document.getElementById('response3').innerHTML+='<br>Нет доступного KA <br>';
-      document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Характеристики Абонента:</div>`;
+      document.getElementById('response3').innerHTML+=`<div>ID запроса на инициирование сеанса связи:
+      ${new Date(data.start_datetime_iso).toLocaleString()}</div>`;
+      document.querySelector('.information_request').innerHTML+=`<div>ID запроса на инициирование сеанса связи:
+      ${new Date(data.start_datetime_iso).toLocaleString()}</div>`;
+      document.querySelector('.information_request').innerHTML+='<div>Нет доступного KA</div>br ';
+      document.querySelector('.information_request').innerHTML+=`<br><div class="header-log" style="display: block;">Характеристики Абонента:</div>`;
+     
+      document.getElementById('response3').innerHTML+='<div>Нет доступного KA</div> <br>';
+      document.getElementById('response3').innerHTML+=`<br><div>Характеристики Абонента:</div>`;
     const latRes=document.createElement('div');
     latRes.classList.add('latitude-res');
     latRes.innerHTML=`Широта, градусы: ${document.getElementById('lat3').value}`;
     const lonRes=document.createElement('div')
     lonRes.innerHTML=`Долгота, градусы: ${document.getElementById('lon3').value}`;
     lonRes.classList.add('long-res');
+    const latResInf=document.createElement('div');
+    latResInf.classList.add('latitude-res');
+    latResInf.innerHTML=`Широта, градусы: ${document.getElementById('lat3').value}`;
+    const lonResInf=document.createElement('div')
+    lonResInf.innerHTML=`Долгота, градусы: ${document.getElementById('lon3').value}`;
+    lonResInf.classList.add('long-res');
+    document.querySelector('.information_request').append(latResInf);
+    document.querySelector('.information_request').append(lonResInf);
     document.getElementById('response3').append(latRes);
     document.getElementById('response3').append(lonRes);
       
     }
     else
     {
+      if ((result.datetime_period.duration_in_sec < document.getElementById('max-time-dur').value)) {
+        console.log( (result.datetime_period.duration_in_sec < document.getElementById('max-time-dur').value));
       createResponse(result,data);
       const datesStartTime=new Date();
-      document.getElementById('response3').innerHTML+=`<div>Время получения КА для связи ${datesStartTime.toLocaleString()}</div>`;
-      document.getElementById('response3').innerHTML+=`<div>Время запроса сеанса связи ${datesStartTime.toLocaleString()}</div>`;
+      document.getElementById('response3').innerHTML+=`<br><div class="header-log">Сеанс связи:</div>`;
+      document.getElementById('response3').innerHTML+=`<div>СУРР: Сеанс разрешен</div>`;
+      document.getElementById('response3').innerHTML+=`<div>СУРР: Время ответа от СУРР: ${datesStartTime.toLocaleString()}</div>`;
+      // document.getElementById('response3').innerHTML+=`<div>Время запроса сеанса связи ${datesStartTime.toLocaleString()}</div>`;
       if (document.querySelector('.duplex-checkbox').checked) {
           postOcFrREs(result.satellite_id,document.querySelector('.duplex-checkbox').value,1,1)
             .then(respons=>{
              const randTime=getRandomNumber(60000,120000);
               const dateStartTime=new Date();
-              document.querySelector('.information_request').innerHTML+=`<div>Время получения КА для связи  ${dateStartTime.toLocaleString()}</div>`;
-              document.getElementById('response3').innerHTML+=`<div>Время вызова сеанса связи ${dateStartTime.toLocaleString()}</div>`;
-              document.getElementById('response3').innerHTML+=`<div>Каналы выделены: ${result.satellite_name} на передачу: канал
+              document.querySelector('.information_request').innerHTML+=`<div>СУРР: Время ответа от СУРР:  ${dateStartTime.toLocaleString()}</div>`;
+              document.getElementById('response3').innerHTML+=`<div>СОВ:  Начало сеанса связи: ${dateStartTime.toLocaleString()}</div>`;
+              document.getElementById('response3').innerHTML+=`<div>СУРР: Частотный ресурс: ${result.satellite_name} на передачу: канал
               ${respons.Nomera_zanyatyih_yacheek[0][1]} тайм слот  ${respons.Nomera_zanyatyih_yacheek[0][0]}, 
               на прием: канал
               ${respons.Nomera_zanyatyih_yacheek[1][1]} тайм слот ${respons.Nomera_zanyatyih_yacheek[1][0]}</div>`;
-              document.querySelector('.information_request').innerHTML+=`<div>Время вызова сеанса связи ${dateStartTime.toLocaleString()}</div>`;
+              document.querySelector('.information_request').innerHTML+=`<div>СОВ:  Начало сеанса связи: ${dateStartTime.toLocaleString()}</div>`;
               document.querySelector('.information_request').innerHTML+=`<div> 
-              Заняты частотные каналы:  ${result.satellite_name} на передачу: канал
+              СУРР: Частотный ресурс:  ${result.satellite_name} на передачу: канал
               ${respons.Nomera_zanyatyih_yacheek[0][1]} тайм слот  ${respons.Nomera_zanyatyih_yacheek[0][0]}, 
               на прием: канал
               ${respons.Nomera_zanyatyih_yacheek[1][1]} тайм слот ${respons.Nomera_zanyatyih_yacheek[1][0]}
@@ -296,17 +311,17 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               console.log(respons.Nomera_zanyatyih_yacheek[0]);
               if (document.querySelector('.time_call-max').checked) {
                 if (document.querySelector('h2').innerHTML=='Имитатор одиночных вызовов'){
-              console.log(respons.Nomera_zanyatyih_yacheek[0]);
-              const time =result.datetime_period.duration_in_sec;
-              let numPhone ='';
-              if(document.getElementById('abonent-select')){
-            console.log(document.getElementById('abonent-select').value);
-            document.querySelectorAll('.number').forEach((number)=>{
-              console.log(number.innerHTML);
-              if (number.classList.contains('show') ){
-                numPhone=number.innerHTML;
-              }
-                
+                  console.log(respons.Nomera_zanyatyih_yacheek[0]);
+                  const time =result.datetime_period.duration_in_sec;
+                 let numPhone ='';
+                  if(document.getElementById('abonent-select')){
+                    console.log(document.getElementById('abonent-select').value);
+                    document.querySelectorAll('.number').forEach((number)=>{
+                    console.log(number.innerHTML);
+                  if (number.classList.contains('show') ){
+                     numPhone=number.innerHTML;
+                }
+                console.log('1');
                 console.log(numPhone);
             });
               }
@@ -317,7 +332,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
             valueAbonent+=1;
           }
               }
-             document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${time}</div>`;
+             document.getElementById('response3').innerHTML+=`<div>СОВ:  Прогнозируемая продолжительность сеанса ,сек: ${time}</div>`;
              const dataSession={
             "ID_Zapros_Seans_Tek": 0,
             "Tlf1": String(numPhone),
@@ -336,10 +351,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
             "Time_Slot2": 0,
             "Canal_pr2": 0,
             "Time_Slot_pr2": 0,
-            "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+            "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
             "Data_Otv": String(datesStartTime.toISOString()),
-            "Data_Beg": String(dateStartTime.toLocaleString()),
-            "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+            "Data_Beg": String(dateStartTime.toISOString()),
+            "Data_Beg_Razg": String(dateStartTime.toISOString()),
             "Data_End": '',
             "Time_Seans": '',
             "Time_Razg": '',
@@ -349,14 +364,18 @@ async function calculateFirstAvailableInterval(data,arrTimers){
             const timer=setTimeout(function(){
               postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                 document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
-                document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
-                document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${time} секунд</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СОВ: Запрос на освобождение частотного ресурса</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СОВ: Время запроса:${new Date().toLocaleString()}</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>CУРР: Продолжительность вызова ${time} секунд</div>`;
                 const dataEndCall=new Date();
-                document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова ${String(dataEndCall.toLocaleString())}:</div>`;
+                document.querySelector('.information_request').innerHTML+=` <div>СУРР: Время освобождения частотного ресурса: ${String(dataEndCall.toLocaleString())}:</div>`;
                 document.getElementById('response3').innerHTML+=`<br><div style="
                 font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
-                document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
-                document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall.toLocaleString())}</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СОВ: Запрос на освобождение частотного ресурса</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СОВ: Время запроса:${new Date().toLocaleString()}</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СУРР: Время освобождения частотного ресурса: ${String(dataEndCall.toLocaleString())}</div>`;
                 addArchivalSession(responses.ID,String(dataEndCall),time,time,1);
               }); 
             },Number(time)*1000);
@@ -365,19 +384,25 @@ async function calculateFirstAvailableInterval(data,arrTimers){
             btnEnd.addEventListener('click',()=>{
               document.getElementById("task-btn_sim").disabled = true;
               clearTimeout(timer);
+              document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
+              
+              document.getElementById('response3').innerHTML+=`<br><div style="
+              font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
+              
               postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                 const dataEndCall=new Date();
-                document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
-                  document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
-                  // document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${dataEndCall} секунд</div>`;
-                  document.querySelector('.information_request').innerHTML+=` <div>Продолжительность вызова 
-                  ${(dataEndCall-new Date(data.start_datetime_iso))/1000} секунд</div>`;
-                  document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова 
-                  ${dataEndCall.toLocaleString()}</div>`;
-                  document.getElementById('response3').innerHTML+=`<br><div style="
-                  font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
-                  document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
-                  document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall.toLocaleString())}</div>`;
+                document.querySelector('.information_request').innerHTML+=` <div>СОВ: Запрос на освобождение частотного ресурса </div>`;
+              document.querySelector('.information_request').innerHTML+=` <div>СОВ: Время запроса:${new Date().toLocaleString()} </div>`;
+              document.querySelector('.information_request').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+              document.querySelector('.information_request').innerHTML+=` <div>СУРР Продолжительность вызова: 
+              ${(dataEndCall-new Date(data.start_datetime_iso))/1000} секунд</div>`;
+              document.querySelector('.information_request').innerHTML+=` <div>СУРР: Время освобождения частотного ресурса: 
+              ${dataEndCall.toLocaleString()}</div>`;
+                  
+              document.getElementById('response3').innerHTML+=` <div>СОВ: Запрос на освобождение частотного ресурса </div>`;
+              document.getElementById('response3').innerHTML+=` <div>СОВ: Время запроса:${new Date().toLocaleString()} </div>`;
+                  document.getElementById('response3').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                  document.getElementById('response3').innerHTML+=`<div>СУРР: Время освобождения частотного ресурса: ${String(dataEndCall.toLocaleString())}</div>`;
                   const timeCall=Math.round(Number((dataEndCall-new Date(data.start_datetime_iso))/1000));
                   addArchivalSession(responses.ID,String(dataEndCall),timeCall,timeCall,7);
                   //   const dataSession={
@@ -398,10 +423,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
                 //     "Time_Slot2": 0,
                 //     "Canal_pr2": 0,
                 //     "Time_Slot_pr2": 0,
-                //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+                //     "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
                 //     "Data_Otv": String(datesStartTime.toISOString()),
-                //     "Data_Beg": String(dateStartTime.toLocaleString()),
-                //     "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+                //     "Data_Beg": String(dateStartTime.toISOString()),
+                //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
                 //     "Data_End": String(dataEndCall),
                 //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
                 //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
@@ -418,7 +443,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
       
           }); 
                 }
-                else{
+          else{ 
                   console.log(respons.Nomera_zanyatyih_yacheek[0]);
                   const time =result.datetime_period.duration_in_sec;
                   let numPhone ='';
@@ -440,7 +465,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
                   valueAbonent+=1
                 }
                   }
-                  document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${time}</div>`;
+                  document.getElementById('response3').innerHTML+=`<div>СОВ:  Прогнозируемая продолжительность сеанса ,сек: ${time}</div>`;
                   const dataSession={
              "ID_Zapros_Seans_Tek": 0,
              "Tlf1": String(numPhone),
@@ -459,10 +484,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
              "Time_Slot2": 0,
              "Canal_pr2": 0,
              "Time_Slot_pr2": 0,
-             "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+             "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
              "Data_Otv": String(datesStartTime.toISOString()),
-             "Data_Beg": String(dateStartTime.toLocaleString()),
-             "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+             "Data_Beg": String(dateStartTime.toISOString()),
+             "Data_Beg_Razg": String(dateStartTime.toISOString()),
              "Data_End": '',
              "Time_Seans": '',
              "Time_Razg": '',
@@ -472,14 +497,16 @@ async function calculateFirstAvailableInterval(data,arrTimers){
                     const timer=setTimeout(function(){
                 postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                 document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
-                document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
-                document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${time} секунд</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СОВ: Запрос на освобождение частотного ресурса</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СОВ: Время запроса: ${time} секунд</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СУРР: Продолжительность вызова ${time} секунд</div>`;
                 const dataEndCall=new Date();
-                document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова ${String(dataEndCall.toLocaleString())}:</div>`;
+                document.querySelector('.information_request').innerHTML+=` <div>СУРР: Время освобождения частотного ресурса: ${String(dataEndCall.toLocaleString())}:</div>`;
                 document.getElementById('response3').innerHTML+=`<br><div style="
                 font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
-                document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
-                document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall.toLocaleString())}</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СУРР: Время освобождения частотного ресурса: ${String(dataEndCall.toLocaleString())}</div>`;
                 addArchivalSession(responses.ID,String(dataEndCall),time,time,1);
               }); 
                     },Number(time)*1000);
@@ -491,7 +518,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
                   document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
                   document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
                   // document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${dataEndCall} секунд</div>`;
-                  document.querySelector('.information_request').innerHTML+=` <div>Продолжительность вызова 
+                  document.querySelector('.information_request').innerHTML+=` <div>СУРР: Продолжительность вызова 
                   ${(dataEndCall-new Date(data.start_datetime_iso))/1000} секунд</div>`;
                   document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова 
                   ${dataEndCall.toLocaleString()}</div> <br>`;
@@ -505,27 +532,28 @@ async function calculateFirstAvailableInterval(data,arrTimers){
                 }    
               }
               else{
-            let numPhone='';
-            if(document.getElementById('abonent-select')){
-              console.log(document.getElementById('abonent-select').value);
-              document.querySelectorAll('.number').forEach((number)=>{
-                console.log(number.innerHTML);
-                if (number.classList.contains('show')) {
-                  numPhone=number.innerHTML;
-                }
+                 let numPhone='';
+                   if(document.getElementById('abonent-select')){
+                      console.log(document.getElementById('abonent-select').value);
+                      document.querySelectorAll('.number').forEach((number)=>{
+                      console.log(number.innerHTML);
+                      if (number.classList.contains('show')) {
+                        numPhone=number.innerHTML;
+                       }
                   
                   console.log(numPhone);
                 
               });
             }
             let valueAbonent=0;
-           if (document.getElementById('abonent-select')) {
+            if (document.getElementById('abonent-select')) {
             valueAbonent=Number(document.getElementById('abonent-select').value);
             if (!valueAbonent) {
               valueAbonent+=1;
             }
            }
-            document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${randTime/1000}</div>`;
+           console.log('1');
+            document.getElementById('response3').innerHTML+=`<div>СОВ:  Прогнозируемая продолжительность сеанса ,сек: ${randTime/1000}</div>`;
             const dataSession={
               "ID_Zapros_Seans_Tek": 0,
               "Tlf1": String(numPhone),
@@ -544,10 +572,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               "Time_Slot2": 0,
               "Canal_pr2": 0,
               "Time_Slot_pr2": 0,
-              "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+              "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
               "Data_Otv": String(datesStartTime.toISOString()),
-              "Data_Beg": String(dateStartTime.toLocaleString()),
-              "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+              "Data_Beg": String(dateStartTime.toISOString()),
+              "Data_Beg_Razg": String(dateStartTime.toISOString()),
               "Data_End": '',
               "Time_Seans": '',
               "Time_Razg": '',
@@ -558,14 +586,19 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                 
                 document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
-                document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
-                document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${randTime/1000} секунд</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СОВ: Запрос на освобождение частотного ресурса</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СОВ: Время запроса: ${new Date().toLocaleString()}</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                
+                document.querySelector('.information_request').innerHTML+=`<div>СУРР: Продолжительность вызова ${randTime/1000} секунд</div>`;
                 const dataEndCall=new Date();
-                document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова ${String(dataEndCall.toLocaleString())}:</div>`;
+                document.querySelector('.information_request').innerHTML+=` <div>СУРР: Время освобождения частотного ресурса: ${String(dataEndCall.toLocaleString())}:</div>`;
                 document.getElementById('response3').innerHTML+=`<br><div style="
                 font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
-                document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
-                document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall.toLocaleString())}</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СОВ: Запрос на освобождение частотного ресурса</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СОВ: Время запроса: ${new Date().toLocaleString()}</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СУРР: Время освобождения частотного ресурса: ${String(dataEndCall.toLocaleString())}</div>`;
                 const timeCall=Math.round(Number(randTime/1000));
                 addArchivalSession(responses.ID,String(dataEndCall),timeCall,timeCall,1);
               });
@@ -579,16 +612,20 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               postRelaeseFrRes(respons.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                 const dataEndCall=new Date();
                 document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
-                  document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
-                  // document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${dataEndCall} секунд</div>`;
-                  document.querySelector('.information_request').innerHTML+=` <div>Продолжительность вызова 
+                document.querySelector('.information_request').innerHTML+=`<div>СУРР: СОВ: Запрос на освобождение частотного ресурса</div>`;
+                  document.querySelector('.information_request').innerHTML+=` <div>СОВ: Время запроса:${new Date().toLocaleString()}</div>`;
+                  document.querySelector('.information_request').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                  document.querySelector('.information_request').innerHTML+=` <div>СУРР: Продолжительность вызова 
                   ${(dataEndCall-new Date(data.start_datetime_iso))/1000} секунд</div>`;
-                  document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова 
+                  
+                  document.querySelector('.information_request').innerHTML+=` <div>СУРР: Время освобождения частотного ресурса: 
                   ${dataEndCall.toLocaleString()}</div> <br>`;
                   document.getElementById('response3').innerHTML+=`<br><div style="
                   font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
-                  document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
-                  document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall.toLocaleString())}</div>`;
+                  document.getElementById('response3').innerHTML+=`<div>СУРР: СОВ: Запрос на освобождение частотного ресурса</div>`;
+                  document.getElementById('response3').innerHTML+=` <div>СОВ: Время запроса:${new Date().toLocaleString()}</div>`;
+                  document.getElementById('response3').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                  document.getElementById('response3').innerHTML+=`<div>СУРР: Время освобождения частотного ресурса: ${String(dataEndCall.toLocaleString())}</div>`;
                   const timeCall=Math.round(Number(dataEndCall-new Date(data.start_datetime_iso)/1000));
                   addArchivalSession(responses.ID,String(dataEndCall),timeCall,timeCall,7);
                   //   const dataSession={
@@ -609,10 +646,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
                 //     "Time_Slot2": 0,
                 //     "Canal_pr2": 0,
                 //     "Time_Slot_pr2": 0,
-                //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+                //     "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
                 //     "Data_Otv": String(datesStartTime.toISOString()),
-                //     "Data_Beg": String(dateStartTime.toLocaleString()),
-                //     "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+                //     "Data_Beg": String(dateStartTime.toISOString()),
+                //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
                 //     "Data_End": String(dataEndCall),
                 //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
                 //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
@@ -659,10 +696,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
                 //     "Time_Slot2": 0,
                 //     "Canal_pr2": 0,
                 //     "Time_Slot_pr2": 0,
-                //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+                //     "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
                 //     "Data_Otv": String(datesStartTime.toISOString()),
-                //     "Data_Beg": String(dateStartTime.toLocaleString()),
-                //     "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+                //     "Data_Beg": String(dateStartTime.toISOString()),
+                //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
                 //     "Data_End": String(dataEndCall),
                 //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
                 //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
@@ -683,19 +720,19 @@ async function calculateFirstAvailableInterval(data,arrTimers){
       //   postOcFrREs(result.satellite_id,document.querySelector('.simple-checkbox').value,1,0).then(response=>{
       //     const randTime=getRandomNumber(60000,120000);
       //     const dateStartTime.toLocaleString()=new Date();
-      //     document.querySelector('.information_request').innerHTML+=`<div>Время получения КА для связи  ${dateStartTime.toLocaleString()}
+      //     document.querySelector('.information_request').innerHTML+=`<div>СУРР: Время ответа от СУРР:  ${dateStartTime.toLocaleString()}
       //     </div>`;
-      //     document.getElementById('response3').innerHTML+=`<div>Время вызова сеанса связи ${dateStartTime.toLocaleString()}</div>`;
-      //     document.getElementById('response3').innerHTML+=`<div>Каналы выделены: на прием: канал ${response.Nomera_zanyatyih_yacheek[0][0]} тайм слот
+      //     document.getElementById('response3').innerHTML+=`<div>СОВ:  Начало сеанса связи: ${dateStartTime.toLocaleString()}</div>`;
+      //     document.getElementById('response3').innerHTML+=`<div>СУРР: Частотный ресурс: на прием: канал ${response.Nomera_zanyatyih_yacheek[0][0]} тайм слот
       //      ${response.Nomera_zanyatyih_yacheek[0][1]}</div>`;
-      //     document.querySelector('.information_request').innerHTML+=`<div>Время вызова сеанса связи ${dateStartTime.toLocaleString()}</div>`;
+      //     document.querySelector('.information_request').innerHTML+=`<div>СОВ:  Начало сеанса связи: ${dateStartTime.toLocaleString()}</div>`;
           
-      //     document.querySelector('.information_request').innerHTML+=`<div> Заняты частотные каналы:${result.satellite_name} 
+      //     document.querySelector('.information_request').innerHTML+=`<div> СУРР: Частотный ресурс:${result.satellite_name} 
       //     на передачу: канал ${response.Nomera_zanyatyih_yacheek[0][0]} тайм слот
       //      ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
       //     if (document.querySelector('.time_call-max').checked) {
       //       const time =result.datetime_period.duration_in_sec;
-      //       document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${time}</div>`;
+      //       document.getElementById('response3').innerHTML+=`<div>СОВ:  Прогнозируемая продолжительность сеанса ,сек: ${time}</div>`;
       //       console.log(time);
       //       let numPhone='';
       //       if(document.getElementById('abonent-select')){
@@ -732,10 +769,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
       //         "Time_Slot2": 0,
       //         "Canal_pr2": 0,
       //         "Time_Slot_pr2": 0,
-      //         "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+      //         "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
       //         "Data_Otv": String(datesStartTime.toISOString()),
-      //         "Data_Beg": String(dateStartTime.toLocaleString()),
-      //         "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+      //         "Data_Beg": String(dateStartTime.toISOString()),
+      //         "Data_Beg_Razg": String(dateStartTime.toISOString()),
       //         "Data_End": "",
       //         "Time_Seans": "",
       //         "Time_Razg": "",
@@ -796,10 +833,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
       //           //     "Time_Slot2": 0,
       //           //     "Canal_pr2": 0,
       //           //     "Time_Slot_pr2": 0,
-      //           //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+      //           //     "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
       //           //     "Data_Otv": String(datesStartTime.toISOString()),
-      //           //     "Data_Beg": String(dateStartTime.toLocaleString()),
-      //           //     "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+      //           //     "Data_Beg": String(dateStartTime.toISOString()),
+      //           //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
       //           //     "Data_End": String(dataEndCall),
       //           //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
       //           //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
@@ -846,10 +883,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
       //           //     "Time_Slot2": 0,
       //           //     "Canal_pr2": 0,
       //           //     "Time_Slot_pr2": 0,
-      //           //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+      //           //     "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
       //           //     "Data_Otv": String(datesStartTime.toISOString()),
-      //           //     "Data_Beg": String(dateStartTime.toLocaleString()),
-      //           //     "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+      //           //     "Data_Beg": String(dateStartTime.toISOString()),
+      //           //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
       //           //     "Data_End": String(dataEndCall),
       //           //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
       //           //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
@@ -882,7 +919,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
       //      if (document.getElementById('abonent-select')) {
       //       valueAbonent=Number(document.getElementById('abonent-select').value);
       //      }
-      //       document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${randTime/1000}</div>`;
+      //       document.getElementById('response3').innerHTML+=`<div>СОВ:  Прогнозируемая продолжительность сеанса ,сек: ${randTime/1000}</div>`;
       //       const dataSession={
       //         "ID_Zapros_Seans_Tek": 0,
       //         "Tlf1": numPhone,
@@ -901,10 +938,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
       //         "Time_Slot2": 0,
       //         "Canal_pr2": 0,
       //         "Time_Slot_pr2": 0,
-      //         "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+      //         "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
       //         "Data_Otv": String(datesStartTime.toISOString()),
-      //         "Data_Beg": String(dateStartTime.toLocaleString()),
-      //         "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+      //         "Data_Beg": String(dateStartTime.toISOString()),
+      //         "Data_Beg_Razg": String(dateStartTime.toISOString()),
       //         "Data_End": '',
       //         "Time_Seans": '',
       //         "Time_Razg": '',
@@ -966,10 +1003,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
       //             //     "Time_Slot2": 0,
       //             //     "Canal_pr2": 0,
       //             //     "Time_Slot_pr2": 0,
-      //             //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+      //             //     "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
       //             //     "Data_Otv": String(datesStartTime.toISOString()),
-      //             //     "Data_Beg": String(dateStartTime.toLocaleString()),
-      //             //     "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+      //             //     "Data_Beg": String(dateStartTime.toISOString()),
+      //             //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
       //             //     "Data_End": String(dataEndCall),
       //             //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
       //             //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
@@ -1016,10 +1053,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
       //           //     "Time_Slot2": 0,
       //           //     "Canal_pr2": 0,
       //           //     "Time_Slot_pr2": 0,
-      //           //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+      //           //     "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
       //           //     "Data_Otv": String(datesStartTime.toISOString()),
-      //           //     "Data_Beg": String(dateStartTime.toLocaleString()),
-      //           //     "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+      //           //     "Data_Beg": String(dateStartTime.toISOString()),
+      //           //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
       //           //     "Data_End": String(dataEndCall),
       //           //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
       //           //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
@@ -1042,14 +1079,14 @@ async function calculateFirstAvailableInterval(data,arrTimers){
         postOcFrREs(result.satellite_id,document.querySelector('.simplex-checkbox').value,0,1).then(response=>{
           const randTime=getRandomNumber(60000,120000);
           const dateStartTime=new Date();
-          document.querySelector('.information_request').innerHTML+=`<div>Время получения КА для связи  ${dateStartTime.toLocaleString()}
+          document.querySelector('.information_request').innerHTML+=`<div>СУРР: Время ответа от СУРР:  ${dateStartTime.toLocaleString()}
           </div>`;
-          document.getElementById('response3').innerHTML+=`<div>Время вызова сеанса связи ${dateStartTime.toLocaleString().toLocaleString()}</div>`;
-          document.getElementById('response3').innerHTML+=`<div>Каналы выделены: ${result.satellite_name} 
+          document.getElementById('response3').innerHTML+=`<div>СОВ:  Начало сеанса связи: ${dateStartTime.toLocaleString().toLocaleString()}</div>`;
+          document.getElementById('response3').innerHTML+=`<div>СУРР: Частотный ресурс: ${result.satellite_name} 
           на передачу:канал ${response.Nomera_zanyatyih_yacheek[0][0]} тайм слот
            ${response.Nomera_zanyatyih_yacheek[0][1]}</div>`;
-          document.querySelector('.information_request').innerHTML+=`<div>Время вызова сеанса связи ${dateStartTime.toLocaleString()}</div>`;
-          document.querySelector('.information_request').innerHTML+=`<div> Заняты частотные каналы ${result.satellite_name} 
+          document.querySelector('.information_request').innerHTML+=`<div>СОВ:  Начало сеанса связи: ${dateStartTime.toLocaleString()}</div>`;
+          document.querySelector('.information_request').innerHTML+=`<div>СУРР: Частотный ресурс: ${result.satellite_name} 
           на прием:канал ${response.Nomera_zanyatyih_yacheek[0][0]} тайм слот
            ${response.Nomera_zanyatyih_yacheek[0][1]}</div> `;
           if (document.querySelector('.time_call-max').checked) {
@@ -1074,7 +1111,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               valueAbonent+=1;
             }
            }
-            document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${time}</div>`;
+            document.getElementById('response3').innerHTML+=`<div>СОВ:  Прогнозируемая продолжительность сеанса ,сек: ${time}</div>`;
             console.log(time);
             const dataSession={
               "ID_Zapros_Seans_Tek": 0,
@@ -1094,10 +1131,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               "Time_Slot2": 0,
               "Canal_pr2": 0,
               "Time_Slot_pr2": 0,
-              "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+              "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
               "Data_Otv": String(datesStartTime.toISOString()),
-              "Data_Beg": String(dateStartTime.toLocaleString()),
-              "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+              "Data_Beg": String(dateStartTime.toISOString()),
+              "Data_Beg_Razg": String(dateStartTime.toISOString()),
               "Data_End": '',
               "Time_Seans": '',
               "Time_Razg": '',
@@ -1107,14 +1144,18 @@ async function calculateFirstAvailableInterval(data,arrTimers){
             const timer=setTimeout(function(){
               postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                 document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
-                document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
-                document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${time} секунд</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СОВ: Запрос на освобождение частотного ресурса</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СОВ: Время запроса: ${new Date().toLocaleString()} секунд</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>CУРР: Продолжительность вызова ${time} секунд</div>`;
                 const dataEndCall=new Date();
-                document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова ${String(dataEndCall.toLocaleString())}:</div> <br>`;
+                document.querySelector('.information_request').innerHTML+=` <div>СУРР: Время освобождения частотного ресурса: ${String(dataEndCall.toLocaleString())}:</div> <br>`;
                 document.getElementById('response3').innerHTML+=`<br><div style="
                 font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
-                document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
-                document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall.toLocaleString())}</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СОВ: Запрос на освобождение частотного ресурса</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СОВ: Время запроса: ${new Date().toLocaleString()} секунд</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СУРР: Время освобождения частотного ресурса: ${String(dataEndCall.toLocaleString())}</div>`;
                 addArchivalSession(responses.ID,String(dataEndCall),time,time,1);
               });  
             },Number(time)*1000);
@@ -1127,16 +1168,20 @@ async function calculateFirstAvailableInterval(data,arrTimers){
                 postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                   const dataEndCall=new Date();
                   document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
-                    document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
+                  document.querySelector('.information_request').innerHTML+=`<div>СОВ: Запрос на освобождение частотного ресурса</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СОВ: Время запроса: ${new Date().toLocaleString()} секунд</div>`;
+                    document.querySelector('.information_request').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
                     // document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${dataEndCall} секунд</div>`;
-                    document.querySelector('.information_request').innerHTML+=` <div>Продолжительность вызова 
+                    document.querySelector('.information_request').innerHTML+=` <div>CУРР:Продолжительность вызова 
                     ${(dataEndCall-new Date(data.start_datetime_iso))/1000} секунд</div>`;
-                    document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова 
+                    document.querySelector('.information_request').innerHTML+=` <div>СУРР: Время освобождения частотного ресурса: 
                     ${dataEndCall.toLocaleString()}</div> <br>`;
                     document.getElementById('response3').innerHTML+=`<br><div style="
                     font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
-                    document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
-                    document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall.toLocaleString())}</div>`;
+                    document.getElementById('response3').innerHTML+=`<div>СОВ: Запрос на освобождение частотного ресурса</div>`;
+                    document.getElementById('response3').innerHTML+=`<div>СУРР: СОВ: Время запроса:  ${(new Date().toLocaleString())}</div>`;
+                    document.getElementById('response3').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                    document.getElementById('response3').innerHTML+=`<div>СУРР: Время освобождения частотного ресурса: ${String(dataEndCall.toLocaleString())}</div>`;
                     const timeCall=Math.round(Number(dataEndCall-new Date(data.start_datetime_iso)/1000));
                     addArchivalSession(responses.ID,String(dataEndCall),timeCall,timeCall,7);
                     //   const dataSession={
@@ -1157,10 +1202,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
                   //     "Time_Slot2": 0,
                   //     "Canal_pr2": 0,
                   //     "Time_Slot_pr2": 0,
-                  //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+                  //     "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
                   //     "Data_Otv": String(datesStartTime.toISOString()),
-                  //     "Data_Beg": String(dateStartTime.toLocaleString()),
-                  //     "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+                  //     "Data_Beg": String(dateStartTime.toISOString()),
+                  //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
                   //     "Data_End": String(dataEndCall),
                   //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
                   //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
@@ -1207,10 +1252,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
                 //     "Time_Slot2": 0,
                 //     "Canal_pr2": 0,
                 //     "Time_Slot_pr2": 0,
-                //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+                //     "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
                 //     "Data_Otv": String(datesStartTime.toISOString()),
-                //     "Data_Beg": String(dateStartTime.toLocaleString()),
-                //     "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+                //     "Data_Beg": String(dateStartTime.toISOString()),
+                //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
                 //     "Data_End": String(dataEndCall),
                 //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
                 //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
@@ -1225,7 +1270,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
             
           }
           else{
-            document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${randTime/1000}</div>`;
+            document.getElementById('response3').innerHTML+=`<div>СОВ:  Прогнозируемая продолжительность сеанса ,сек: ${randTime/1000}</div>`;
             let numPhone='';
             if(document.getElementById('abonent-select')){
               console.log(document.getElementById('abonent-select').value);
@@ -1261,10 +1306,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               "Time_Slot2": 0,
               "Canal_pr2": 0,
               "Time_Slot_pr2": 0,
-              "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+              "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
               "Data_Otv": String(datesStartTime.toISOString()),
-              "Data_Beg": String(dateStartTime.toLocaleString()),
-              "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+              "Data_Beg": String(dateStartTime.toISOString()),
+              "Data_Beg_Razg": String(dateStartTime.toISOString()),
               "Data_End": '',
               "Time_Seans": '',
               "Time_Razg":'',
@@ -1275,14 +1320,18 @@ async function calculateFirstAvailableInterval(data,arrTimers){
            
               postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                 document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
-                document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
-                document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${randTime/1000} секунд</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СОВ: Запрос на освобождение частотного ресурса</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СОВ: Время запроса: ${new Date().toLocaleString()}</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                document.querySelector('.information_request').innerHTML+=`<div>CУРР: Продолжительность вызова ${randTime/1000} секунд</div>`;
                 const dataEndCall=new Date();
-                document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова ${String(dataEndCall.toLocaleString())}:</div> <br>`;
+                document.querySelector('.information_request').innerHTML+=` <div>СУРР: Время освобождения частотного ресурса: ${String(dataEndCall.toLocaleString())}:</div> <br>`;
                 document.getElementById('response3').innerHTML+=`<br><div style="
                 font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
-                document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
-                document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall.toLocaleString())}</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СОВ: Запрос на освобождение частотного ресурса</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СОВ: Время запроса: ${new Date().toLocaleString()}</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                document.getElementById('response3').innerHTML+=`<div>СУРР: Время освобождения частотного ресурса: ${String(dataEndCall.toLocaleString())}</div>`;
                 const timeCall=Math.round(Number(randTime/1000));
                     addArchivalSession(responses.ID,String(dataEndCall),timeCall,timeCall,1);
               });
@@ -1293,19 +1342,27 @@ async function calculateFirstAvailableInterval(data,arrTimers){
             btnEnd.addEventListener('click',()=>{
               document.getElementById("task-btn_sim").disabled = true;
               clearTimeout(timer);
+              document.getElementById('response3').innerHTML+=`<br><div style="
+                  font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
+                  document.getElementById('response3').innerHTML+=`<div >СОВ: Запрос на освобождение частотного ресурса</div>`;
+                  document.getElementById('response3').innerHTML+=`<div >СОВ: Время запроса:${new Date().toLocaleString()}</div>`;
+                  
+                  document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
+                  document.querySelector('.information_request').innerHTML+=`<div>СОВ: Запрос на освобождение частотного ресурса </div>`;
+                  document.querySelector('.information_request').innerHTML+=`<div>СОВ: Время запроса:${new Date().toLocaleString()} </div>`;
               postRelaeseFrRes(response.Nomera_zanyatyih_yacheek,result.satellite_id).then(()=>{
                 const dataEndCall=new Date();
-                document.querySelector('.information_request').innerHTML+=` <br><div style="font-size: calc(1.2rem);">Завершение сеанса связи: </div>`;
-                  document.querySelector('.information_request').innerHTML+=`<div>Каналы освобождены</div>`;
+               
+                
+                  document.querySelector('.information_request').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
                   // document.querySelector('.information_request').innerHTML+=`<div> Продолжительность вызова ${dataEndCall} секунд</div>`;
-                  document.querySelector('.information_request').innerHTML+=` <div>Продолжительность вызова 
+                  document.querySelector('.information_request').innerHTML+=` <div>СУРР: Продолжительность вызова 
                   ${(dataEndCall-new Date(data.start_datetime_iso))/1000} секунд</div>`;
-                  document.querySelector('.information_request').innerHTML+=` <div>Время завершения вызова 
+                  document.querySelector('.information_request').innerHTML+=` <div>СУРР: Время освобождения частотного ресурса: 
                   ${dataEndCall.toLocaleString()}</div> <br>`;
-                  document.getElementById('response3').innerHTML+=`<br><div style="
-                  font-size: calc(1.2rem);">Завершение сеанса связи:</div>`;
-                  document.getElementById('response3').innerHTML+=`<div>Каналы очищены</div>`;
-                  document.getElementById('response3').innerHTML+=`<div>Время очистки каналов ${String(dataEndCall.toLocaleString())}</div>`;
+                  
+                  document.getElementById('response3').innerHTML+=`<div>СУРР: Освобождения частотного ресурса подтверждена</div>`;
+                  document.getElementById('response3').innerHTML+=`<div>СУРР: Время освобождения частотного ресурса: ${String(dataEndCall.toLocaleString())}</div>`;
                   const timeCall=Math.round(Number((dataEndCall-new Date(data.start_datetime_iso))/1000));
                   addArchivalSession(responses.ID,String(dataEndCall),timeCall,timeCall,7);
                   //   const dataSession={
@@ -1326,10 +1383,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
                 //     "Time_Slot2": 0,
                 //     "Canal_pr2": 0,
                 //     "Time_Slot_pr2": 0,
-                //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+                //     "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
                 //     "Data_Otv": String(datesStartTime.toISOString()),
-                //     "Data_Beg": String(dateStartTime.toLocaleString()),
-                //     "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+                //     "Data_Beg": String(dateStartTime.toISOString()),
+                //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
                 //     "Data_End": String(dataEndCall),
                 //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
                 //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
@@ -1376,10 +1433,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
                 //     "Time_Slot2": 0,
                 //     "Canal_pr2": 0,
                 //     "Time_Slot_pr2": 0,
-                //     "Data_Vyz": String(result.datetime_period.start_datetime_iso),
+                //     "Data_Vyz": String(new Date(result.datetime_period.start_datetime_iso).toISOString()),
                 //     "Data_Otv": String(datesStartTime.toISOString()),
-                //     "Data_Beg": String(dateStartTime.toLocaleString()),
-                //     "Data_Beg_Razg": String(dateStartTime.toLocaleString()),
+                //     "Data_Beg": String(dateStartTime.toISOString()),
+                //     "Data_Beg_Razg": String(dateStartTime.toISOString()),
                 //     "Data_End": String(dataEndCall),
                 //     "Time_Seans": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
                 //     "Time_Razg": String((dataEndCall-new Date(data.start_datetime_iso))/1000),
@@ -1400,6 +1457,11 @@ async function calculateFirstAvailableInterval(data,arrTimers){
       }
    
       return result;
+      }
+      else{
+        document.getElementById('response3').innerHTML+=`<span>Нет подходящего КА</span> <br>`
+      }
+      
     }
    
   } catch (error) {
@@ -1440,115 +1502,143 @@ async function postActiveSession(data) {
 }
 function createResponse(result,data){
   if (document.querySelector('.information_request')) {
-    document.getElementById('response3').innerHTML+=`<br><div class="header-log">Вызов: </div>`;
-    document.getElementById('response3').innerHTML+=`
-      <div  class="header-log">ID запроса на инициирование сеанса связи:
-      ${new Date(result.datetime_period.start_datetime_iso).toLocaleString()}</div>`;
-    document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Характеристики Абонента:</div>`;
-    const latRes=document.createElement('div');
-    latRes.classList.add('latitude-res');
-    latRes.innerHTML=`Широта, градусы: ${document.getElementById('lat3').value}`;
-    const lonRes=document.createElement('div')
-    lonRes.innerHTML=`Долгота, градусы: ${document.getElementById('lon3').value}`;
-    lonRes.classList.add('long-res');
-    document.getElementById('response3').append(latRes);
-    document.getElementById('response3').append(lonRes);
-    // document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Доступный КА:</div>`;  
-    for (const [key, value] of Object.entries(result)) {
-      if (typeof(value)!='object') {
-        // if (key=='duration_in_sec') {
-        //   document.getElementById('response3').innerHTML+=`<div class="total-time"> total_duration_in_sec: ${value}</div>`;
-        // }
-        // else {
-          
-        //   document.getElementById('response3').innerHTML+=`<div>${key}: ${value}</div>`;
-        // }
-       
-      }
-     else{
-      for (const [key, values] of Object.entries(value)){
-        if (key=='duration_in_sec') {
-          document.getElementById('response3').innerHTML+=`<br><span style="
-          font-size: calc(1.2rem);">Сеанс связи: </span>`;
-         }
-        // else  if (key=='end_datetime_iso') {
-        //   document.getElementById('response3').innerHTML+=`<div>${key}: ${new Date(values).toLocaleString()}</div>`;
-        //   document.getElementById('response3').innerHTML+=`<div>Максимальная продолжительность вызова : ${(new Date(values)-new Date(data.start_datetime_iso))/1000}</div>`;
-        //   console.log(new Date(values));
-        //   console.log(new Date(data.start_datetime_iso));
-        // }
-        // else  if (key=='start_datetime_iso') {
-        //   document.getElementById('response3').innerHTML+=`<div>${key}: ${new Date(values).toLocaleString()}</div>`;
-        // }
-        // else{
-        //   document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div>`;
-        // }
-       
-        
-      }
-     }
-      console.log();
+    if (result.datetime_period.duration_in_sec > document.getElementById('max-time-dur').value) {
+      document.getElementById('response3').innerHTML+=`<br><div> Нет подходящего КА</div>`;
+      
     }
-    // document.querySelector('.information_request').remove();
-    const createInformationRequest=document.querySelector('.information_request');
-    const parent=document.querySelector('.content');
-    // createInformationRequest.classList.add('information_request');
-    for (const [key, value] of Object.entries(data)) {
-      if (typeof(value)!='object') {
-        if (key=='start_datetime_iso') {
-          createInformationRequest.innerHTML+=`<br><div style="
-          font-size: calc(1.2rem);">Начало сеанса связи:</div>`; 
-          createInformationRequest.innerHTML+=`<div>Время начала вызова: ${new Date(value).toLocaleString()}</div>`; 
-          document.getElementById('response3').innerHTML+=`<br><div>Время начала вызова: ${new Date(value).toLocaleString()}`;
-          // const div=document.createElement('div');
-          // div.textContent=`Время начала вызова: ${value}`;
-          // document.getElementById('long-res').after(div); 
-        }
-        else if (key=='min_duration_in_sec') {
-          createInformationRequest.innerHTML+=`<div>Минимальная продолжительность вызова, сек: ${value}</div>`;
-          console.log(value);
-        }
-        else{
-          createInformationRequest.innerHTML+=`<div>${key}: ${value}</div>`;
-        }
+    else{
+      const select = document.getElementById('abonent-select');
+      let selIndex=select.selectedIndex;
+      if (!selIndex) {
+        selIndex+=1;
       }
-     else{
-      const charKA=document.createElement('div');
-      for (const [key, values] of Object.entries(value)){
-        
-        if (key=='name') {
-         
-          charKA.style=` font-size: calc(1.2rem);`;
-          charKA.textContent="Характеристики КА:";
-          // createInformationRequest.innerHTML+=`<div style="
-          // font-size: calc(1.2rem);">Характеристики КА:</div>`;
-         
-          charKA.innerHTML+=`<div>Наименование КА: ${result.satellite_name} ${values}</div>`;
-          
-        }
-        else if (key=='lat') {
-          // createInformationRequest.innerHTML+=`<br><div>Вызов:</div>`;
-          createInformationRequest.innerHTML+=`<br><div style="
-          font-size: calc(1.2rem);">Характеристики Абонента:</div>`;
-          createInformationRequest.innerHTML+=`<div>Широта, градусы: ${values}</div>`;
-        }
-        else if (key=='lon') {
-          createInformationRequest.innerHTML+=`<div>Долгота, градусы: ${values}</div><br>`;
-        }
-        else if (key=='radius') {
-          charKA.innerHTML+=`<div>Радиус зоны действия КА, км: ${values}</div>`;
-          // createInformationRequest.append(charKA);
-        }
-        else{
-           createInformationRequest.innerHTML+=`<div>${key}: ${values}</div>`;
-        }
-        
+      console.log(select.options[select.selectedIndex].text);
+      document.getElementById('response3').innerHTML+=`<br><div class="header-log">Вызов: </div>`;
+      document.getElementById('response3').innerHTML+=`
+        <div>ID запроса на инициирование сеанса связи:
+        ${new Date(result.datetime_period.start_datetime_iso).toLocaleString()} ID Абонента: ${selIndex} </div>`;
+      if (select.options[select.selectedIndex].text=='Выберите Абонента') {
+        document.getElementById('response3').innerHTML+=`<div">Абонент:Абонент 1</div>`;
+      }
+      else{
+        document.getElementById('response3').innerHTML+=`<div">Абонент:${select.options[select.selectedIndex].text}</div>`;
       }
      
-     }
-      console.log();
+      const latRes=document.createElement('div');
+      latRes.classList.add('latitude-res');
+      latRes.innerHTML=`Широта, градусы: ${document.getElementById('lat3').value}`;
+      const lonRes=document.createElement('div')
+      lonRes.innerHTML=`Долгота, градусы: ${document.getElementById('lon3').value}`;
+      lonRes.classList.add('long-res');
+      document.getElementById('response3').append(latRes);
+      document.getElementById('response3').append(lonRes);
+      if (document.querySelector('.duplex-checkbox').checked) {
+        document.getElementById('response3').innerHTML+=`Вид связи: Дуплекс <br>`;
+      }
+      else{
+        document.getElementById('response3').innerHTML+=`Вид связи: Симплекс <br>`;
+      }
+      
+      // document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Доступный КА:</div>`;  
+      for (const [key, value] of Object.entries(result)) {
+        if (typeof(value)!='object') {
+          // if (key=='duration_in_sec') {
+          //   document.getElementById('response3').innerHTML+=`<div class="total-time"> total_duration_in_sec: ${value}</div>`;
+          // }
+          // else {
+            
+          //   document.getElementById('response3').innerHTML+=`<div>${key}: ${value}</div>`;
+          // }
+         
+        }
+       else{
+        for (const [key, values] of Object.entries(value)){
+          if (key=='duration_in_sec') {
+            document.getElementById('response3').innerHTML+=`<br><span style="
+            font-size: calc(1.2rem);">Запрос: </span>`;
+           }
+          // else  if (key=='end_datetime_iso') {
+          //   document.getElementById('response3').innerHTML+=`<div>${key}: ${new Date(values).toLocaleString()}</div>`;
+          //   document.getElementById('response3').innerHTML+=`<div>Максимальная продолжительность вызова : ${(new Date(values)-new Date(data.start_datetime_iso))/1000}</div>`;
+          //   console.log(new Date(values));
+          //   console.log(new Date(data.start_datetime_iso));
+          // }
+          // else  if (key=='start_datetime_iso') {
+          //   document.getElementById('response3').innerHTML+=`<div>${key}: ${new Date(values).toLocaleString()}</div>`;
+          // }
+          // else{
+          //   document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div>`;
+          // }
+         
+          
+        }
+       }
+        console.log();
+      }
+      // document.querySelector('.information_request').remove();
+      const createInformationRequest=document.querySelector('.information_request');
+      const parent=document.querySelector('.content');
+      // createInformationRequest.classList.add('information_request');
+      for (const [key, value] of Object.entries(data)) {
+        if (typeof(value)!='object') {
+          if (key=='start_datetime_iso') {
+            createInformationRequest.innerHTML+=`<br><div style="
+            font-size: calc(1.2rem);">Начало сеанса связи:</div>`;
+            document.getElementById('response3').innerHTML+=`<div>СОВ: Инициирование сеанса связи</div>`;
+            createInformationRequest.innerHTML+=`<div>СОВ: Инициирование сеанса связи</div>`; 
+            createInformationRequest.innerHTML+=`<div>СОВ:Время инициирования сеанса связи: ${new Date(value).toLocaleString()}</div>`; 
+            document.getElementById('response3').innerHTML+=`<div>СОВ:Время инициирования сеанса связи: ${new Date(value).toLocaleString()}`;
+            // const div=document.createElement('div');
+            // div.textContent=`Время инициирования сеанса связи: ${value}`;
+            // document.getElementById('long-res').after(div); 
+          }
+          else if (key=='min_duration_in_sec') {
+            createInformationRequest.innerHTML+=`<div>CОВ: Минимальная продолжительность вызова, сек: ${value}</div>`;
+            console.log(value);
+          }
+          else{
+            createInformationRequest.innerHTML+=`<div>${key}: ${value}</div>`;
+          }
+        }
+       else{
+        const charKA=document.createElement('div');
+        for (const [key, values] of Object.entries(value)){
+          
+          if (key=='name') {
+           
+            charKA.style=` font-size: calc(1.2rem);`;
+            charKA.textContent="Характеристики КА:";
+            // createInformationRequest.innerHTML+=`<div style="
+            // font-size: calc(1.2rem);">Характеристики КА:</div>`;
+           
+            charKA.innerHTML+=`<div>Наименование КА: ${result.satellite_name} ${values}</div>`;
+            
+          }
+          else if (key=='lat') {
+            // createInformationRequest.innerHTML+=`<br><div>Вызов:</div>`;
+            createInformationRequest.innerHTML+=`<br><div style="
+            font-size: calc(1.2rem);">Характеристики Абонента:</div>`;
+            createInformationRequest.innerHTML+=`<div>Широта, градусы: ${values}</div>`;
+          }
+          else if (key=='lon') {
+            createInformationRequest.innerHTML+=`<div>Долгота, градусы: ${values}</div><br>`;
+          }
+          else if (key=='radius') {
+            charKA.innerHTML+=`<div>Радиус зоны действия КА, км: ${values}</div>`;
+            // createInformationRequest.append(charKA);
+          }
+          else{
+             createInformationRequest.innerHTML+=`<div>${key}: ${values}</div>`;
+          }
+          
+        }
+       
+       }
+        console.log();
+      }
+      parent.append(createInformationRequest);
     }
-    parent.append(createInformationRequest);
+    
   } 
   else{
     // document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Доступный КА:</div>`;  
@@ -1567,7 +1657,7 @@ function createResponse(result,data){
     for (const [key, values] of Object.entries(value)){
       if (key=='duration_in_sec') {
         document.getElementById('response3').innerHTML+=`<div class="total-time"> total_duration_in_sec: ${values}</div> <br><span style="
-        font-size: calc(1.2rem);">Сеанс связи: </span>`;
+        font-size: calc(1.2rem);">Запрос: </span>`;
       }
       else  if (key=='end_datetime_iso') {
         document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div>`;
@@ -1592,14 +1682,15 @@ function createResponse(result,data){
         if (key=='start_datetime_iso') {
           createInformationRequest.innerHTML+=`<br><div style="
           font-size: calc(1.2rem);">Начало сеанса связи:</div>`; 
-          createInformationRequest.innerHTML+=`<div>Время начала вызова: ${new Date(value.toLocaleString())}</div>`; 
-          document.getElementById('response3').innerHTML+=`<br><div>Время начала вызова: ${new Date(value).toLocaleString()}` ;
+          createInformationRequest.innerHTML+=`<div>СОВ:Время инициирования сеанса связи: ${new Date(value.toLocaleString())}</div>`;
+          document.getElementById('response3').innerHTML+=`<div>СОВ: Инициирование сеанса связи</div>`;
+          document.getElementById('response3').innerHTML+=`<br><div>СОВ:Время инициирования сеанса связи: ${new Date(value).toLocaleString()}` ;
           // const div=document.createElement('div');
-          // div.textContent=`Время начала вызова: ${value}`;
+          // div.textContent=`Время инициирования сеанса связи: ${value}`;
           // document.getElementById('long-res').after(div); 
         }
         else if (key=='min_duration_in_sec') {
-          createInformationRequest.innerHTML+=`<div>Минимальная продолжительность вызова, сек: ${value}</div>`;
+          createInformationRequest.innerHTML+=`<div>CОВ: Минимальная продолжительность вызова, сек: ${value}</div>`;
           console.log(value);
         }
         else{

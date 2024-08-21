@@ -16,7 +16,7 @@
         <div class="csus">Эмулятор СОВ</div>
         <br>        
         <div class="div-abonent">Данные абонента</div>
-        
+        <br>  
         <div class="data-abonent">
             <span>Абонент:</span> <select  class="select" name="abonents" id="abonent-select">
                 <option value="0">Выберите Абонента</option>
@@ -25,14 +25,14 @@
               </select>
               <span>Номер телефона: </span><span class="number hide">89000000001</span><span class="number hide">89000000001</span><span class="number hide">89000000002</span>
         </div>
-        <br>
+        
         <div class="data-abonent">
             <span>Принадлежность абонента к МСПСС Гонец_М1: </span>
             <select class="select" name="affiliation" id="affiliation-id" disabled>
                 <option>да</option>
             </select>
         </div>
-        <br>
+        
         <div class="data-abonent">
             <span>Размещение абонента : </span>
             <span>Страна: </span>
@@ -43,16 +43,16 @@
                 <select class="select" disabled>
                     <option>Все регионы</option>
                 </select>
-            <br> 
+            
         </div>
         <br>
         <div class="data-abonent">
             <span>Задать координаты абонента :</span>
             <div class="radio-dvi">
-                
-                <input type="radio" value="1" name="radio-coord" class="time_call-rand">
+                <br>
+                <input type="radio" value="1" name="radio-coord" class="time_call">
                 <span>Вручную</span>
-                <input type="radio" value="1" name="radio-coord" class="time_call-max" checked>
+                <input type="radio" value="1" name="radio-coord" class="time_call" checked>
                 <span>Случайным образом</span>
                 <img class="re-date" src="../static/img/re.png">
             </div>
@@ -69,7 +69,7 @@
         </div>
         <br>
         <div class="div-abonent">Параметры вызова</div>
-        
+        <br>
         <div class="data-abonent">
             
             <span>Длительность сеанса связи: от,сек</span>
@@ -81,20 +81,26 @@
         </div>
         <div class="radio-dvi">
             <span>Продолжительность сеанса:</span>
-            <input type="radio" value="1" name="radio-time" class="time_call-rand">
+            <input type="radio" value="1" name="radio-time" class="time_call-rand" checked>
             <span>Случайная</span>
-            <input type="radio" value="1" name="radio-time" class="time_call-max" checked>
+            <input type="radio" value="1" name="radio-time" class="time_call-max" >
             <span>Максимальная</span>
+            
+            
+           
+            
             
         </div>
         <div class="radio-dvi">
             <span>Вид связи:</span>
             <!-- <input type="radio" value="1" name="radio" class="simple-checkbox">
             <span>Симплекс передача</span> -->
-            <input type="radio" value="1" name="radio" class="simplex-checkbox">
+            <input type="radio" value="1" name="radios" class="simplex-checkbox">
             <span>Симплекс </span>
-            <input type="radio" value="2" name="radio" class="duplex-checkbox" checked>
+            <input type="radio" value="2" name="radios" class="duplex-checkbox" checked>
             <span>Дуплекс</span>
+            
+            
         </div>
         
             </div>

@@ -12,7 +12,7 @@
     
 }
 #response3{
-    min-height: 14vh;
+    min-height: 24vh;
     overflow-y: scroll;
     /* max-height: 300px; */
     display: none;
