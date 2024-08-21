@@ -253,6 +253,10 @@ async function calculateFirstAvailableInterval(data,arrTimers){
       // console.log("Success:", result);
       
       document.getElementById('response3').innerHTML+=`<br><div  class="header-log">Вызов:</div>`;
+      document.getElementById('response3').innerHTML+=`
+      <div  class="header-log">ID запроса на инициирование сеанса связи:
+      ${new Date(result.datetime_period.start_datetime_iso).toLocaleString()}</div>`;
+
       document.getElementById('response3').innerHTML+='<br>Нет доступного KA <br>';
       document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Характеристики Абонента:</div>`;
     const latRes=document.createElement('div');
@@ -309,6 +313,9 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               let valueAbonent=0;
              if (document.getElementById('abonent-select')) {
           valueAbonent=Number(document.getElementById('abonent-select').value);
+          if (!valueAbonent) {
+            valueAbonent+=1;
+          }
               }
              document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${time}</div>`;
              const dataSession={
@@ -322,7 +329,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
             "Canal_pr1": respons.Nomera_zanyatyih_yacheek[1][1],
             "Time_Slot_pr1": respons.Nomera_zanyatyih_yacheek[1][0],
             "Tlf2": '',
-            "ID_Abonent_T2": 0,
+            "ID_Abonent_T2": ++valueAbonent,
             "ID_KA2": 0,
             "ID_RSS2": 0,
             "Canal2": 0,
@@ -429,6 +436,9 @@ async function calculateFirstAvailableInterval(data,arrTimers){
                   let valueAbonent=0;
                   if (document.getElementById('abonent-select')) {
                 valueAbonent=Number(document.getElementById('abonent-select').value);
+                if (!valueAbonent) {
+                  valueAbonent+=1
+                }
                   }
                   document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${time}</div>`;
                   const dataSession={
@@ -442,7 +452,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
              "Canal_pr1": respons.Nomera_zanyatyih_yacheek[1][1],
              "Time_Slot_pr1": respons.Nomera_zanyatyih_yacheek[1][0],
              "Tlf2": '',
-             "ID_Abonent_T2": 0,
+             "ID_Abonent_T2": ++valueAbonent,
              "ID_KA2": 0,
              "ID_RSS2": 0,
              "Canal2": 0,
@@ -511,6 +521,9 @@ async function calculateFirstAvailableInterval(data,arrTimers){
             let valueAbonent=0;
            if (document.getElementById('abonent-select')) {
             valueAbonent=Number(document.getElementById('abonent-select').value);
+            if (!valueAbonent) {
+              valueAbonent+=1;
+            }
            }
             document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${randTime/1000}</div>`;
             const dataSession={
@@ -524,7 +537,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               "Canal_pr1": respons.Nomera_zanyatyih_yacheek[1][1],
               "Time_Slot_pr1": respons.Nomera_zanyatyih_yacheek[1][0],
               "Tlf2": "string",
-              "ID_Abonent_T2": 0,
+              "ID_Abonent_T2": ++valueAbonent,
               "ID_KA2": 0,
               "ID_RSS2": 0,
               "Canal2": 0,
@@ -1057,6 +1070,9 @@ async function calculateFirstAvailableInterval(data,arrTimers){
             let valueAbonent=0;
            if (document.getElementById('abonent-select')) {
             valueAbonent=Number(document.getElementById('abonent-select').value);
+            if (!valueAbonent) {
+              valueAbonent+=1;
+            }
            }
             document.getElementById('response3').innerHTML+=`<div>Прогнозируемая продолжительность сеанса ,сек: ${time}</div>`;
             console.log(time);
@@ -1071,7 +1087,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
               "Canal_pr1": response.Nomera_zanyatyih_yacheek[0][1],
               "Time_Slot_pr1": response.Nomera_zanyatyih_yacheek[0][0],
               "Tlf2": "string",
-              "ID_Abonent_T2": 0,
+              "ID_Abonent_T2": ++valueAbonent,
               "ID_KA2": 0,
               "ID_RSS2": 0,
               "Canal2": 0,
@@ -1425,6 +1441,9 @@ async function postActiveSession(data) {
 function createResponse(result,data){
   if (document.querySelector('.information_request')) {
     document.getElementById('response3').innerHTML+=`<br><div class="header-log">Вызов: </div>`;
+    document.getElementById('response3').innerHTML+=`
+      <div  class="header-log">ID запроса на инициирование сеанса связи:
+      ${new Date(result.datetime_period.start_datetime_iso).toLocaleString()}</div>`;
     document.getElementById('response3').innerHTML+=`<br><div class="header-log" style="display: block;">Характеристики Абонента:</div>`;
     const latRes=document.createElement('div');
     latRes.classList.add('latitude-res');
@@ -1449,21 +1468,21 @@ function createResponse(result,data){
      else{
       for (const [key, values] of Object.entries(value)){
         if (key=='duration_in_sec') {
-          document.getElementById('response3').innerHTML+=`<div class="total-time"> total_duration_in_sec: ${values}</div> <br><span style="
+          document.getElementById('response3').innerHTML+=`<br><span style="
           font-size: calc(1.2rem);">Сеанс связи: </span>`;
-        }
-        else  if (key=='end_datetime_iso') {
-          document.getElementById('response3').innerHTML+=`<div>${key}: ${new Date(values).toLocaleString()}</div>`;
-          document.getElementById('response3').innerHTML+=`<div>Максимальная продолжительность вызова : ${(new Date(values)-new Date(data.start_datetime_iso))/1000}</div>`;
-          console.log(new Date(values));
-          console.log(new Date(data.start_datetime_iso));
-        }
-        else  if (key=='start_datetime_iso') {
-          document.getElementById('response3').innerHTML+=`<div>${key}: ${new Date(values).toLocaleString()}</div>`;
-        }
-        else{
-          document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div>`;
-        }
+         }
+        // else  if (key=='end_datetime_iso') {
+        //   document.getElementById('response3').innerHTML+=`<div>${key}: ${new Date(values).toLocaleString()}</div>`;
+        //   document.getElementById('response3').innerHTML+=`<div>Максимальная продолжительность вызова : ${(new Date(values)-new Date(data.start_datetime_iso))/1000}</div>`;
+        //   console.log(new Date(values));
+        //   console.log(new Date(data.start_datetime_iso));
+        // }
+        // else  if (key=='start_datetime_iso') {
+        //   document.getElementById('response3').innerHTML+=`<div>${key}: ${new Date(values).toLocaleString()}</div>`;
+        // }
+        // else{
+        //   document.getElementById('response3').innerHTML+=`<div>${key}: ${values}</div>`;
+        // }
        
         
       }
@@ -1480,7 +1499,7 @@ function createResponse(result,data){
           createInformationRequest.innerHTML+=`<br><div style="
           font-size: calc(1.2rem);">Начало сеанса связи:</div>`; 
           createInformationRequest.innerHTML+=`<div>Время начала вызова: ${new Date(value).toLocaleString()}</div>`; 
-          document.getElementById('response3').innerHTML+=`<div>Время начала вызова: ${new Date(value).toLocaleString()}`;
+          document.getElementById('response3').innerHTML+=`<br><div>Время начала вызова: ${new Date(value).toLocaleString()}`;
           // const div=document.createElement('div');
           // div.textContent=`Время начала вызова: ${value}`;
           // document.getElementById('long-res').after(div); 
@@ -1574,7 +1593,7 @@ function createResponse(result,data){
           createInformationRequest.innerHTML+=`<br><div style="
           font-size: calc(1.2rem);">Начало сеанса связи:</div>`; 
           createInformationRequest.innerHTML+=`<div>Время начала вызова: ${new Date(value.toLocaleString())}</div>`; 
-          document.getElementById('response3').innerHTML+=`<div>Время начала вызова: ${new Date(value).toLocaleString()}` ;
+          document.getElementById('response3').innerHTML+=`<br><div>Время начала вызова: ${new Date(value).toLocaleString()}` ;
           // const div=document.createElement('div');
           // div.textContent=`Время начала вызова: ${value}`;
           // document.getElementById('long-res').after(div); 
