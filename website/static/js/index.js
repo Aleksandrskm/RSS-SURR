@@ -251,16 +251,20 @@ async function calculateFirstAvailableInterval(data,arrTimers){
     console.log("Success:", result);
     if (result.detail || Date.parse((new Date((result.start_datetime_iso)))<Date.parse(new Date())))  {
       console.log(document.getElementById('max-time-dur').value);
-      
+      const select = document.getElementById('abonent-select');
+      let selIndex=select.selectedIndex;
+      if (!selIndex) {
+        selIndex+=1;
+      }
       document.getElementById('response3').innerHTML+=`<br><div  class="header-log">Вызов:</div>`;
       document.getElementById('response3').innerHTML+=`<div>ID запроса на инициирование сеанса связи:
-      ${new Date(data.start_datetime_iso).toLocaleString()}</div>`;
+      ${new Date(data.start_datetime_iso).toLocaleString()} ID Абонента: ${selIndex}</div>`;
       document.querySelector('.information_request').innerHTML+=`<div>ID запроса на инициирование сеанса связи:
-      ${new Date(data.start_datetime_iso).toLocaleString()}</div>`;
-      document.querySelector('.information_request').innerHTML+='<div>Нет доступного KA</div>br ';
+      ${new Date(data.start_datetime_iso).toLocaleString()} ID Абонента: ${selIndex}</div>`;
+      document.querySelector('.information_request').innerHTML+='<div>Отказано в сеансе связи</div><br> ';
       document.querySelector('.information_request').innerHTML+=`<br><div class="header-log" style="display: block;">Характеристики Абонента:</div>`;
      
-      document.getElementById('response3').innerHTML+='<div>Нет доступного KA</div> <br>';
+      document.getElementById('response3').innerHTML+='<br><div>Отказано в сеансе связи</div> ';
       document.getElementById('response3').innerHTML+=`<br><div>Характеристики Абонента:</div>`;
     const latRes=document.createElement('div');
     latRes.classList.add('latitude-res');
@@ -282,7 +286,7 @@ async function calculateFirstAvailableInterval(data,arrTimers){
     }
     else
     {
-      if ((result.datetime_period.duration_in_sec < document.getElementById('max-time-dur').value)) {
+      if (true) {
         console.log( (result.datetime_period.duration_in_sec < document.getElementById('max-time-dur').value));
       createResponse(result,data);
       const datesStartTime=new Date();
@@ -1459,7 +1463,8 @@ async function calculateFirstAvailableInterval(data,arrTimers){
       return result;
       }
       else{
-        document.getElementById('response3').innerHTML+=`<span>Нет подходящего КА</span> <br>`
+        
+        document.getElementById('response3').innerHTML+=`<span>Отказано в вызове</span> <br><br>`
       }
       
     }
@@ -1502,7 +1507,7 @@ async function postActiveSession(data) {
 }
 function createResponse(result,data){
   if (document.querySelector('.information_request')) {
-    if (result.datetime_period.duration_in_sec > document.getElementById('max-time-dur').value) {
+    if (false) {
       document.getElementById('response3').innerHTML+=`<br><div> Нет подходящего КА</div>`;
       
     }
@@ -1813,7 +1818,7 @@ if (document.querySelector('h2')) {
         // document.querySelector('.information_request').remove();
       }
       const loader = new Loader('.loader-container');
-        loader.show('Получение первого доступного КА');
+        loader.show('Загрузка данных с сервера');
         
       calculateFirstAvailableInterval(data).then(()=>{
         loader.close();
@@ -1827,7 +1832,7 @@ if (document.querySelector('h2')) {
     
     btnFlawStart.addEventListener('click',()=>{
       const loader = new Loader('.loader-container');
-      loader.show('Получение первого доступного КА');
+      loader.show('Загрузка данных с сервера');
       const data = {
       'point':{
             "name":'',
