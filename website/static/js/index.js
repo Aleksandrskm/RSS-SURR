@@ -89,6 +89,38 @@ function getDateTime() {
   let dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
    return dateTime;
 }
+async function calculateBSSsSatellitesAvailability(data) {
+    try {
+      const response = await fetch(`http://185.192.247.60:7130/CommunicationAvailability/CalculateBSSsSatellitesAvailability`, {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      console.log("Success:", result);
+      return result;
+    } catch (error) {
+      console.error("Error:", error);
+    } 
+}
+async function calculateBSSsSatellitesDistribution(data) {
+  try {
+    const response = await fetch(`http://185.192.247.60:7130/CommunicationAvailability/CalculateBSSsSatellitesDistribution`, {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data)
+    });
+    const result = await response.json();
+    console.log("Success:", result);
+    return result;
+  } catch (error) {
+    console.error("Error:", error);
+  } 
+}
 // example usage: realtime clock
 setInterval(function(){
   let currentTime = getDateTime();
@@ -238,6 +270,10 @@ if (document.querySelector('h2')) {
           ]
       }
       console.log(data)
+      calculateBSSsSatellitesAvailability(data).then(response=>{
+        console.log(response.BSSs_satellites_data);
+        calculateBSSsSatellitesDistribution(response.BSSs_satellites_data);
+      })
     });
    
   }
