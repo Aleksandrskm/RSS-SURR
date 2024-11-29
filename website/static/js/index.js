@@ -89,6 +89,16 @@ function getDateTime() {
   let dateTime = year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second;   
    return dateTime;
 }
+function getDateTimes(dateControl,timeControl){
+  let dateControlYear=+dateControl.value.substring(0,4);
+  let dateControlMonth=+dateControl.value.substring(5,7);
+  let dateControlDay=+dateControl.value.substring(8,10);
+  let timeHouse=Number(`${timeControl.value[0]}${timeControl.value[1]}`);
+  let timeMin=+(`${timeControl.value[3]}${timeControl.value[4]}`);
+  let timeSec=+(`${timeControl.value[6]}${timeControl.value[7]}`);
+  const dateTime=new Date(dateControlYear,dateControlMonth-1,dateControlDay,timeHouse,timeMin,timeSec).toISOString();
+  return dateTime
+}
 async function calculateBSSsSatellitesAvailability(data) {
     try {
       const response = await fetch(`http://185.192.247.60:7130/CommunicationAvailability/CalculateBSSsSatellitesAvailability`, {
@@ -173,26 +183,19 @@ if (document.querySelector('h2')) {
     let timeSelf=`${dateControl[0].value}T0${numberTime-3}${timeControl[0].value.substring(2,10)}.000Z`;
     console.log(timeSelf);
     console.log((timeControl[0].value));
-    let dateControlYear=+dateControl[0].value.substring(0,4);
-    let dateControlMonth=+dateControl[0].value.substring(5,7);
-    let dateControlDay=+dateControl[0].value.substring(8,10);
-    let timeHouse=Number(`${timeControl[0].value[0]}${timeControl[0].value[1]}`);
-    let timeMin=+(`${timeControl[0].value[3]}${timeControl[0].value[4]}`);
-    let timeSec=+(`${timeControl[0].value[6]}${timeControl[0].value[7]}`);
     
-    let dateControlYearEnd=+dateControl[1].value.substring(0,4);
-    let dateControlMonthEnd=+dateControl[1].value.substring(5,7);
-    let dateControlDayEnd=+dateControl[1].value.substring(8,10);
-    let timeHouseEnd=Number(`${timeControl[1].value[0]}${timeControl[1].value[1]}`);
-    let timeMinEnd=+(`${timeControl[1].value[3]}${timeControl[1].value[4]}`);
-    let timeSecEnd=+(`${timeControl[1].value[6]}${timeControl[1].value[7]}`);
-
-    const startDateTime=new Date(dateControlYear,dateControlMonth-1,dateControlDay,timeHouse,timeMin,timeSec).toISOString();
-    const endDateTime=new Date(dateControlYearEnd,dateControlMonthEnd-1,dateControlDayEnd,timeHouseEnd,timeMinEnd,timeSecEnd).toISOString();
     console.log()
     const btnStartSim=document.getElementById('task-btn_sim');
     btnStartSim.addEventListener('click',()=>{
-      const data={
+      const timeControl = document.querySelectorAll('input[type="time"]');
+      const dateControl = document.querySelectorAll('input[type="date"]');
+      const startDateTime=getDateTimes(dateControl[0],timeControl[0]);
+      const endDateTime=getDateTimes(dateControl[1],timeControl[1]);
+      if (endDateTime<startDateTime) {
+        console.log('Ошибка')
+      }
+      else{
+        const data={
         
           "params": {
               "start_datetime_iso": startDateTime,
@@ -272,8 +275,10 @@ if (document.querySelector('h2')) {
       console.log(data)
       calculateBSSsSatellitesAvailability(data).then(response=>{
         console.log(response.BSSs_satellites_data);
-        calculateBSSsSatellitesDistribution(response.BSSs_satellites_data);
+        // calculateBSSsSatellitesDistribution(response.BSSs_satellites_data);
       })
+      }
+      
     });
    
   }
