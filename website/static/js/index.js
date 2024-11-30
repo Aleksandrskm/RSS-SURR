@@ -166,7 +166,7 @@ if (document.querySelector('h2')) {
     dateControl[1].value=formattedDate;
     timeControl[1].value=String(toTimeString(testTime).toLocaleTimeString())
     console.log(formattedDate);
-    console.log(endTimeVal);
+
     // timeControl.value=getDateTime().substring(11,19);
     console.log(dateControl[0].value);
     console.log(timeControl[0].value);
