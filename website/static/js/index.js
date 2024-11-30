@@ -96,7 +96,7 @@ function getDateTimes(dateControl,timeControl){
   let timeHouse=Number(`${timeControl.value[0]}${timeControl.value[1]}`);
   let timeMin=+(`${timeControl.value[3]}${timeControl.value[4]}`);
   let timeSec=+(`${timeControl.value[6]}${timeControl.value[7]}`);
-  const dateTime=new Date(dateControlYear,dateControlMonth-1,dateControlDay,timeHouse,timeMin,timeSec).toISOString();
+  const dateTime=new Date(dateControlYear,dateControlMonth-1,dateControlDay,timeHouse,timeMin,timeSec);
   return dateTime
 }
 async function calculateBSSsSatellitesAvailability(data) {
@@ -144,45 +144,33 @@ btn.addEventListener("click", ()=>{modal.style.display = "flex"});
 span.addEventListener("click", ()=>{modal.style.display = "none"});  
 if (document.querySelector('h2')) {
   if (document.querySelector('h2').innerHTML) {
-
     const dateControl = document.querySelectorAll('input[type="date"]');
-
     dateControl[0].value=getDateTime().slice(0,10);
-    dateControl[1].value=getDateTime().slice(0,10);
+    // dateControl[1].value=getDateTime().slice(0,10);
     const timeControl = document.querySelectorAll('input[type="time"]');
-    
+    console.log(getDateTime().slice(0,10))
     let numberTime=Number(getDateTime().substring(11,13));
     let timeVal=getDateTime().substring(13,19);
-    let endTimeVal=Number(timeVal.substring(1,3))+15;
-    let secEndTimeVal=timeVal.substring(3,6);
-    console.log(endTimeVal,secEndTimeVal)
-    let endNumTime=numberTime;
-    if (endTimeVal>59) {
-      endNumTime++;
-      endTimeVal-=60;
-      if (endTimeVal<10) {
-        endTimeVal=`0${endTimeVal}`
-      }
-    }
     if (numberTime>=10) {
       timeControl[0].value=`${numberTime}${timeVal}`;
-      console.log(String(endTimeVal));
-      console.log(endTimeVal,secEndTimeVal)
-      timeControl[1].value=`${endNumTime}:${(endTimeVal)}${secEndTimeVal}`;
     }
     else{
       timeControl[0].value=`0${numberTime}${timeVal}`;
-      timeControl[1].value=`0${endNumTime}${String(endTimeVal)}`;
     }
+   const testTime= (getDateTimes(dateControl[0],timeControl[0]).getTime()/1000)+900;
+   const toTimeString = (second) => new Date(second * 1000);
+   console.log(String(toTimeString(testTime).toLocaleDateString()));
    
-    console.log(numberTime);
-    console.log(timeVal);
+    const [day, month, year] = String(toTimeString(testTime).toLocaleDateString()).split('.');
+    const formattedDate = `${year}-${month}-${day}`;
+    dateControl[1].value=formattedDate;
+    timeControl[1].value=String(toTimeString(testTime).toLocaleTimeString())
+    console.log(formattedDate);
+    console.log(endTimeVal);
     // timeControl.value=getDateTime().substring(11,19);
     console.log(dateControl[0].value);
     console.log(timeControl[0].value);
-    let timeSelf=`${dateControl[0].value}T0${numberTime-3}${timeControl[0].value.substring(2,10)}.000Z`;
-    console.log(timeSelf);
-    console.log((timeControl[0].value));
+    console.log((timeControl[1].value));
     
     console.log()
     const btnStartSim=document.getElementById('task-btn_sim');
@@ -198,8 +186,8 @@ if (document.querySelector('h2')) {
         const data={
         
           "params": {
-              "start_datetime_iso": startDateTime,
-              "end_datetime_iso": endDateTime,
+              "start_datetime_iso": startDateTime.toISOString(),
+              "end_datetime_iso": endDateTime.toISOString(),
               "dates_delta_in_sec": 15,
               "min_session_time_in_sec": 10,
               "acceptable_session_time_in_sec": 100
