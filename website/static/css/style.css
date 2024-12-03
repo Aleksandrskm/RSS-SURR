@@ -15,7 +15,7 @@
     min-height: 24vh;
     overflow-y: scroll;
     /* max-height: 300px; */
-    display: none;
+    /* display: none; */
 }
 #abonent-select{
     margin-bottom: 10px;

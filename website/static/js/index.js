@@ -62,6 +62,46 @@ function getRandomNumber(min, max) {
   max = Math.floor(max)
   return Math.floor(Math.random() * (max - min) + min)
 }
+function createBeginningLog(dateStartTime,respons){
+  document.querySelector('.information_request').innerHTML+=`<div style=
+            "font-size: calc(1.2rem);">Начало Работы</div><br>`;
+  document.getElementById('response3').innerHTML+=`<div style=
+  "font-size: calc(1.2rem);">Начало Работы</div><br>`;          
+  document.getElementById('response3').innerHTML+=`<div>РСС:Инициирование связи с СУРР</div>`;
+  document.querySelector('.information_request').innerHTML+=`<div>РСС:Инициирование связи с СУРР</div>`;
+  document.querySelector('.information_request').innerHTML+=`<div>РСС: Время инициирования получения данных от СУРР:  ${dateStartTime.toLocaleString()}</div>`;
+  document.getElementById('response3').innerHTML+=`<div>РСС: Время инициирования получения данных от СУРР:  ${dateStartTime.toLocaleString()}</div>`;
+
+  // const dataDecrip=document.createElement('div');
+  // dataDecrip.innerHTML+=`<br>`;
+  // respons.forEach(element => {
+  //   for (const key in element) {
+  //     dataDecrip.innerHTML+=`<div>${key} ${element[key]}</div>`;
+  //   }
+  //   dataDecrip.innerHTML+=`<br>`;
+  // });
+  // document.getElementById('response3').innerHTML+=`<div>СУРР: ${respons}</div>`;
+  // document.querySelector('.information_request').innerHTML+=`<div>РСС:  Время получения данных: ${dateStartTime.toLocaleString()}</div>`;
+  // document.querySelector('.information_request').append(dataDecrip);
+}
+function createEndLog(dateStartTime,respons,result){
+  document.querySelector('.information_request').innerHTML+=`<br><div style="font-size: calc(1.2rem);">Завершение Работы</div><br>`;
+  document.getElementById('response3').innerHTML+=`<br><div style=
+  "font-size: calc(1.2rem);">Завершение Работы</div><br>`;  
+  document.querySelector('.information_request').innerHTML+=`<div>СУРР: Время ответа от СУРР:  ${dateStartTime.toLocaleString()}</div>`;
+  document.getElementById('response3').innerHTML+=`<div>РСС:  Время получения данных: ${dateStartTime.toLocaleString()}</div>`;
+  const dataDecrip=document.createElement('div');
+  dataDecrip.innerHTML+=`<br>`;
+  respons.forEach(element => {
+    for (const key in element) {
+      dataDecrip.innerHTML+=`<div>${key}: ${element[key]}</div>`;
+    }
+    dataDecrip.innerHTML+=`<br>`;
+  });
+  // document.getElementById('response3').innerHTML+=`<div>СУРР: ${respons}</div>`;
+  document.querySelector('.information_request').innerHTML+=`<div>РСС:  Время получения данных: ${dateStartTime.toLocaleString()}</div>`;
+  document.querySelector('.information_request').append(dataDecrip);
+}
 function getDateTime() {
   let now     = new Date(); 
   let year    = now.getFullYear();
@@ -263,7 +303,10 @@ if (document.querySelector('h2')) {
       console.log(data)
       calculateBSSsSatellitesAvailability(data).then(response=>{
         console.log(response.BSSs_satellites_data);
-        // calculateBSSsSatellitesDistribution(response.BSSs_satellites_data);
+        calculateBSSsSatellitesDistribution(response.BSSs_satellites_data).then((respons)=>{
+          createBeginningLog(new Date())
+          createEndLog(new Date(),respons)
+        });
       })
       }
       
