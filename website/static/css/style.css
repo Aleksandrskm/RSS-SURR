@@ -15,7 +15,7 @@
     min-height: 24vh;
     overflow-y: scroll;
     /* max-height: 300px; */
-    display: none;
+    /* display: none; */
 }
 #abonent-select{
     margin-bottom: 10px;
@@ -235,7 +235,7 @@ img {
     margin-top: 10px;
     padding: 6px;
     text-align: center;
-    width: 130px;
+    width: 200px;
     border-radius: 6px;
     border-width: 2px;
     font-size: calc(1rem);
@@ -556,7 +556,7 @@ body {
 .radio-dvi input{
     width: 13px;
 }
-.csus{
+.RSS{
     font-size: calc(1.5rem);
     text-align: center; 
 }

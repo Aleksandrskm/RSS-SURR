@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="loader-container loader-container--hidden">
+    <span class="loader"></span>
+    <span class="loader-container__title">Загрузка...</span>
+</div>  
+    <h2>Планирование РСС</h2>
+<div class="content">
+    
+    <div class="input_parameters_imitator">
+        
+        <div class="row_com">
+            
+            <div class="column2_com">
+        <div class="RSS">Эмулятор РСС</div>
+        <br>        
+        <div class="div-abonent">
+            <div class="radio-dvi">
+                <br>
+                <span>Период: с</span>
+                <input type="time" id="start-time" name="trip-start-time" value="" step="2">
+                <input type="date" id="start" name="trip-start" value="">
+                <span>по</span>
+                <input type="time" id="end-time" name="trip-end-time" value="" step="2">
+                <input type="date" id="end-date" name="trip-end" value="">
+            </div>
+        </div>
+        <br>  
+        
+       
+        <div class="btn2">
+            <button id="task-btn_sim" onclick="">Получить план</button>
+        </div>
+
+        <!-- <div class="header-log">Доступный КА:</div> -->
+        
+        <span id="response3">
+            <!-- <span id="call">Вызов: </span> -->
+            
+            <!-- <div style="
+          font-size: calc(1.2rem);">Характеристики Абонента:</div>
+          <div id="latitude-res">Широта, градусы: </div>
+          <div id="long-res">Долгота, градусы: </div> -->
+            <br>
+        </span>
+
+    </div>
+   
+    
+</div>
+ </div>   
+ <div class="information_request">
+    <span class="RSS">Шлюз взаимодействия РСС-СУРР</span>
+</div>
+</div>
+    
+{% endblock %}
