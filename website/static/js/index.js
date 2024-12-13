@@ -139,6 +139,39 @@ function getDateTimes(dateControl,timeControl){
   const dateTime=new Date(dateControlYear,dateControlMonth-1,dateControlDay,timeHouse,timeMin,timeSec);
   return dateTime
 }
+async function getRssDatas() {
+  try {
+    const response = await fetch(`http://185.192.247.60:7130/Characteristics/BSSs`,{
+      method:"GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    const result =await response.json();
+    console.log(result)
+    return result
+  } 
+  catch (error) {
+    
+  }
+}
+async function getKaDatas() {
+  try {
+    const response = await fetch(`http://185.192.247.60:7130/ka`,{
+      method:"GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    const result =await response.json();
+    console.log(result)
+    return result
+  } 
+  catch (error) {
+    
+  }
+}
+
 async function calculateBSSsSatellitesAvailability(data) {
     try {
       const response = await fetch(`http://185.192.247.60:7130/CommunicationAvailability/CalculateBSSsSatellitesAvailability`, {
@@ -180,10 +213,29 @@ const modal = document.getElementById("myModal");
 const btn = document.getElementById("openModal");
 const span = document.getElementsByClassName("close")[0];
 let countSession=0;
+const satIDs=[];
+const rss=[]
 btn.addEventListener("click", ()=>{modal.style.display = "flex"});
 span.addEventListener("click", ()=>{modal.style.display = "none"});  
 if (document.querySelector('h2')) {
   if (document.querySelector('h2').innerHTML) {
+    
+    const rssPromise = getRssDatas().then(result=>{
+      result.forEach ((rssData)=>{
+        rss.push(rssData)
+      })
+      console.log(satIDs)
+    });;
+    const kasPromise=getKaDatas().then(result=>{
+      result.forEach ((ka)=>{
+        satIDs.push(ka.ID)
+      })
+      console.log(satIDs)
+    });
+    
+   
+   
+   
     const dateControl = document.querySelectorAll('input[type="date"]');
     dateControl[0].value=getDateTime().slice(0,10);
     // dateControl[1].value=getDateTime().slice(0,10);
@@ -215,6 +267,7 @@ if (document.querySelector('h2')) {
     console.log()
     const btnStartSim=document.getElementById('task-btn_sim');
     btnStartSim.addEventListener('click',()=>{
+      console.log()
       const timeControl = document.querySelectorAll('input[type="time"]');
       const dateControl = document.querySelectorAll('input[type="date"]');
       const startDateTime=getDateTimes(dateControl[0],timeControl[0]);
@@ -232,73 +285,8 @@ if (document.querySelector('h2')) {
               "min_session_time_in_sec": 10,
               "acceptable_session_time_in_sec": 100
           },
-          "BSSs": [
-              {
-                  "id": 1,
-                  "name": "Мурманск",
-                  "lat": 69,
-                  "lon": 33,
-                  "radius": 2500
-              },
-              {
-                  "id": 2,
-                  "name": "Евпатория",
-                  "lat": 45.20000076293945,
-                  "lon": 33.29999923706055,
-                  "radius": 2500
-              },
-              {
-                  "id": 3,
-                  "name": "Новосибирск",
-                  "lat": 55,
-                  "lon": 83,
-                  "radius": 2500
-              },
-              {
-                  "id": 4,
-                  "name": "Хабаровск",
-                  "lat": 48.5,
-                  "lon": 135,
-                  "radius": 2500
-              },
-              {
-                  "id": 5,
-                  "name": "Магадан",
-                  "lat": 59.5,
-                  "lon": 151,
-                  "radius": 2500
-              }
-          ],
-          "satellites_id": [
-              1,
-              2,
-              3,
-              4,
-              5,
-              6,
-              7,
-              8,
-              9,
-              10,
-              11,
-              12,
-              13,
-              14,
-              15,
-              16,
-              17,
-              18,
-              19,
-              20,
-              21,
-              22,
-              23,
-              24,
-              25,
-              26,
-              27,
-              28
-          ]
+          "BSSs": rss,
+          "satellites_id": satIDs
       }
       console.log(data)
       calculateBSSsSatellitesAvailability(data).then(response=>{
@@ -313,52 +301,7 @@ if (document.querySelector('h2')) {
     });
    
   }
-  else if (document.querySelector('h2').innerHTML=='Имитатор потока вызовов') {
-    const btnFlawStart=document.querySelector('#task-btn_sim_flow');
-    
-    btnFlawStart.addEventListener('click',()=>{
-      const loader = new Loader('.loader-container');
-      loader.show('Загрузка данных с сервера');
-      const data = {
-      'point':{
-            "name":'',
-            "lat": document.getElementById('lat4').value,
-            "lon": document.getElementById('lon4').value,
-            "radius": 2500
-          },
-      "start_datetime_iso": new Date().toISOString(),
-      "min_duration_in_sec":document.getElementById('min-call-time').value
-      
-    }
-    const arrTimers=[];
-   
-      const timerCalls=setInterval(function (){
-        calculateFirstAvailableInterval(data,arrTimers).then(()=>{
-          loader.close();
-          ++countSession;
-          console.log(countSession);
-          document.getElementById('response3').style.display='block';
-      });
-      },1000);
-      const time=setInterval(function(){
-        if (countSession>0) {
-            clearTimeout(timerCalls);
-           
-            console.log(countSession);
-        }
-    },1000);
-      
-     
-    
-      // console.log(countSession);
-      // clearInterval(timerCalls);
-     
-   
-
-  
-    });
-    
-  }
+ 
 }
 if (document.getElementById('abonent-select')) {
   const select = document.getElementById('abonent-select');
