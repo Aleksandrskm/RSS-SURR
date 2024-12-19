@@ -141,7 +141,7 @@ function getDateTimes(dateControl,timeControl){
 }
 async function getRssDatas() {
   try {
-    const response = await fetch(`http://185.192.247.60:7130/Characteristics/BSSs`,{
+    const response = await fetch(`http://185.192.247.60:7130/rss`,{
       method:"GET",
       headers: {
         "Content-Type": "application/json",
@@ -171,7 +171,22 @@ async function getKaDatas() {
     
   }
 }
-
+async function getAllAntenas() {
+  try {
+    const response = await fetch(`http://185.192.247.60:7130/rss/antennas`,{
+      method:"GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    const result =await response.json();
+    console.log(result)
+    return result
+  } 
+  catch (error) {
+    
+  }
+}
 async function calculateBSSsSatellitesAvailability(data) {
     try {
       const response = await fetch(`http://185.192.247.60:7130/CommunicationAvailability/CalculateBSSsSatellitesAvailability`, {
@@ -218,13 +233,19 @@ const rss=[]
 btn.addEventListener("click", ()=>{modal.style.display = "flex"});
 span.addEventListener("click", ()=>{modal.style.display = "none"});  
 if (document.querySelector('h2')) {
-  if (document.querySelector('h2').innerHTML) {
-    
+  if (document.querySelector('h2').innerHTML==`Планирование РСС`) {
+    let tempRssData=``;
     const rssPromise = getRssDatas().then(result=>{
       result.forEach ((rssData)=>{
-        rss.push(rssData)
+        
+        tempRssData={name:rssData.NAIM,
+          lat:rssData.SHIROTA,
+          lon:rssData.DOLGOTA,
+          radius:rssData.RADIUS};
+        console.log(tempRssData)
+        rss.push(tempRssData)
       })
-      console.log(satIDs)
+      
     });;
     const kasPromise=getKaDatas().then(result=>{
       result.forEach ((ka)=>{
@@ -299,6 +320,94 @@ if (document.querySelector('h2')) {
       }
       
     });
+   
+  }
+  if (document.querySelector('h2').innerHTML==`Передача состояния антенных постов РСС`) {
+   const dataAntennasPosts= document.querySelector('.antennas-posts');
+   getAllAntenas()
+   .then(antennas=>{
+    dataAntennasPosts.innerHTML=`<div class="RSS">Антенные посты</div>`
+    antennas.forEach(antennaData=>{
+      let antenna =document.createElement('div');
+      let {ID,ID_RSS,NUM,NAIM,AZIMUT,UM,ID_ISPR,DATA_BEG,DATA_END}=antennaData;
+      
+      antenna.classList.add('antennas-post');
+      antenna.innerHTML=`
+      <br>
+      <span class="field">ID:</span><span class="data-ant">${ID}</span>
+      <br>
+      <span class="field">ID_RSS:</span><span class="data-ant">${ID_RSS}</span>
+      <br>
+      <span class="field">NUM:</span><span class="data-ant">${NUM}</span>
+      <br>
+      <span class="field">NAIM:</span><span class="data-ant">${NAIM}</span>
+      <br>
+      <span class="field">AZIMUT:</span><span class="data-ant">${AZIMUT}</span>
+      <br>
+      <span class="field"> UM:</span><span class="data-ant">${UM}</span>
+      <br>
+      <span class="field">ID_ISPR:</span><span class="data-ant">${ID_ISPR}</span>
+      <br>
+      <span class="field"> DATA_BEG:</span><span class="data-ant">${DATA_BEG}</span>
+      <br>
+      <span class="field"> DATA_END:</span><span class="data-ant">${DATA_END}</span>`
+      dataAntennasPosts.append(antenna);
+    })
+    const antPosts=document.querySelectorAll('.antennas-post');
+    antPosts.forEach(post=>{
+      post.addEventListener('click',()=>{
+        const fields=[];
+        const datasAnt=[];
+        const postsChildren= post.children ;
+        [].forEach.call(postsChildren,(chield)=>{
+         
+          if (chield.classList.contains('field')) {
+            fields.push(chield.innerHTML);
+          }
+          if (chield.classList.contains('data-ant')) {
+            datasAnt.push(chield.innerHTML);
+          }
+         
+
+        })
+        const modalEdit=document.getElementById("myEdit");
+        modalEdit.innerHTML=` <div class="modal-content-edit">
+        <h4 class="modal-header-edit">Редактирование антенного поста</h4>
+        
+        <div class="btns-edit">
+            
+            <button class="close-edit">Закрыть</button>
+            <button class="edit-btn">Редактировать</button>
+        </div>
+    </div>`;
+        const closeEditModal=document.querySelector('.close-edit');
+        const modalHeaderEdit=document.querySelector('.modal-header-edit');
+        closeEditModal.addEventListener('click',()=>{modalEdit.style.display = "none";})
+       
+        modalEdit.style.display = "flex";
+        
+        
+        console.log(fields[0]);
+        console.log(datasAnt);
+       
+        for(let i=fields.length-1;i>=0;i--){
+          const modalRowEdit=document.createElement('div');
+          modalRowEdit.classList.add('modal_row-edit');
+          const field=document.createElement('span');
+          const data=document.createElement('input');
+          data.type='text';
+          data.value=datasAnt[i];
+          field.innerText=fields[i];
+          modalRowEdit.append(field);
+          modalRowEdit.append(data);
+          
+          modalHeaderEdit.after(modalRowEdit);
+        }
+      })
+    })
+    
+   })
+   
    
   }
  
