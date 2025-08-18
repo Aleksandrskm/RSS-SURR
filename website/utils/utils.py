@@ -6,7 +6,7 @@ from skyfield.sgp4lib import EarthSatellite
 from skyfield.toposlib import wgs84
 
 
-def calculate_azimuth(lat1, lon1, lat2, lon2):
+def calculate_azimuth(lat1, lon1, lat2, lon2): 
     lat1 = math.radians(lat1)
     lon1 = math.radians(lon1)
     lat2 = math.radians(lat2)
