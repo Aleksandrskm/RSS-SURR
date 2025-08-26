@@ -923,3 +923,18 @@ input[type='time'] {
     font-family: Arial;
     width: 100px;
 }
+
+.test {
+    list-style: none;
+    margin-left: 1750px;
+    margin-top: -45px;
+}
+.tect span{    
+    color: red;
+    display: inline-block;
+    width: 20px;
+}
+
+.KTCYR{
+    margin-left: 1700px;
+}
