@@ -926,8 +926,8 @@ input[type='time'] {
 
 .test {
     list-style: none;
-    margin-left: 1750px;
-    margin-top: -45px;
+    margin-left: 1700px;
+    margin-top: -40px;
 }
 .tect span{    
     color: red;
@@ -936,5 +936,5 @@ input[type='time'] {
 }
 
 .KTCYR{
-    margin-left: 1700px;
+    margin-left: 1650px;
 }
