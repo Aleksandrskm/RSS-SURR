@@ -62,15 +62,16 @@ function getRandomNumber(min, max) {
   max = Math.floor(max)
   return Math.floor(Math.random() * (max - min) + min)
 }
-function createBeginningLog(dateStartTime,respons){
-  document.querySelector('.information_request').innerHTML+=`<div style=
-            "font-size: calc(1.2rem);">Начало Работы</div><br>`;
-  document.getElementById('response3').innerHTML+=`<div style=
-  "font-size: calc(1.2rem);">Начало Работы</div><br>`;          
-  document.getElementById('response3').innerHTML+=`<div>РСС:Инициирование связи с СУРР</div>`;
-  document.querySelector('.information_request').innerHTML+=`<div>РСС:Инициирование связи с СУРР</div>`;
-  document.querySelector('.information_request').innerHTML+=`<div>РСС: Время инициирования получения данных от СУРР:  ${dateStartTime.toLocaleString()}</div>`;
-  document.getElementById('response3').innerHTML+=`<div>РСС: Время инициирования получения данных от СУРР:  ${dateStartTime.toLocaleString()}</div>`;
+const gateway = document.querySelector('.information_request'); 
+
+const createBeginningLog = (dateStartTime) => 
+    gateway.insertAdjacentHTML('beforeend', `
+        <div class="log-entry">
+            <div class="log-title">🟢 Начало работы</div>
+            <div>РСС: Инициирование связи с СУРР</div>
+            <div>Время: ${dateStartTime.toLocaleString()}</div>
+        </div>
+    `);
 
   // const dataDecrip=document.createElement('div');
   // dataDecrip.innerHTML+=`<br>`;
@@ -83,24 +84,26 @@ function createBeginningLog(dateStartTime,respons){
   // document.getElementById('response3').innerHTML+=`<div>СУРР: ${respons}</div>`;
   // document.querySelector('.information_request').innerHTML+=`<div>РСС:  Время получения данных: ${dateStartTime.toLocaleString()}</div>`;
   // document.querySelector('.information_request').append(dataDecrip);
-}
-function createEndLog(dateStartTime,respons,result){
-  document.querySelector('.information_request').innerHTML+=`<br><div style="font-size: calc(1.2rem);">Завершение Работы</div><br>`;
-  document.getElementById('response3').innerHTML+=`<br><div style=
-  "font-size: calc(1.2rem);">Завершение Работы</div><br>`;  
-  document.querySelector('.information_request').innerHTML+=`<div>СУРР: Время ответа от СУРР:  ${dateStartTime.toLocaleString()}</div>`;
-  document.getElementById('response3').innerHTML+=`<div>РСС:  Время получения данных: ${dateStartTime.toLocaleString()}</div>`;
-  const dataDecrip=document.createElement('div');
-  dataDecrip.innerHTML+=`<br>`;
-  respons.forEach(element => {
-    for (const key in element) {
-      dataDecrip.innerHTML+=`<div>${key}: ${element[key]}</div>`;
-    }
-    dataDecrip.innerHTML+=`<br>`;
-  });
-  // document.getElementById('response3').innerHTML+=`<div>СУРР: ${respons}</div>`;
-  document.querySelector('.information_request').innerHTML+=`<div>РСС:  Время получения данных: ${dateStartTime.toLocaleString()}</div>`;
-  document.querySelector('.information_request').append(dataDecrip);
+function createEndLog(dateStartTime, distributionResponse, mainResponse) {
+    const gateway = document.querySelector('.information_request');
+    
+    const bssCount = mainResponse.BSSs_satellites_data?.length || 0;
+    let totalSessions = 0;
+    
+    mainResponse.BSSs_satellites_data?.forEach(bss => {
+        bss.satellites_data?.forEach(satellite => {
+            totalSessions += satellite.datetime_period?.length || 0;
+        });
+    });
+    
+    gateway.insertAdjacentHTML('beforeend', `
+        <div class="log-entry log-end-bss">
+            <div class="log-title">🔵 Завершение работы</div>
+            <div>Время: ${dateStartTime.toLocaleString()}</div>
+            <div>РСС: ${bssCount} объектов</div>
+            <div>Сеансы: ${totalSessions} соединений</div>
+        </div>
+    `);
 }
 function getDateTime() {
   let now     = new Date(); 
@@ -219,6 +222,22 @@ async function calculateBSSsSatellitesDistribution(data) {
     console.error("Error:", error);
   } 
 }
+/*async function calculateRSSPlan(data) {
+    try {
+      const response = await fetch(`http://185.192.247.60:7130/сalculate_RSS_plan`, {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data.params)
+      });
+      const result = await response.json();
+      console.log("Success:", result);
+      return result;
+    } catch (error) {
+      console.error("Error:", error);
+    } 
+}*/
 // example usage: realtime clock
 setInterval(function(){
   let currentTime = getDateTime();
@@ -233,94 +252,302 @@ const rss=[]
 btn.addEventListener("click", ()=>{modal.style.display = "flex"});
 span.addEventListener("click", ()=>{modal.style.display = "none"});  
 if (document.querySelector('h2')) {
-  if (document.querySelector('h2').innerHTML==`Планирование РСС`) {
-    let tempRssData=``;
-    const rssPromise = getRssDatas().then(result=>{
-      result.forEach ((rssData)=>{
-        
-        tempRssData={name:rssData.NAIM,
-          lat:rssData.SHIROTA,
-          lon:rssData.DOLGOTA,
-          radius:rssData.RADIUS};
-        console.log(tempRssData)
-        rss.push(tempRssData)
-      })
-      
-    });;
-    const kasPromise=getKaDatas().then(result=>{
-      result.forEach ((ka)=>{
-        satIDs.push(ka.ID)
-      })
-      console.log(satIDs)
-    });
-    
-   
-   
-   
-    const dateControl = document.querySelectorAll('input[type="date"]');
-    dateControl[0].value=getDateTime().slice(0,10);
-    // dateControl[1].value=getDateTime().slice(0,10);
-    const timeControl = document.querySelectorAll('input[type="time"]');
-    console.log(getDateTime().slice(0,10))
-    let numberTime=Number(getDateTime().substring(11,13));
-    let timeVal=getDateTime().substring(13,19);
-    if (numberTime>=10) {
-      timeControl[0].value=`${numberTime}${timeVal}`;
-    }
-    else{
-      timeControl[0].value=`0${numberTime}${timeVal}`;
-    }
-   const testTime= (getDateTimes(dateControl[0],timeControl[0]).getTime()/1000)+900;
-   const toTimeString = (second) => new Date(second * 1000);
-   console.log(String(toTimeString(testTime).toLocaleDateString()));
-   
-    const [day, month, year] = String(toTimeString(testTime).toLocaleDateString()).split('.');
-    const formattedDate = `${year}-${month}-${day}`;
-    dateControl[1].value=formattedDate;
-    timeControl[1].value=String(toTimeString(testTime).toLocaleTimeString())
-    console.log(formattedDate);
-
-    // timeControl.value=getDateTime().substring(11,19);
-    console.log(dateControl[0].value);
-    console.log(timeControl[0].value);
-    console.log((timeControl[1].value));
-    
-    console.log()
-    const btnStartSim=document.getElementById('task-btn_sim');
-    btnStartSim.addEventListener('click',()=>{
-      console.log()
-      const timeControl = document.querySelectorAll('input[type="time"]');
-      const dateControl = document.querySelectorAll('input[type="date"]');
-      const startDateTime=getDateTimes(dateControl[0],timeControl[0]);
-      const endDateTime=getDateTimes(dateControl[1],timeControl[1]);
-      if (endDateTime<startDateTime) {
-        console.log('Ошибка')
-      }
-      else{
-        const data={
-        
-          "params": {
-              "start_datetime_iso": startDateTime.toISOString(),
-              "end_datetime_iso": endDateTime.toISOString(),
-              "dates_delta_in_sec": 15,
-              "min_session_time_in_sec": 10,
-              "acceptable_session_time_in_sec": 100
-          },
-          "BSSs": rss,
-          "satellites_id": satIDs
-      }
-      console.log(data)
-      calculateBSSsSatellitesAvailability(data).then(response=>{
-        console.log(response.BSSs_satellites_data);
-        calculateBSSsSatellitesDistribution(response.BSSs_satellites_data).then((respons)=>{
-          createBeginningLog(new Date())
-          createEndLog(new Date(),respons)
+  if (document.querySelector('h2').innerHTML == `Планирование РСС`) {
+    let tempRssData = ``;
+    const rssPromise = getRssDatas().then(result => {
+        result.forEach((rssData) => {
+            tempRssData = {
+                name: rssData.NAIM,
+                lat: rssData.SHIROTA,
+                lon: rssData.DOLGOTA,
+                radius: rssData.RADIUS
+            };
+            console.log(tempRssData);
+            rss.push(tempRssData);
         });
-      })
-      }
-      
     });
-   
+    
+    const kasPromise = getKaDatas().then(result => {
+        result.forEach((ka) => {
+            satIDs.push(ka.ID);
+        });
+        console.log(satIDs);
+    });
+
+    const dateControl = document.querySelectorAll('input[type="date"]');
+    const timeControl = document.querySelectorAll('input[type="time"]');
+    const btnStartSim = document.getElementById('task-btn_sim');
+    const allDateInputs = document.querySelectorAll('input[type="date"], input[type="time"]');
+
+    dateControl[0].value = getDateTime().slice(0, 10);
+
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    dateControl[1].value = tomorrow.toISOString().slice(0, 10);
+    timeControl[1].value = '00:00:00';
+
+    const currentTime = getDateTime();
+    const numberTime = Number(currentTime.substring(11, 13));
+    const timeVal = currentTime.substring(13, 19);
+    timeControl[0].value = numberTime >= 10 ? `${numberTime}${timeVal}` : `0${numberTime}${timeVal}`;
+
+    function toggleButton(show = true) {
+        const { classList, style } = btnStartSim;
+        
+        if (show) {
+            style.display = 'block';
+            setTimeout(() => {
+                classList.add('button-transition', 'visible-button');
+                classList.remove('hidden-button');
+            }, 10);
+        } else {
+            classList.add('button-transition', 'hidden-button');
+            classList.remove('visible-button');
+            setTimeout(() => style.display = 'none', 150);
+        }
+    }
+
+    const DOM_CONFIG = {
+        planningTitle: 'Планирование сеансов связи',
+        noDataMessage: 'Данные не найдены',
+        noSatellitesMessage: 'Нет доступных спутников'
+    };
+
+    const createToggle = (container, countEl, data, displayFn, label) => () => {
+        const visible = container.style.display === 'block';
+        container.style.display = visible ? 'none' : 'block';
+        countEl.textContent = `${label} ${visible ? '▶' : '▼'}`;
+        !visible && !container.children.length && displayFn(data, container);
+    };
+
+    // Функциии отображения спутников
+    function displayGroupedBSSSatellites(response, containerId = 'response3') {
+        const container = document.getElementById(containerId);
+        const bssData = response.BSSs_satellites_data || [];
+        
+        container.innerHTML = bssData.length ? 
+            `<br><div class="planning-title">${DOM_CONFIG.planningTitle}</div>` +
+            bssData.map((bss, i) => `
+                <div class="bss-container" data-bss="${i}">
+                    <div class="bss-header">
+                        <span>${bss.name}</span>
+                        <span class="satellite-count">${bss.satellites_data?.length || 0} спутников ▶</span>
+                    </div>
+                    <div class="satellites-container"></div>
+                </div>
+            `).join('') : 
+            `<br><div class="planning-title">${DOM_CONFIG.planningTitle}</div>
+             <div style="color:orange;margin-top:15px">${DOM_CONFIG.noDataMessage}</div>`;
+        
+        bssData.forEach((bss, i) => {
+            const bssCont = container.querySelector(`[data-bss="${i}"]`);
+            const header = bssCont.querySelector('.bss-header');
+            const satContainer = bssCont.querySelector('.satellites-container');
+            const countEl = header.querySelector('.satellite-count');
+            const satCount = bss.satellites_data?.length || 0;
+            
+            header.onclick = createToggle(satContainer, countEl, bss.satellites_data, 
+                (data, cont) => displaySatellites(data, cont, i), `${satCount} спутников`);
+        });
+    }
+
+    function displaySatellites(satellitesData, container, bssIndex) {
+        if (!satellitesData?.length) {
+            container.innerHTML = `<div class="no-data">${DOM_CONFIG.noSatellitesMessage}</div>`;
+            return;
+        }
+        
+        container.innerHTML = satellitesData.map((sat, i) => `
+            <div class="satellite-item" data-sat="${i}">
+                <div class="satellite-header">
+                    <span>🛰️ ${sat.name}</span>
+                    <span class="session-count">${sat.datetime_period?.length || 0} сеансов ▶</span>
+                </div>
+                <div class="sessions-container"></div>
+            </div>
+        `).join('');
+        
+        satellitesData.forEach((sat, i) => {
+            const satCard = container.querySelector(`[data-sat="${i}"]`);
+            const sessionsCont = satCard.querySelector('.sessions-container');
+            const countEl = satCard.querySelector('.session-count');
+            const sessCount = sat.datetime_period?.length || 0;
+            
+            satCard.onclick = (e) => {
+                if (!['BUTTON', 'A'].includes(e.target.tagName)) {
+                    e.stopPropagation();
+                    createToggle(sessionsCont, countEl, sat.datetime_period, 
+                        displaySessions, `${sessCount} сеансов`)();
+                }
+            };
+        });
+    }
+
+    // Управление таймерами сеансов
+    const timers = new Map();
+
+    function displaySessions(periods, container) {
+        timers.forEach(timer => clearInterval(timer));
+        timers.clear();
+        
+        if (!periods?.length) {
+            container.innerHTML = '<div class="no-sessions">Нет сеансов</div>';
+            return;
+        }
+        
+        const now = new Date();
+        const renderId = Date.now();
+        
+        container.innerHTML = periods.map((period, index) => {
+            const start = new Date(period.start_datetime_iso);
+            const end = new Date(period.end_datetime_iso);
+            const duration = period.duration_sec || Math.round((end - start) / 1000);
+            const status = now < start ? ['Ожидается', '#3498db'] : 
+                          now <= end ? ['В процессе', '#27ae60'] : 
+                          ['Завершён', '#999'];
+            
+            return `
+                <div class="session-item" data-session="${renderId}-${index}">
+                    <div class="session-header">
+                        <strong>Сеанс ${index + 1}</strong>
+                        <span class="session-status" style="background:${status[1]}">${status[0]}</span>
+                    </div>
+                    <div id="timer-${renderId}-${index}" class="time-display"></div>
+                    <div class="session-dates">
+                        <div>
+                            <small>Начало</small>
+                            <div>${start.toLocaleDateString()}<br>${start.toLocaleTimeString()}</div>
+                        </div>
+                        <div>
+                            <small>Окончание</small>
+                            <div>${end.toLocaleDateString()}<br>${end.toLocaleTimeString()}</div>
+                        </div>
+                    </div>
+                    <div class="session-duration">Длительность: ${formatTime(duration)}</div>
+                </div>
+            `;
+        }).join('');
+        
+        periods.forEach((period, index) => {
+            const sessionElement = container.querySelector(`[data-session="${renderId}-${index}"]`);
+            const statusElement = sessionElement.querySelector('.session-status');
+            
+            startTimer(
+                `timer-${renderId}-${index}`,
+                new Date(period.start_datetime_iso),
+                new Date(period.end_datetime_iso),
+                period.duration_sec,
+                statusElement
+            );
+        });
+    }
+
+    function startTimer(timerId, startTime, endTime, durationSeconds, statusElement) {
+        const display = document.getElementById(timerId);
+        if (!display) return;
+        
+        const duration = durationSeconds || Math.round((endTime - startTime) / 1000);
+        
+        const update = () => {
+            const now = new Date();
+            let text = 'Завершён', color = '#999';
+            let status = 'Завершён', statusColor = '#999';
+            
+            if (now < startTime) {
+                const secondsLeft = Math.floor((startTime - now) / 1000);
+                text = `До начала: ${formatTime(secondsLeft)}`;
+                color = '#3498db';
+                status = 'Ожидается';
+                statusColor = '#3498db';
+            } else if (now <= endTime) {
+                const secondsLeft = duration - Math.floor((now - startTime) / 1000);
+                if (secondsLeft > 0) {
+                    text = `Осталось: ${formatTime(secondsLeft)}`;
+                    color = '#e74c3c';
+                    status = 'В процессе';
+                    statusColor = '#27ae60';
+                } else {
+                    status = 'Завершён';
+                    statusColor = '#999';
+                }
+            }
+            
+            display.textContent = text;
+            display.style.color = color;
+            
+            if (statusElement) {
+                statusElement.textContent = status;
+                statusElement.style.background = statusColor;
+            }
+            
+            if (now > endTime) {
+                clearInterval(timers.get(timerId));
+            }
+        };
+        
+        update();
+        if (new Date() <= endTime) {
+            timers.set(timerId, setInterval(update, 1000));
+        }
+    }
+
+    function formatTime(seconds) {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+        const parts = [];
+        if (h > 0) parts.push(`${h}ч`);
+        if (m > 0) parts.push(`${m}м`);
+        if (s > 0 || parts.length === 0) parts.push(`${s}с`);
+        return parts.join(' ');
+    }
+
+    btnStartSim.addEventListener('click', async () => { 
+        toggleButton(false);
+        
+        const timeInputs = document.querySelectorAll('input[type="time"]');
+        const dateInputs = document.querySelectorAll('input[type="date"]');
+        const startDateTime = getDateTimes(dateInputs[0], timeInputs[0]);
+        const endDateTime = getDateTimes(dateInputs[1], timeInputs[1]);
+        
+        if (endDateTime < startDateTime) {
+            alert('Ошибка: время окончания не может быть раньше времени начала');
+            toggleButton(true);
+            return;
+        }
+        
+        const data = {
+            "params": {
+                "start_datetime_iso": startDateTime.toISOString(),
+                "end_datetime_iso": endDateTime.toISOString(),
+                "dates_delta_in_sec": 15,
+                "min_session_time_in_sec": 10,
+                "acceptable_session_time_in_sec": 100
+            },
+            "BSSs": rss,
+            "satellites_id": satIDs
+        };
+        
+        console.log('📤 BSS данные:', data);
+        createBeginningLog(new Date());
+        
+        try {
+            const response = await calculateBSSsSatellitesAvailability(data);
+            console.log('BSS запрос завершен:', response);
+            displayGroupedBSSSatellites(response);
+            setTimeout(() => createEndLog(new Date(), {}, response), 500);
+        } catch (error) {
+            console.error('Ошибка BSS запроса:', error);
+        }
+    });
+
+    allDateInputs.forEach(input => {
+        input.addEventListener('change', () => toggleButton(true));
+    });
+
+    window.addEventListener('beforeunload', () => {
+        timers.forEach(timer => clearInterval(timer));
+    });
   }
   if (document.querySelector('h2').innerHTML==`Передача состояния антенных постов РСС`) {
    const dataAntennasPosts= document.querySelector('.antennas-posts');
@@ -435,8 +662,6 @@ select.addEventListener('change', function() {
   lastIndex = index; 
 });
 }
-
-
 
 
 
