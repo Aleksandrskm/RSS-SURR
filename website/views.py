@@ -12,6 +12,10 @@ def index():
 def function_plan_RSS():
     return render_template('plan_RSS.html')
 
+@views.route('/plan_request')
+def function_plan_request():
+    return render_template('plan_request.html')
+
 @views.route('/transmitting_antennas_RSS')
 def function_transmitting_antennas_RSS():
     return render_template('transmitting_antennas_RSS.html')
